@@ -1,0 +1,29 @@
+--- apps/volrend/Makefile.NOPATCH	2021-03-10 11:55:42.925344159 +0100
++++ apps/volrend/Makefile	2021-03-10 11:55:50.892059147 +0100
+@@ -1,10 +1,10 @@
+ TARGET = VOLREND
+-OBJS = adaptive.o file.o main.o map.o normal.o octree.o opacity.o option.o raytrace.o render.o view.o libtiff/libtiff.a
++OBJS = adaptive.o file.o main.o map.o normal.o octree.o opacity.o option.o raytrace.o render.o view.o
+ 
+ include ../../Makefile.config
+ 
+-CFLAGS := $(CFLAGS) -I./libtiff
+-LDFLAGS := -L./libtiff $(LDFLAGS) -ltiff
++CFLAGS := $(CFLAGS) -I./libtiff/../include -ltiff -lm
++LDFLAGS := -L./libtiff $(LDFLAGS) -ltiff -lm
+ 
+ main.c:	main.c.in incl.h anl.h
+ file.c:	file.c.in incl.h
+@@ -20,10 +20,9 @@
+ 
+ incl.h:	user_options.h const.h my_types.h global.h macros.h address.h
+ 
+-libtiff/libtiff.a:
+-	make -C libtiff
++all: $(OBJS)
++	$(MAKE) VOLREND
+ 
+ clean:
+-	$(MAKE) -C libtiff clean
+ 	$(RM) $(OBJS) VOLREND
+ 

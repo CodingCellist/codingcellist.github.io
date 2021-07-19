@@ -1,0 +1,35 @@
+# Navigation Links
+#   To link a homepage widget, specify the URL as a hash `#` followed by the filename of the
+#     desired widget in your `content/home/` folder.
+#   The weight parameter defines the order that the links will appear in.
+
+main:
+  - name: Hjem
+    url: "#about"
+    weight: 10
+
+  - name: Projekter
+    url: "#projects"
+    weight: 20
+
+  - name: Erfaring
+    url: "#experience"
+    weight: 30
+
+  - name: Udmærkelser
+    url: "#accomplishments"
+    weight: 40
+
+  - name: Blog (engelsk)
+    url: "../en/blog"
+    weight: 50
+
+  - name: Kursusarbejde (engelsk)
+    url: "../en/coursework-archive"
+    weight: 90
+
+# Link to a PDF of your resume/CV from the menu.
+# To enable, copy your resume/CV to `static/uploads/resume.pdf` and uncomment the lines below.
+#  - name: CV
+#    url: uploads/resume.pdf
+#    weight: 70
