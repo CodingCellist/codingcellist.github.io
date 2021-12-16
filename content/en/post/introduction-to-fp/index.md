@@ -146,7 +146,7 @@ To define a function which computes the power of a number (ignoring negative
 powers), for example, you could write the following in Java:
 
 ```java
-int power(int a, int p) {
+public int power(int a, int p) {
   int pow = 1;
   for (int i = 0; i < p; i++) {
     pow *= a;
