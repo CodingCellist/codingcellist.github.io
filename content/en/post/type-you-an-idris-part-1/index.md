@@ -1,14 +1,14 @@
 ---
 # Documentation: https://wowchemy.com/docs/managing-content/
 
-title: "Type You an Idris for Great Good!"
+title: "Type You an Idris for Great Good - Part 1: Warmup"
 subtitle: ""
 summary: "The best way to learn & understand a thing is to implement it. So
           let's implement (a subset) of Idris2!"
 authors: [thomas-e-hansen]
-tags: [idris2, type-theory, functional-programming, splv2020]
+tags: [idris2, type-theory, functional-programming, splv2020, type-you-an-idris]
 categories: []
-date: 2022-02-17T11:38:10+01:00
+date: 2022-02-18
 lastmod:
 featured: false
 draft: false
@@ -104,9 +104,11 @@ With the patch applied, we're ready to build TinyIdris, when we eventually get
 to that. For now, let's start with the Warmup Exercises.
 
 
-### Warmup
+### Exercise 1
 
-#### Exercise 1
+This exercise is just to get into Idris again: A bit of equality and proofs.
+
+#### Part 1: Name equality
 
 First, we need to write an `Eq Name` implementation. Here, the interactive
 editing can help us a lot: Let's start by giving a base definition of `==` (I
@@ -152,7 +154,7 @@ Eq Name where
   (==) _        _        = False
 ```
 
-#### Exercise 2
+#### Part 2: Provably equal names
 
 Proving that two `Name`s are equal is a bit more complicated. Although,
 thankfully, this is not a `DecEq` (_decidable_ equality) implementation, which
@@ -171,7 +173,7 @@ nameEq _        _        = Nothing
 Let's start with `UN`s. Idris comes with built-in decidable equality for
 `String`s, so let's use that! If two names' strings are decidedly equal, then
 the `Name`s must be too. Recall that `Refl` is a proof of equality, and that
-`rewrite` let's us use proofs to transform the type of the right hand side:
+`rewrite` lets us use proofs to transform the type of the right hand side:
 
 ```idris
 nameEq : (x : Name) -> (y : Name) -> Maybe (x = y)
@@ -202,10 +204,10 @@ nameEq (MN x i) (MN y j) =
 nameEq _        _        = Nothing
 ```
 
-#### Exercise 3
+#### Part 3: _Decidedly_ equal names
 
 Remember how I just said we thankfully didn't have to implement `DecEq Name`?
-Psych! That's exercise 3 ^^
+Psych! That's part 3 ^^
 
 Let's start as usual (case-splitting, etc.):
 
@@ -317,9 +319,9 @@ Here, although _we_, the human, know that we're under a `(Yes prfXY)`-case, we
 have never actually told Idris that/what that means, so it doesn't know that the
 strings `x` and `y` are the same and that only `i` and `j` might differ.
 
-If we now lift (using `<localleader> l`) both the holes, making sure to lift
+If we now lift both the holes (using `<localleader> l`), making sure to lift
 these all the way above the `DecEq Name` declaration,  we'll get some useful
-lemma types which we can generate definitions from:
+lemma types from which we can generate definitions:
 
 ```idris
 mnNumbersDiffer : x = y -> (i = j -> Void) -> MN y i = MN y j -> Void
@@ -394,10 +396,13 @@ Having `Uninhabited` implementations allows us to use `absurd` to finish off the
 Together with all the previous definitions, we can reload and confirm that
 `DecEq Name` type-checks and that there are no holes left.
 
-With our warm-up done, let's move on to the real stuff!
+Now, let's move on to slightly more relevant exercises.
 
 
 <!--
+With our warm-up done, let's move on to the real stuff!
+
+
 ```sh
 $ idris2 --build tinyidris.ipkg
 ```
