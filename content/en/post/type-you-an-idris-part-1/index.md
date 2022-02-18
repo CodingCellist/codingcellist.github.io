@@ -399,6 +399,135 @@ Together with all the previous definitions, we can reload and confirm that
 Now, let's move on to slightly more relevant exercises.
 
 
+### Exercise 2
+
+#### Part 1
+
+Part 1 is to implement `dropFirst`, which will remove all references to the most
+recently bound variable. The type of `dropFirst` is given as:
+
+```idris
+dropFirst : List (Var (v :: vs)) -> List (Var vs)
+```
+
+As with exercise 1, let's start by defining and case-splitting on the argument:
+
+```idris
+dropFirst : List (Var (v :: vs)) -> List (Var vs)
+dropFirst [] = ?dropFirst_rhs_0
+dropFirst (x :: xs) = ?dropFirst_rhs_1
+```
+
+The first case is trivial: If we have no bound variables, then there is nothing
+to remove.
+
+```idris
+dropFirst [] = []
+```
+
+The second case is a bit more complicated. If we inspect the type of
+`?dropFirst_rhs_1` we get:
+
+```idris
+ 0 v : Name
+ 0 vs : List Name
+   x : Var (v :: vs)
+   xs : List (Var (v :: vs))
+------------------------------
+dropFirst_rhs_1 : List (Var vs)
+```
+
+Seems like we somehow need to deconstruct and reconstruct a `Var` term, in order
+to remove `v` from `x`, and then probably recurse. The question is how to
+deconstruct `x`? I guess we could try case-splitting again:
+
+```idris
+dropFirst ((MkVar p) :: xs) = ?dropFirst_rhs_2
+
+ 0 v : Name
+ 0 vs : List Name
+ 0 p : IsVar n i (v :: vs)
+   xs : List (Var (v :: vs))
+------------------------------
+dropFirst_rhs_2 : List (Var vs)
+```
+
+Hmm, now we have the proof that the index is a valid index for `n` in `(v ::
+vs)`. It doesn't really seem closer, but this is actually partway there: We now
+have a mention of the variable we're trying to remove! Let's case-split one more
+time:
+
+```idris
+dropFirst ((MkVar First) :: xs) = ?dropFirst_rhs_3
+dropFirst ((MkVar (Later x)) :: xs) = ?dropFirst_rhs_4
+```
+
+Ah ha! Now we're finally getting somewhere! `First` is a proof that the variable
+`v` was the first thing in the list (or actually, that the index 0 was a valid
+index for the variable; same same, but different). How do we drop that?  Well,
+we just do! We just don't mention it on the RHS and continue removing the other
+references:
+
+```idris
+dropFirst ((MkVar First) :: xs) = dropFirst xs
+```
+
+For the second part, it helps a bit to look at the type of `Later`:
+
+```idris
+  Later : IsVar n i ns -> IsVar n (S i) (m :: ns)
+```
+
+That is: "If I have a proof that `i` is a valid index for `n` in `ns`, then I
+can extend `ns` with `m`, as long as I increment the index." How does this help
+us, you might ask? Let's have a look at the type for our final pattern-match in
+`dropFirst` again:
+
+```idris
+dropFirst ((MkVar (Later x)) :: xs) = ?dropFirst_rhs_4
+```
+
+What does our insight of what `Later` means determine for `x`? Don't worry if
+you don't get it; I didn't until I inspected the type again:
+
+```idris
+ 0 v : Name
+ 0 vs : List Name
+ 0 x : IsVar n i vs
+   xs : List (Var (v :: vs))
+------------------------------
+dropFirst_rhs_4 : List (Var vs)
+```
+
+Notice the type of `x`. Since `Later` determines that we could extend something
+as long as we incremented the index, this entails that `v` never was present in
+`x` in the first place; it occurs _later_. If you're still not convinced,
+construct and inspect the type of the following `let`-expression:
+
+```idris
+dropFirst ((MkVar (Later x)) :: xs) = let var' = MkVar x in ?dropFirst_rhs_4
+
+ 0 v : Name
+ 0 vs : List Name
+ 0 x : IsVar n i vs
+   xs : List (Var (v :: vs))
+   var' : Var vs
+------------------------------
+dropFirst_rhs_4 : List (Var vs)
+
+```
+
+Putting `x` back in a `Var` shows that the only names present in it are the list
+`vs`; there is no `v`. What this means is that we can keep `(MkVar x)` and
+recursively remove references to `v` from the rest. Like so:
+
+```idris
+dropFirst ((MkVar (Later x)) :: xs) = (MkVar x) :: dropFirst xs
+```
+
+Phew! For a warmup, it's certainly picked up a bit (at least if you, like me,
+are new to this stuff and feel like you're out of your depth). On to part 2...
+
 <!--
 With our warm-up done, let's move on to the real stuff!
 
