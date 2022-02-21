@@ -4,7 +4,8 @@
 title: "Type You an Idris for Great Good - Part 1: Warmup"
 subtitle: ""
 summary: "The best way to learn & understand a thing is to implement it. So
-          let's implement (a subset) of Idris2!"
+          let's implement (a subset) of Idris2! This part is an introduction and
+          covers some function exercises that will help later."
 authors: [thomas-e-hansen]
 tags: [idris2, type-theory, functional-programming, splv2020, type-you-an-idris]
 categories: []
