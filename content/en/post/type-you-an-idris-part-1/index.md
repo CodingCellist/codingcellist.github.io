@@ -9,7 +9,7 @@ summary: "The best way to learn & understand a thing is to implement it. So
 authors: [thomas-e-hansen]
 tags: [idris2, type-theory, functional-programming, splv2020, type-you-an-idris]
 categories: []
-date: 2022-02-18
+date: 2022-02-21
 lastmod:
 featured: false
 draft: false
@@ -528,6 +528,173 @@ dropFirst ((MkVar (Later x)) :: xs) = (MkVar x) :: dropFirst xs
 
 Phew! For a warmup, it's certainly picked up a bit (at least if you, like me,
 are new to this stuff and feel like you're out of your depth). On to part 2...
+
+#### Part 2
+
+TODO
+
+
+### Exercise 3
+
+Exercise 3 has us do some more exercises with proofs and lemmas. We start with
+lists.
+
+#### Part 1
+
+The first part is to prove that appending `Nil` (typically written `[]`) to a
+list doesn't change the list. This one is not trivial enough for Idris to just
+find: If we ask Idris to generate the definition, it comes back with a `No
+search results` message. So we have to do a bit of work (although not too much).
+
+As always, creating a definition and case-splitting on the argument is a good
+initial approach:
+
+```idris
+appendNilNeutral : (xs : List a) -> xs ++ [] = xs
+appendNilNeutral [] = ?appendNilNeutral_rhs_0
+appendNilNeutral (x :: xs) = ?appendNilNeutral_rhs_1
+```
+
+In the first case, we are appending `Nil` to itself. That sounds trivial. And
+indeed, a proof-search on `?appendNilNeutral_rhs_0` finds that it is `Refl`:
+
+```idris
+appendNilNeutral : (xs : List a) -> xs ++ [] = xs
+appendNilNeutral [] = Refl
+appendNilNeutral (x :: xs) = ?appendNilNeutral_rhs_1
+```
+
+The second case, the recursive/inductive step, is a bit more tricky. We can get
+some help by asking about the type of the hole:
+
+```idris
+ 0 a : Type
+   x : a
+   xs : List a
+------------------------------
+appendNilNeutral_rhs_1 : x :: (xs ++ []) = x :: xs
+```
+
+So, we need to prove that appending `Nil` to the tail of the list doesn't change
+it. As I hinted to earlier, we can use recursion here (since we'll either need
+to prove this for the next `head'`/`tail'` pair, or the tail will be empty, in
+which case we've won). We also need to use this proof in our general proof. That
+sounds like a job for `rewrite`! (I've shortened the hole name a bit, in order
+to make it fit nicely in the code block).
+
+```idris
+appendNilNeutral (x :: xs) = rewrite appendNilNeutral xs in ?aNN_rhs_1
+```
+
+This type-checks and Idris is happy so far. If we now inspect the hole to see
+what's changed, we find:
+
+```idris
+ 0 a : Type
+   x : a
+   xs : List a
+------------------------------
+aNN_rhs_1 : x :: xs = x :: xs
+```
+
+Well that certainly improved things! We've won!! The logic here, is that since
+Idris now knows that appending `Nil` to the tail of the list doesn't change the
+tail, all that remains is to prove that reconstructing the list (from our
+"destructive" pattern-match on `x :: xs`) doesn't change the list. That
+_definitely_ sounds trivial! And indeed, a proof-search on `?aNN_rhs_1` finds it
+is `Refl`, completing the definition:
+
+```idris
+appendNilNeutral : (xs : List a) -> xs ++ [] = xs
+appendNilNeutral [] = Refl
+appendNilNeutral (x :: xs) = rewrite appendNilNeutral xs in Refl
+```
+
+#### Part 2
+
+Next up is to prove that appending lists is associative, i.e. it doesn't matter
+if we append list `a` to list `b` and then append list `c` to the result, or if
+we first append list `c` to list `b` and then append that to list `a`. In mathsy
+notation (also seen in the type):
+
+```idris
+xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
+```
+
+This one appears difficult, but actually isn't. Start by defining and
+case-splitting, _but only on the first argument (`xs`)_.
+
+```idris
+appendAssoc :  (xs : List a) -> (ys : List a) -> (zs : List a)
+            -> xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
+appendAssoc [] ys zs = ?appendAssoc_rhs_0
+appendAssoc (x :: xs) ys zs = ?appendAssoc_rhs_1
+```
+
+As I said, this one is a bit deceptive: Before we case-split any further, let's
+start by inspecting what we currently have:
+
+```idris
+ 0 a : Type
+   zs : List a
+   ys : List a
+------------------------------
+appendAssoc_rhs_0 : ys ++ zs = ys ++ zs
+```
+
+Hmm, that doesn't seem complicated... Is it just `Refl`?... A proof-search on
+`?appendAssoc_rhs_0` says "Yes"! Note that we've not imported `Data.List` or
+anything here, so this is purely Idris being clever and figuring out that append
+is associative for two lists, based on the function definition.
+
+Now we need to prove the general case. Again, let's inspect the information we
+currently have:
+
+```idris
+ 0 a : Type
+   x : a
+   xs : List a
+   zs : List a
+   ys : List a
+------------------------------
+appendAssoc_rhs_1 : x :: (xs ++ (ys ++ zs)) = x :: ((xs ++ ys) ++ zs)
+```
+
+The head (`x`) has been pulled out of the `append` call. We now need to prove
+that extending the list with `x` doesn't change it as long as `++` is
+associative. Does this seem familiar? It is the same idea as with
+`appendNilNeutral`! Recurse on `xs`:
+
+```idris
+appendAssoc (x :: xs) ys zs = rewrite appendAssoc xs ys zs in ?appendAssoc_rhs_1
+```
+
+If we now inspect the hole, we get:
+
+```idris
+ 0 a : Type
+   x : a
+   xs : List a
+   zs : List a
+   ys : List a
+------------------------------
+appendAssoc_rhs_1 : x :: ((xs ++ ys) ++ zs) = x :: ((xs ++ ys) ++ zs)
+```
+
+Again, the logic is that we'll either keep recursing on the tail, or reach the
+base-case `[] ys zs`, in which case we've won. We know we'll eventually reach
+the base-case since lists in Idris cannot be infinite and we're removing an
+element each time, so we know that eventually everything will be fine. All that
+remains to prove is that restoring `x` to the front of the list doesn't change
+the recursive append result. This is trivial and completes the definition/proof:
+
+```idris
+appendAssoc :  (xs : List a) -> (ys : List a) -> (zs : List a)
+            -> xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
+appendAssoc [] ys zs = Refl
+appendAssoc (x :: xs) ys zs = rewrite appendAssoc xs ys zs in Refl
+```
+
 
 <!--
 With our warm-up done, let's move on to the real stuff!
