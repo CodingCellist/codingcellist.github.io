@@ -105,7 +105,7 @@ With the patch applied, we're ready to build TinyIdris, when we eventually get
 to that. For now, let's start with the Warmup Exercises.
 
 
-### Exercise 1
+### Exercise 1 - Equalities
 
 This exercise is just to get into Idris again: A bit of equality and proofs.
 
@@ -400,9 +400,9 @@ Together with all the previous definitions, we can reload and confirm that
 Now, let's move on to slightly more relevant exercises.
 
 
-### Exercise 2
+### Exercise 2 - Scope manipulation
 
-#### Part 1
+#### Part 1: Variable removal
 
 Part 1 is to implement `dropFirst`, which will remove all references to the most
 recently bound variable. The type of `dropFirst` is given as:
@@ -529,17 +529,17 @@ dropFirst ((MkVar (Later x)) :: xs) = (MkVar x) :: dropFirst xs
 Phew! For a warmup, it's certainly picked up a bit (at least if you, like me,
 are new to this stuff and feel like you're out of your depth). On to part 2...
 
-#### Part 2
+#### Part 2: Variable insertion
 
 TODO
 
 
-### Exercise 3
+### Exercise 3 - Lists and Trees
 
 Exercise 3 has us do some more exercises with proofs and lemmas. We start with
 lists.
 
-#### Part 1
+#### Part 1: Appending Nil does nothing
 
 The first part is to prove that appending `Nil` (typically written `[]`) to a
 list doesn't change the list. This one is not trivial enough for Idris to just
@@ -610,7 +610,7 @@ appendNilNeutral [] = Refl
 appendNilNeutral (x :: xs) = rewrite appendNilNeutral xs in Refl
 ```
 
-#### Part 2
+#### Part 2: List appending is associative
 
 Next up is to prove that appending lists is associative, i.e. it doesn't matter
 if we append list `a` to list `b` and then append list `c` to the result, or if
@@ -643,7 +643,9 @@ appendAssoc_rhs_0 : ys ++ zs = ys ++ zs
 ```
 
 Hmm, that doesn't seem complicated... Is it just `Refl`?... A proof-search on
-`?appendAssoc_rhs_0` says "Yes"! Note that we've not imported `Data.List` or
+`?appendAssoc_rhs_0` says "Yes"! This is a great example of remembering to check
+whether we actually _need_ to split further, or if the current information is
+enough to solve the problem. Note that we've not imported `Data.List` or
 anything here, so this is purely Idris being clever and figuring out that append
 is associative for two lists, based on the function definition.
 
@@ -694,6 +696,11 @@ appendAssoc :  (xs : List a) -> (ys : List a) -> (zs : List a)
 appendAssoc [] ys zs = Refl
 appendAssoc (x :: xs) ys zs = rewrite appendAssoc xs ys zs in Refl
 ```
+
+That also concludes the parts on lists. Now we move on to trees.
+
+#### Part 3: Rotating trees left
+
 
 
 <!--
