@@ -49,11 +49,15 @@ start by hiding their default definitions, so that we can define our own, and
 since we're doing proofs, let's also enable totality checking by default:
 
 ```idris
+module DecEqIntro
+
 %hide (==)
 %hide (===)
 %hide Void
+%hide Prelude.Not
 %hide Builtin.Equal
 %hide Builtin.Refl
+%hide Builtin.sym
 
 %default total
 ```
@@ -242,7 +246,7 @@ public export
 (===) = Equal
 ```
 
-This lets us use `===` in the middle of expressions where we would have used
+This lets us use `(===)` in the middle of expressions where we would have used
 `Equal` instead, e.g.:
 
 ```idris
@@ -251,20 +255,156 @@ ex4 : 3 === 3
 ex4 = Refl
 ```
 
+And just to show how equality proofs (and Idris) are actually quite powerful,
+here's an example with computation:
+
+```idris
+public export
+ex5 : (1 + 2 * 3) === 7
+ex5 = Refl
+```
+
+Alright, that's all well and good, but how would we prove the opposite: That
+something is not equal; that the equality is `False`?
+
 #### Proofs of False
+
+To prove that something is false, one might be tempted to write:
+
+```idris
+falseAttempt : (2 === 3) === False
+```
+
+But we cannot implement this, since there is no way to call `Refl` to obtain the
+expression `(2 === 3)`. (This is actually somewhat reassuring, since it suggests
+our approach to proofs is sound.)
+
+Another attempt might look like:
+
+```idris
+falseAttempt2 : (2 == 3) === False
+```
+
+But while we might be able to implement this, it would actually not guarantee
+anything about 2 and 3! All it would prove, was that the _function call_ `(==) 2
+3` returned `False`. Which, as we saw at the beginning, guarantees nothing.
+
+To get around this, we need some datatype which captures the concept of "false"
+or "untrue". In logic and type-theory, we often call this "bottom" or "void" and
+write it "⊥". But there is still the question of how to express this as a
+datatype, especially in terms of constructors: What arguments would those even
+take??
+
+Let's put that aside for now and instead think of what "false" means in the
+context of proofs. If we've proven something to be false, then we've shown that
+it cannot be the case. A common tactic in maths is "proof by contradiction": You
+assume a statement to be true, and then show that if that statement _was_ true,
+then you would arrive at a contradiction. And from said contradiction, you could
+likely prove anything since you've broken the rules to begin with. We can use a
+similar idea to define a datatype which captures the concept of "false". Here is
+the _entire_ definition of that datatype:
+
+```idris
+public export
+data Void : Type where
+```
+
+Initially you might object, because clearly there is no way we can use this:
+there are no constructors which can be used to get something of type `Void`. But
+that's entirely intentional! What we are expressing here is "If I have something
+of type `Void`, then I have broken the rules". Similar to contradictions in
+maths and logic, where the contradiction breaks some foundational rule and so
+continuing defies the point of those reasoning systems, Idris has a foundational
+rule of "datatypes are created by data-constructors" which, if broken, means we
+might as well assume anything; in those cases, all bets are off!
+
+The `Void` datatype in and of itself is not super useful, but it is useful for
+expressing impossibilities.
 
 #### Expressing contradictions
 
+Now that we have some way of indicating that we've broken the rules, we can
+start writing down contradictions. A contradiction is some statement which, if
+true, breaks the rules. Using `Void`, we can express this as a function:
 
-### Proving two things equal
+```idris
+public export
+falsum1 : 2 === 3 -> Void
+```
+
+The function `falsum1` returns something of type `Void`. But since we have
+defined `Void` such that it can never be constructed, we know this can never be!
+The function can never return a value! What `falsum1` effectively says is "If I
+can prove 2 equals 3, then I have broken the rules and can also construct
+`Void`".  Which is true: As we saw earlier, there is no way to call `Refl` to
+get an `Equal 2 3`. Unless we cheat. In which case anything goes, and we might
+as well also say that we can construct datatypes which have no constructors.
+
+To finish the "implementation" of `falsum1`, we write the following:
+
+```idris
+falsum1 Refl impossible
+```
+
+The `impossible` keyword tells Idris that the correct behaviour here is that
+there is no way to make the expression type-check. Which, again, is true: The
+only constructor for `2 === 3` is `Refl`, and the only way we could match on
+that in `falsum1` would be if the implicit argument was 2 _and_ 3 at the same
+time.  For this reason, it is also not possible to write out the implicit
+argument as we did with the proofs of equality: If we could write that out, then
+it wouldn't be `impossible`.
+
+Again, let's look at some examples. This time, of things which _cannot_ be true:
+
+1. 0 is not the successor of a natural number
+   ```idris
+   public export
+   falsum2 : 0 === (S _) -> Void
+   falsum2 Refl impossible
+   ```
+2. `Nat`s are not `String`s:
+   ```idris
+   public export
+   falsum3 : Nat === String -> Void
+   falsum3 Refl impossible
+   ```
+3. Plus doesn't get evaluated before times:
+   ```idris
+   public export
+   falsum4 : (1 + 2 * 3) === 9 -> Void
+   falsum4 Refl impossible
+   ```
+
+And similar to what we did for `Equal`, let's define some shorthand for writing
+down contradictions. Since they're used for proofs of things which _aren't_
+true, we'll call it `Not` (and write `p` for "property"):
+
+```idris
+public export
+Not : Type -> Type
+Not p = p -> Void
+```
+
+### Interlude
+
+Whew!... That took a lot longer than I initially expected, but that's the
+fundamentals done. If you're still with me, let's finally move on to what I
+actually promised this would be about: decidable equality!
 
 ### Decidable Equality
 
+
 ### Absurdities
+
+
+### Lemmas
+
 
 ### Beyond Equality: Custom Predicates
 
+
 ### Conclusion
+
 
 ### Acknowledgements
 
