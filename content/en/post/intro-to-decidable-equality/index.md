@@ -54,7 +54,12 @@ module DecEqIntro
 %hide (==)
 %hide (===)
 %hide Void
+
 %hide Prelude.Not
+%hide Prelude.Dec
+%hide Prelude.Uninhabited
+%hide Prelude.absurd
+
 %hide Builtin.Equal
 %hide Builtin.Refl
 %hide Builtin.sym
@@ -385,19 +390,42 @@ Not : Type -> Type
 Not p = p -> Void
 ```
 
+#### Absurdities
+
+
+#### Lemmas
+
+
 ### Interlude
 
 Whew!... That took a lot longer than I initially expected, but that's the
 fundamentals done. If you're still with me, let's finally move on to what I
 actually promised this would be about: decidable equality!
 
+
 ### Decidable Equality
 
+<!--
+Decidable equality, as the name implies, is a procedure for determining whether
+two things are equal. In Idris, we use it when we want to prove that things are
+equal or, in case they aren't, provide a counter-proof showing why they cannot
+be equal. As with the proofs above, we capture this concept in a datatype:
 
-### Absurdities
+```idris
+public export
+data Dec : Type -> Type where
+  Yes : prop -> Dec prop
+  No  : Not prop -> Dec prop
+```
 
+This expresses decidability over some property which is carried in the type. The
+`Yes` constructor takes a proof of the property as an argument, and the `No`
+constructor takes a proof that the property cannot hold (remember, `Not p` is
+shorthand for `p -> Void`).
 
-### Lemmas
+Now we can define decidable equality by simply declaring a function which
+returns some `Dec` carrying a proof which uses `Equal`:
+-->
 
 
 ### Beyond Equality: Custom Predicates
