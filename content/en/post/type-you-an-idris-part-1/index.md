@@ -701,7 +701,26 @@ That also concludes the parts on lists. Now we move on to trees.
 
 #### Part 3: Rotating trees left
 
+The first part of the exercise on trees is to implement a lemma. We can look at
+the type to get some information as to what this lemma is meant to show:
 
+```idris
+   n : a
+   n' : a
+   rightr : Tree ys
+   rightl : Tree xs
+   left : Tree xs
+ 0 xs : List a
+------------------------------
+rotateLemma :  Tree ((xs ++ (n :: xs)) ++ (n' :: ys))
+            -> Tree (xs ++ (n :: (xs ++ (n' :: ys))))
+```
+
+This lemma, you may not be surprised to hear, uses parts of the previous
+exercise: We need to show that we can reorder appending in the context of trees,
+which will inevitably involve manipulating the lists in the nodes. Specifically,
+we need to show that it is okay to sequence the operations, instead of doing
+them out-of-order and then combining those results.
 
 <!--
 With our warm-up done, let's move on to the real stuff!
