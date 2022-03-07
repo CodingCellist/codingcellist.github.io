@@ -339,18 +339,18 @@ In logic and type-theory, we often call this "bottom" or "void" and write it
 Especially in terms of constructors: What arguments would those even take??
 
 Well, if we think slightly more maths-y (this may be a blessing or a curse,
-depending on how much you enjoy logic and proof theory), a common approach is
+depending on how much you enjoy logic and proof-theory), a common approach is
 "proof by contradiction": If we assume p to be true and we then arrive at a
 contradiction, it would be silly to keep going; our assumption was false.
 
 A different way to say "our assumption was false" is: "we could never write (or,
-_construct_) that assumption". Now that's beginning to sound more like something
-we can define in Idris!
+_construct_) that assumption according to our logic". Now that's beginning to
+sound more like something we can define in Idris!
 
 #### The representation of false
 
-We need a datatype which captures something we cannot construct; a false
-assumption... Well, the easiest way to do that would just be to not provide any
+We need a datatype which captures something we cannot construct; an untrue
+statement... Well, the easiest way to do that would just be to not provide any
 constructors, no? Then there's nothing to call, so we can't construct the
 datatype! Let's try that!
 
@@ -359,94 +359,31 @@ public export
 data Void : Type where
 ```
 
-<!-- TODO: Rewrite this
-Initially you might object, because clearly there is no way we can use this:
-there are no constructors which can be used to get something of type `Void`. But
-that's entirely intentional! What we are expressing here is "If I have something
-of type `Void`, then I have broken the rules". Similar to contradictions in
-maths and logic, where the contradiction breaks some foundational rule and so
-continuing defies the point of those reasoning systems, Idris has a foundational
-rule of "datatypes are created by data-constructors" which, if broken, means we
-might as well assume anything; in those cases, all bets are off!
+This is a perfectly valid datatype declaration, we can "forward-declare" data
+definitions just like we can for functions. Except if we never define any
+constructors (neither here nor later) then we can never create something of type
+`Void` but we can still talk about it.
 
-The `Void` datatype in and of itself is not super useful, but it is useful for
-expressing impossibilities.
+Since we prove things by having instances of datatypes whose constructors can
+only be called if certain conditions are met (like `Refl` for `Equal`), we can
+never prove `Void`. This is great! How so? Well, in terms of logical reasoning
+and proofs, you can never prove something false to be true either! (This might
+sound obvious when put into English, but it's important to realise nonetheless).
+There is nothing we can do to prove the statement "1 times 1 is 2" or that "the
+square root of 2 is 1". <!-- Get out of here with your Terryology! -->
 
-#### Expressing contradictions
-
-Now that we have some way of indicating that we've broken the rules, we can
-start writing down contradictions. A contradiction is some statement which, if
-true, breaks the rules. Using `Void`, we can express this as a function:
-
-```idris
-public export
-falsum1 : 2 === 3 -> Void
-```
-
-The function `falsum1` returns something of type `Void`. But since we have
-defined `Void` such that it can never be constructed, we know this can never be!
-The function can never return a value! What `falsum1` effectively says is "If I
-can prove 2 equals 3, then I have broken the rules and can also construct
-`Void`".  Which is true: As we saw earlier, there is no way to call `Refl` to
-get an `Equal 2 3`. Unless we cheat. In which case anything goes, and we might
-as well also say that we can construct datatypes which have no constructors.
-
-To finish the "implementation" of `falsum1`, we write the following:
-
-```idris
-falsum1 Refl impossible
-```
-
-The `impossible` keyword tells Idris that the correct behaviour here is that
-there is no way to make the expression type-check. Which, again, is true: The
-only constructor for `2 === 3` is `Refl`, and the only way we could match on
-that in `falsum1` would be if the implicit argument was 2 _and_ 3 at the same
-time.  For this reason, it is also not possible to write out the implicit
-argument as we did with the proofs of equality: If we could write that out, then
-it wouldn't be `impossible`.
-
-Again, let's look at some examples. This time, of things which _cannot_ be true:
-
-1. 0 is not the successor of a natural number
-   ```idris
-   public export
-   falsum2 : 0 === (S _) -> Void
-   falsum2 Refl impossible
-   ```
-2. `Nat`s are not `String`s:
-   ```idris
-   public export
-   falsum3 : Nat === String -> Void
-   falsum3 Refl impossible
-   ```
-3. Plus doesn't get evaluated before times:
-   ```idris
-   public export
-   falsum4 : (1 + 2 * 3) === 9 -> Void
-   falsum4 Refl impossible
-   ```
-
-And similar to what we did for `Equal`, let's define some shorthand for writing
-down contradictions. Since they're used for proofs of things which _aren't_
-true, we'll call it `Not` (and write `p` for "property"):
-
-```idris
-public export
-Not : Type -> Type
-Not p = p -> Void
-```
-
-#### Absurdities
+Since there are no constructors for `Void`, and we use constructors to prove
+things, `Void` represents an untrue statement for which no proof can exist.
+Pretty clever, no?
 
 
-#### Lemmas
--->
+## Interlude
 
-### Interlude
+Whew!... That took a lot longer than I initially expected! I know I said the
+fundamentals were challenging in their own right, but still...
 
-Whew!... That took a lot longer than I initially expected, but that's the
-fundamentals done. If you're still with me, let's finally move on to what I
-actually promised this would be about: decidable equality!
+If you're still with me, let's finally move on to what I actually promised this
+would be about: decidable equality!
 
 
 ### Decidable Equality
