@@ -386,7 +386,45 @@ If you're still with me, let's finally move on to what I actually promised this
 would be about: decidable equality!
 
 
-### Decidable Equality
+## Decidable Equality
+
+We've finally arrived! Decidable equality! Let's go!!!
+
+### What is decidable?
+
+So, what does it mean for something to be decidable? It means we can _decide_
+whether that thing is true or not. Let's try to express that in a datatype!
+
+```idris
+data Decide : Type -> Type where
+  ItHolds : (prf : p) -> Decide p
+  Unsound : (contra : Void) -> Decide Void
+```
+
+And let's break it down to make sure we understand it:
+- `data Decide : Type -> Type where` --- The `Decide` datatype depends on some
+    `Type` (remember, we're using datatypes as proofs).
+- `ItHolds : (prf : p) -> Decide p` --- The `ItHolds` constructor takes a proof
+    of type `p`, and constructs a `Decide p` (effectively proving `p` held since
+    we could pass an instance of it to `ItHolds`).
+- `Unsound : (contra : Void) -> Decide Void` --- Expresses something which
+    cannot be (we would be passing some `Void` to it, but `Void` cannot exist so
+    this statement is unable to be proven, i.e. 'false').
+
+So far so good: We have a datatype for reasoning about decidable properties. Now
+let's try to use it!
+
+### Trying to use `Decide`
+
+TODO: WRITE ME!!!
+
+This is a problem...
+
+### Expressing contradictions
+
+### Decidable with proof-by-contradiction
+
+### Proving things impossible is _hard_
 
 <!--
 Decidable equality, as the name implies, is a procedure for determining whether
@@ -411,11 +449,11 @@ returns some `Dec` carrying a proof which uses `Equal`:
 -->
 
 
-### Beyond Equality: Custom Predicates
+## Beyond Equality: Custom Predicates
 
 
-### Conclusion
+## Conclusion
 
 
-### Acknowledgements
+## Acknowledgements
 
