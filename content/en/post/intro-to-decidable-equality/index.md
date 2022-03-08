@@ -438,8 +438,8 @@ However, if we try to implement any of the other holes, we run into some
 trouble. Consider the types of `?decide_rhs_2` and `?decide_rhs_3`:
 
 ```idris
--- ?decide_rhs_2 : Decide (Equal 0     (S j))
--- ?decide_rhs_3 : Decide (Equal (S k) 0    )
+--- ?decide_rhs_2 : Decide (Equal 0     (S j))
+--- ?decide_rhs_3 : Decide (Equal (S k) 0    )
 ```
 
 We know these proofs cannot exist, and we have a concept for that: the `Unsound`
@@ -490,14 +490,14 @@ Sticking to our example of deciding if two `Nat`s are provably equal, let's
 define a case where `Nat`s are provably _not_ equal. But this time, via proof by
 contradiction.
 
-We'll start with `(S k) ≠ 0`, i.e. it is impossible for the successor of a
+We'll start with `(S k) ≠ Z`, i.e. it is impossible for the successor of a
 number to be zero. We need to express this as a proof by contradiction... How
 about "If I can prove that `(S k)` is `0`, then I have done the impossible"?
 That sounds pretty accurate, don't you think? Let's write that in Idris!
 
 ```idris
 public export
-succNotZero : (prf : (S k) === 0) -> Void
+succNotZero : (prf : (S k) === Z) -> Void
 ```
 
 Now the question becomes "How do we implement this?". We, the programmers, know
@@ -530,7 +530,7 @@ that zero cannot be the successor of a `Nat`:
 
 ```idris
 public export
-zeroNotSucc : (prf : 0 === (S j)) -> Void
+zeroNotSucc : (prf : Z === (S j)) -> Void
 zeroNotSucc Refl impossible
 ```
 
@@ -569,6 +569,48 @@ we've renamed the constructors to `Yes` and `No`. It's a lot easier to read (and
 shorter to write).
 
 ### Decidable equality (for real this time)
+
+With a refined, and crucially more usable, datatype, let's have a go at using it
+to define decidable equality again. As before, we'll use `Nat`s and start by
+case-splitting on the arguments:
+
+```idris
+decNat : (m : Nat) -> (n : Nat) -> Dec (m === n)
+-- decNat 0     0     = ?decNat_rhs_1
+-- decNat 0     (S j) = ?decNat_rhs_2
+-- decNat (S k) 0     = ?decNat_rhs_3
+-- decNat (S k) (S j) = ?decNat_rhs_4
+```
+
+The first case is trivial, 0 is equal to itself:
+
+```idris
+decNat 0     0     = Yes Refl
+```
+
+The second and third case are false, so we start by prefixing them with `No`:
+
+```idris
+-- decNat 0     (S j) = No ?decNat_rhs_2
+-- decNat (S k) 0     = No ?decNat_rhs_3
+```
+
+Now you'll notice that rather than complaining, Idris provides the following
+types for the holes:
+
+```idris
+--- decNat_rhs_2 : Equal 0     (S j) -> Void
+--- decNat_rhs_3 : Equal (S k) 0     -> Void
+```
+
+Now that's something we can work with! With our refined `Dec` datatype, we don't
+have to provide the impossible, we just have to prove that the property arrives
+at a contradiction! Even better, we've already defined the two counter-proofs!
+
+```idris
+decNat 0     (S j) = No zeroNotSucc
+decNat (S k) 0     = No succNotZero
+```
 
 ### Proving things impossible is _hard_
 
