@@ -10,7 +10,7 @@ summary: "One of the more difficult concepts in Idris, I've found, is proving
 authors: [thomas-e-hansen]
 tags: [idris2, intro, formal-methods]
 categories: []
-date: 2022-03-03
+date: 2022-03-08
 lastmod:
 featured: false
 draft: false
@@ -416,13 +416,159 @@ let's try to use it!
 
 ### Trying to use `Decide`
 
-TODO: WRITE ME!!!
+Our `Decide` datatypes technically models _any_ decidable property, so in order
+to arrive at decidable _equality_, we need to combine it with `Equals`. As we
+saw while covering the fundamentals, `Equals` describes a relationship between
+two things, so we'll also need two things which can be equal. An easy example is
+`Nat`s:
 
-This is a problem...
+```idris
+decideEquals : (n : Nat) -> (m : Nat) -> Decide (n === m)
+decideEquals 0     0     = IsSound Refl
+decideEquals 0     (S j) = ?decide_rhs_2
+decideEquals (S k) 0     = ?decide_rhs_3
+decideEquals (S k) (S j) = ?decide_rhs_4
+```
 
-### Expressing contradictions
+So far so good. We've case-split the function into the various options, and
+successfully proved the first case: if both arguments are 0, then we know that
+there is a sound proof of equality, which in this case is `Refl`.
+
+However, if we try to implement any of the other holes, we run into some
+trouble. Consider the types of `?decide_rhs_2` and `?decide_rhs_3`:
+
+```idris
+-- ?decide_rhs_2 : Decide (Equal 0     (S j))
+-- ?decide_rhs_3 : Decide (Equal (S k) 0    )
+```
+
+We know these proofs cannot exist, and we have a concept for that: the `Unsound`
+constructor, right? Well yes but actually no. If we try to introduce `Unsound`
+on the right hand side of `decide 0 (S j)` Idris (rightfully) complains:
+
+```idris
+-- decideEquals 0     (S j) = Unsound ?decide_rhs_2
+
+--- Error: While processing right hand side of decide. When unifying:
+---     Decide Void
+--- and:
+---     Decide (0 === S j)
+--- Mismatch between: Void and Equal 0 (S j).
+```
+
+When we defined `Decide`, we defined that `Unsound` takes an argument of type
+`Void` but we're trying to construct an `Equal 0 (S j)`. These are clearly not
+the same types (although they are both impossible). Thing is, as we went over
+when defining `Void`, there is _no way_ we can pass `Unsound` something of type
+`Void`! `Void` cannot be constructed; that was kinda the whole idea... A similar
+issue pops up if we try using `Unsound` in the `decide (S k) 0` case.
+
+This is a problem... We've defined something which models the impossible
+(`Void`), but in order to use it we currently need to prove the impossible. This
+is contradictory. Are we stuck?
+
+### The solution: expressing contradictions
+
+We are not stuck (at least, not completely). We just need to rethink a couple of
+things. Remember I talked about proof by contradiction? (It was a while back, I
+don't blame you if you don't). Those are our way out!
+
+In case you need a refresher, the tl;dr for proofs by contradiction is:
+
+1. Make an assumption,
+2. show that from there you arrive at some contradiction,
+3. this means your assumption must be false,
+4. you're done. Hurray!
+
+What we've expressed with `Void` is something impossible. But we haven't
+actually expressed _how_ something might be impossible. There needs to be a link
+between impossible things and the `Void` datatype.
+
+#### The missing link
+
+Sticking to our example of deciding if two `Nat`s are provably equal, let's
+define a case where `Nat`s are provably _not_ equal. But this time, via proof by
+contradiction.
+
+We'll start with `(S k) ≠ 0`, i.e. it is impossible for the successor of a
+number to be zero. We need to express this as a proof by contradiction... How
+about "If I can prove that `(S k)` is `0`, then I have done the impossible"?
+That sounds pretty accurate, don't you think? Let's write that in Idris!
+
+```idris
+public export
+succNotZero : (prf : (S k) === 0) -> Void
+```
+
+Now the question becomes "How do we implement this?". We, the programmers, know
+that it is not possible. When we were coming up with `Void`, we saw that
+definitions based on unsound proofs of equality cannot be defined since we
+cannot match on the proof (it doesn't exist). But how do we communicate this to
+Idris?
+
+#### Impossible definitions
+
+For things where there is no way to define them, Idris provides the `impossible`
+keyword. This tells the type-checker "Hey! Here, in this expression, there
+should be no way whatsoever to make this type-check". So if we want to provide a
+definition for `succNotZero`, we can write:
+
+```idris
+succNotZero Refl impossible
+```
+
+And Idris is happy with this: There is no way to pass the implicit argument to
+`Refl`, which means we cannot pattern-match on the argument, which means we
+cannot construct `Void`. Well, that's what we've been trying to say all along!
+Fantastic!
+
+#### The trick to counter-proofs
+
+The trick to counter-proofs is functions which return `Void`. We saw this when
+proving the successor of a `Nat` cannot be zero, and we can also use it to prove
+that zero cannot be the successor of a `Nat`:
+
+```idris
+public export
+zeroNotSucc : (prf : 0 === (S j)) -> Void
+zeroNotSucc Refl impossible
+```
+
+Since `Void` cannot be constructed, neither can the argument(s) to a function
+which returns `Void` (or we'd be able to return something from it). Hopefully
+you agree that this is a proof by contradiction:
+
+1. We started out with an assumption (e.g. `0 === (S j)`),
+2. expressed that this was contradictory (given the proof, we could construct
+   `Void` --- "construct `Void`" is a contradiction in terms),
+3. so our assumption must be false (`Refl impossible`).
+4. Idris agrees, since it cannot find a solution to the implicit argument for
+   `Refl`. Hurray!
 
 ### Decidable with proof-by-contradiction
+
+With that cleared up, let's make a better definition of something decidable. We
+previously had that `Decide` was either a proof or something impossible. Let's
+refine that definition to:
+
+Something decidable is either a proof, or something which _should be_
+impossible (i.e. a contradiction).
+
+Let's put this in a datatype, shall we?
+
+```idris
+public export
+data Dec : Type -> Type where
+  Yes : (prf : prop)            -> Dec prop
+  No  : (contra : prop -> Void) -> Dec prop
+```
+
+The change here is that for the case where the property provably doesn't hold,
+we provide a `contra` which explains _how_ the property cannot hold. Oh and
+we've renamed the constructors to `Yes` and `No`. It's a lot easier to read (and
+shorter to write).
+
+### Decidable equality (for real this time)
 
 ### Proving things impossible is _hard_
 
@@ -456,4 +602,7 @@ returns some `Dec` carrying a proof which uses `Equal`:
 
 
 ## Acknowledgements
+
+- the hacker known as "Alex" (aka. mangopdf), for making me realise I was
+    [writing a textbook when I didn't need to](https://mango.pdf.zone/i-give-you-feedback-on-your-blog-post-draft-but-you-dont-send-it-to-me)
 
