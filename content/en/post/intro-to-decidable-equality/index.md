@@ -61,11 +61,14 @@ module DecEqIntro
 %hide Prelude.Not
 %hide Prelude.Dec
 %hide Prelude.Uninhabited
-%hide Prelude.absurd
 
 %hide Builtin.Equal
 %hide Builtin.Refl
+
 %hide Builtin.sym
+%hide Prelude.prim__void
+%hide Prelude.void
+%hide Prelude.absurd
 
 %default total
 ```
@@ -678,7 +681,26 @@ seems like we need a link to `S`, which we don't have at the moment...
 Unfortunately, missing the two links to `S` means we can't quite complete the
 definition for `decNat`. Without them, there is no way to convince Idris that
 one proof (or counter-proof) leads to the next. This is a problem, but
-thankfully one which is not too difficult to solve. Let's make the final push!
+thankfully one which is not too difficult to solve.
+
+{{< spoiler text="Side note on `rewrite`..." >}}
+The builtin equality in Idris supports this thing called `rewrite`. It lets us
+use a proof to update the rhs, like so:
+
+```idris
+-- decNat (S k) (S j) = case decNat k j of
+--                           (Yes prf) -> rewrite prf in Yes Refl
+--                           (No contra) -> No ?decNat_rhs_6
+```
+
+Here, `rewrite` has used the proof `prf` (which shows that `k` and `j` are
+equal) to show that it is fine to construct the `Refl` for `(S j)`.
+Unfortunately, `rewrite` is slightly magic and _requires_ the builtin equality.
+So we can't use it with our own equality (although the two are identical) and we
+have to do things by hand.
+{{< /spoiler >}}
+
+Well then. Let's make the final push!
 
 #### Linking `k === j` and `S`
 
@@ -880,17 +902,142 @@ I hope that you still think it was worth it, and that you now understand both
 the concept and inner workings of decidable equality. Thanks for reading along!
  : )
 
+## Acknowledgements
 
-## Want to know more?
+- Zoe Stafford (z-snails/z_snail) and Guillaume Allais (gallais) for help with
+    understanding `rewrite` and `void`.
+- the hacker known as "Alex" (mangopdf), for making me realise I was
+    [writing a textbook when I didn't need to](https://mango.pdf.zone/i-give-you-feedback-on-your-blog-post-draft-but-you-dont-send-it-to-me)
 
-### Beyond Equality: Custom Predicates
 
+## Would you like to know more?
+
+Really? You've not had enough?... Alrighty then!
+
+(note: be aware that this will be a lot more crash-coursey than the previous
+stuff, since this blog entry is already extremely long)
+
+### Generalising stuff
+
+You may not be surprised to hear that there are general ways of defining
+pretty much all of the above. Generalising is what logicians do best, after all.
+Without further ado, let's get to it!
+
+#### Generalising decidable equality
+
+Decidable equality is a thing we can define for lots of types. So it would be
+nice to be able to just use a general function, e.g. `decEq`, for all these
+types. I hear ya fam!
+
+```idris
+public export
+interface DecEq ty where
+  decEq : (a : ty) -> (b : ty) -> Dec (a === b)
+```
+
+Now anything that implements the `DecEq` interface has to specify an
+implementation of the `decEq` function, which will describe how to prove (and
+how to disprove) equality between two members of the type. And then you can just
+use `decEq` whenever you need a proof of equality for some type which implements
+it. Neat!
+
+#### Generalising contradictions
+
+We saw how to state that an expression cannot be made to type-check using the
+`impossible` keyword. When this applies to a datatype in general, we say that
+the type is "_uninhabited_". Constructing an uninhabited type is a
+contradiction, so we define the following interface:
+
+```idris
+public export
+interface Uninhabited ty where
+  uninhabited : ty -> Void
+```
+
+This enforces that uninhabited types must be able to show that a contradiction
+occurs, e.g. using `impossible`:
+
+```idris
+public export
+Uninhabited (True === False) where
+  uninhabited Refl impossible
+
+public export
+Uninhabited (False === True) where
+  uninhabited Refl impossible
+```
+
+#### Generalising counter-proofs
+
+If we can generalise contradictions, can we also generalise counter-proofs? Why
+yes, we can!
+
+We've discussed that once we have `Void`, anything goes (aka. it is pointless to
+continue after a contradiction has been found). The generalisation of this
+requires a tiny amount of trickery:
+
+```idris
+public export
+void : (0 v : Void) -> a
+void v = assert_total $ idris_crash "ERROR: Called 'void'"
+```
+
+The type of the function captures that from `Void` we can construct anything.
+However, the function definition crashes Idris with the given error message,
+whilst also asserting to the totality-checker that doing so is total. **We are
+subverting the totality-checker here**, but it is okay (necessary, even) because
+we should never be able to call `void` (we can only call it if we have a
+`Void`) and if we somehow _do_ call `void`, the user should definitely know
+something has gone horribly wrong!
+
+In the Idris source code, `void` is defined in terms of `prim__void` which is an
+external function. However, all external implementations of `prim__void` crash
+the runtime they target, so the definitions are effectively equivalent.
+
+#### That's absurd!
+
+To finish generalising counter-proofs, we need one more thing: A link to
+generalised contradictions. Since a `Void` lets us construct anything and
+constructing `Void` is impossible, we call any type that lets us do this
+`absurd`:
+
+```idris
+public export
+absurd : Uninhabited ty => ty -> a
+absurd u = void (uninhabited u)
+```
+
+This `absurd` function expresses that if we have some instance of something
+`Uninhabited`, then that's the same as having constructed `Void` (since
+uninhabited means the type cannot exist).
+
+#### Putting it all together
+
+The `DecEq` and `Uninhabited` interfaces, combined with the `absurd` function,
+allow us to write `Dec` things more nicely (if we can define the interfaces for
+the type):
+
+```idris
+public export
+DecEq Bool where
+  decEq False False = Yes Refl
+  decEq False True  = No absurd
+  decEq True  False = No absurd
+  decEq True  True  = Yes Refl
+```
+
+Look at how nice and simple that implementation is! It's so much easier to read
+than writing out custom proofs.
+
+Of course, this only works if your type is nice and easy to define `Uninhabited`
+and `Equal` for...
+
+### And this, is to go even further beyond!
+
+Simple equality is not always the most interesting. Quite often, it is more fun
+to reason about more complicated properties of more complex structures. And that
+is totally possible! As long as you're willing to do the work...
 
 ### Proving things impossible is _hard_
 
-
-## Acknowledgements
-
-- the hacker known as "Alex" (aka. mangopdf), for making me realise I was
-    [writing a textbook when I didn't need to](https://mango.pdf.zone/i-give-you-feedback-on-your-blog-post-draft-but-you-dont-send-it-to-me)
 
