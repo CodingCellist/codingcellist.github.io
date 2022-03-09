@@ -588,7 +588,7 @@ The first case is trivial, 0 is equal to itself:
 decNat 0     0     = Yes Refl
 ```
 
-The second and third case are false, so we start by prefixing them with `No`:
+The second and third cases are false, so we start by prefixing them with `No`:
 
 ```idris
 -- decNat 0     (S j) = No ?decNat_rhs_2
@@ -604,43 +604,289 @@ types for the holes:
 ```
 
 Now that's something we can work with! With our refined `Dec` datatype, we don't
-have to provide the impossible, we just have to prove that the property arrives
-at a contradiction! Even better, we've already defined the two counter-proofs!
+have to provide the impossible, we just have to provide a proof that the
+property arrives at a contradiction! Even better, we've already defined the two
+counter-proofs!
 
 ```idris
 decNat 0     (S j) = No zeroNotSucc
 decNat (S k) 0     = No succNotZero
 ```
 
-### Proving things impossible is _hard_
+#### The non-trivial case
 
-<!--
-Decidable equality, as the name implies, is a procedure for determining whether
-two things are equal. In Idris, we use it when we want to prove that things are
-equal or, in case they aren't, provide a counter-proof showing why they cannot
-be equal. As with the proofs above, we capture this concept in a datatype:
+For the final case, we run into a small problem: How do we deal with two
+non-zero numbers which _might_ be equal?
+
+```idris
+decNat (S k) (S j) = ?decNat_rhs_4
+```
+
+We can't just stick a `Yes` in there, since we don't know if `k` equals `j`...
+In order to figure this out, we first need some more information about `k` and
+`j`, so let's recurse:
+
+```idris
+-- decNat (S k) (S j) = case decNat k j of
+--                           (Yes prf) -> ?decNat_rhs_5
+--                           (No contra) -> ?decNat_rhs_6
+```
+
+This helps us a bit: If we know `k === j` (the `Yes prf` case), then `(S k) ===
+(S j)`; we've just proved that `k` and `j` are the same number, after all.
+Similarly, if we can prove that `k` and `j` being the same would lead to a
+contradiction, then using `S` shouldn't change that.
+
+Let's put that in the case expression, and then inspect the holes:
+
+```idris
+-- decNat (S k) (S j) = case decNat k j of
+--                           (Yes prf) -> Yes ?decNat_rhs_5
+--                           (No contra) -> No ?decNat_rhs_6
+```
+
+#### More missing links
+
+For the first hole, we get:
+
+```idris
+---   k : Nat
+---   j : Nat
+---   prf : Equal k j
+---  ------------------------------
+---  decNat_rhs_5 : Equal (S k) (S j)
+```
+
+So we have a proof that `k === j`, but we want a proof that `(S k) === (S j)`.
+Seems like we need some way to link `prf` and `S`, which we don't at the moment.
+Let's come back to that after looking at the `No` case:
+
+```idris
+---  k : Nat
+---  j : Nat
+---  contra : Equal k j -> Void
+--- ------------------------------
+--- decNat_rhs_6 : Equal (S k) (S j) -> Void
+```
+
+Hmm... Here we have a proof that if `k === j`, we'd have a contradiction. But we
+want a proof that if `(S k) === (S j)` we'd have a contradiction. This also
+seems like we need a link to `S`, which we don't have at the moment...
+
+### We were on the verge of greatness
+
+Unfortunately, missing the two links to `S` means we can't quite complete the
+definition for `decNat`. Without them, there is no way to convince Idris that
+one proof (or counter-proof) leads to the next. This is a problem, but
+thankfully one which is not too difficult to solve. Let's make the final push!
+
+#### Linking `k === j` and `S`
+
+First things first: The missing link between equality and the successor
+function. If `k` and `j` are the same, then applying `S` doesn't change that.
+For the mathematically inclined, this is also known as the "injective" property:
 
 ```idris
 public export
-data Dec : Type -> Type where
-  Yes : prop -> Dec prop
-  No  : Not prop -> Dec prop
+succInjective : (prf : k === j) -> (S k) === (S j)
 ```
 
-This expresses decidability over some property which is carried in the type. The
-`Yes` constructor takes a proof of the property as an argument, and the `No`
-constructor takes a proof that the property cannot hold (remember, `Not p` is
-shorthand for `p -> Void`).
+This definition gets interesting! If we start by defining:
 
-Now we can define decidable equality by simply declaring a function which
-returns some `Dec` carrying a proof which uses `Equal`:
--->
+```idris
+-- succInjective prf = ?succInjective_rhs
+```
+
+Then the type of the hole becomes:
+
+```idris
+---  0 k : Nat
+---  0 j : Nat
+---  prf : Equal k j
+--- ------------------------------
+--- succInjective_rhs : Equal (S k) (S j)
+```
+
+Which isn't very helpful; it's just re-told us what we're trying to prove.
+**However,** if we now case-split on `prf`, the picture suddenly changes:
+
+```idris
+-- succInjective Refl = ?succInjective_rhs_0
+
+---  0 k : Nat
+---  0 j : Nat
+--- ------------------------------
+--- succInjective_rhs_0 : Equal (S j) (S j)
+```
+
+What's happened?? Suddenly we only care about `j`! This is because matching on
+`Refl` tells us something _about_ `k` and `j`: `Refl` only takes a single
+argument, so by pattern-matching on `Refl`, Idris can deduce that `k` and `j`
+must have been the same (or we wouldn't have been able to call `Refl`; just like
+with `MkBronze`!!). This is supremely useful, since `Equal (S j) (S j)` is
+trivial to prove:
+
+```idris
+succInjective Refl = Refl
+```
+
+Once again, the implicit arguments confuse us here: The left hand side (lhs) and
+the right hand side (rhs) look identical, but the `Refl` on the lhs is actually
+`Refl {x=j}` and the `Refl` on the rhs is actually `Refl {x=(S j)}`. Idris can
+figure this out automatically which saves us some typing but admittedly looks a
+bit confusing. Trust me when I say it's worth it. Especially for bigger proofs.
+
+#### Linking `k === j -> Void` and `S`
+
+With `k === j -> (S k) === (S j)` defined, can we take a similar approach to the
+counter-proof? I don't see why not! If we have one contradiction, then mixing
+`S` doesn't magically fix things, it just leads to another contradiction:
+
+```idris
+public export
+succDiffers : (contra : k === j -> Void) -> (sPrf : (S k) === (S j)) -> Void
+```
+
+Another way to read this type is "If I know that `k === j` is nonsense, but at
+the same time someone has given me a proof that `(S k) === (S j)`, then that
+proof must also be nonsense!".
+
+Like with `succInjective`, our initial definition doesn't match on anything but
+let's us inspect the type of the rhs.
+
+```idris
+-- succDiffers contra sPrf = ?succDiffers_rhs
+
+---  0 k : Nat
+---  0 j : Nat
+---    sPrf : Equal (S k) (S j)
+---    contra : Equal k j -> Void
+--- ------------------------------
+--- succDiffers_rhs : Void
+```
+
+_Ah, mince!_ We need to return `Void` here, but we know that that's impossible!
+Is all lost? Not quite. If we try matching on `sPrf` (the proof that `S`
+magically fixed things) we get:
+
+```idris
+-- succDiffers contra Refl = ?succDiffers_rhs_0
+
+---  0 k : Nat
+---  0 j : Nat
+---    contra : Equal j j -> Void
+--- ------------------------------
+--- succDiffers_rhs_0 : Void
+```
+
+Exactly _how_ does this help us? Well, we now know that `(S k)` and `(S j)` were
+the same (that's what `sPrf` was telling us) so `k` and `j` must have been the
+same. But we also have a counter-proof, a function, showing us that _if_ that's
+the case, then we have a contradiction. We can apply this to dismiss the proof
+as nonsense (or rather, show that the other proof _also_ arrives at a
+contradiction):
+
+```idris
+succDiffers contra Refl = contra Refl
+```
+
+#### Why don't we break the rules already?
+
+Have we beaten the system? Have we returned `Void`? No! `contra` is impossible;
+there is no way to give its body a definition. What we have done is explained to
+Idris that "if I somehow give you a `contra : j === j -> Void` and a
+`Refl {x=(S j)}`, then I have broken the rules and we can use that `contra` to
+return `Void`".
+
+This is a very important thing to be able to show. It shows that breaking the
+rules in one place results in them being broken everywhere. If we take a false
+statement as true (i.e. have it exist as a function), then our entire system of
+reasoning becomes unsound and we can do silly things like construct `Void` from
+this statement.
+
+Continuing to prove things _after_ we have shown there is a contradiction is
+nonsensical.
+
+### Decidable equality (for real real this time)
+
+With all the missing links now in place, we can finally, actually define
+decidable equality for natural numbers. No more tricks or princesses in other
+castles, I promise.
+
+```idris
+public export
+decEqNat : (m : Nat) -> (n : Nat) -> Dec (m === n)
+decEqNat 0     0     = Yes Refl
+decEqNat 0     (S j) = No zeroNotSucc
+decEqNat (S k) 0     = No succNotZero
+{-
+decEqNat (S k) (S j) = case decEqNat k j of
+                            (Yes prf) = Yes ?decEqNat_rhs_5
+                            (No contra) = No ?decEqNat_rhs_6
+-}
+```
+
+That was where we left off last time. Except now that we have shown that there
+are links between proofs and counter-proofs and `S`, we can complete the
+definition by applying these as relevant:
+
+```idirs
+decEqNat (S k) (S j) = case decEqNat k j of
+                            (Yes prf) => Yes (succInjective prf)
+                            (No contra) => No (succDiffers contra)
+```
+
+This final case shows that if we have _proved_ `k` and `j` to be equal, then a
+proof for "Are `(S k)` and `(S j)` equal?" is decidably `Yes`, and we obtain the
+relevant proof via `succInjective`.
+
+And vice-versa, if we have proved that `k` and `j` _cannot_ be equal, then we
+can use that counter-proof to construct another one using `succDiffers`, which
+shows that `(S k)` and `(S j)` cannot be equal. And with that, the answer is
+decidably `No`.
+
+## We did it!
+
+That's decidable equality. Having `Refl` and `Void` allows us to write functions
+which can tell if two things are equal along with explaining _how_ they are
+equal (or how they _cannot possibly_ be equal). This is only possible thanks to
+dependent types, which lets us describe relationships between data in the type
+of things. Without it, we do not get any guarantees from the return types of
+functions.
+
+Coming back to the very start where we were looking at `==`. If we now compare
+the types of two functions for comparing `Nat`s:
+
+```idris
+boolEqNat : (m : Nat) -> (n : Nat) -> Bool
+
+decEqNat' : (m : Nat) -> (n : Nat) -> Dec (m === n)
+```
+
+(I've had to call it `decEqNat'` since we already have `decEqNat`). We can see
+that the _type_ of the function now provides a relationship between the inputs.
+Where `Bool` doesn't have any mention of whether it's actually looking at `m`
+and `n`, `Dec` explicitly mentions `m` and `n` _and_ states that the function
+will return a proof datatype relating them, if it returns a `Yes`. That's pretty
+cool, no?
+
+### It _is_... but that sure took a while!...
+
+Yeah, sorry about that. This took 4-5 times as long as I thought it would. For
+those bits where I went "ah but first, we actually also need [...]", that was
+genuinely me getting caught off-guard having forgotten a thing.
+
+I hope that you still think it was worth it, and that you now understand both
+the concept and inner workings of decidable equality. Thanks for reading along!
+ : )
 
 
-## Beyond Equality: Custom Predicates
+## Want to know more?
+
+### Beyond Equality: Custom Predicates
 
 
-## Conclusion
+### Proving things impossible is _hard_
 
 
 ## Acknowledgements
