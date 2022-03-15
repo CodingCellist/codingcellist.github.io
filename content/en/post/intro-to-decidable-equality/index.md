@@ -427,7 +427,7 @@ two things, so we'll also need two things which can be equal. An easy example is
 
 ```idris
 decideEquals : (n : Nat) -> (m : Nat) -> Decide (n === m)
-decideEquals 0     0     = IsSound Refl
+decideEquals 0     0     = ItHolds Refl
 decideEquals 0     (S j) = ?decide_rhs_2
 decideEquals (S k) 0     = ?decide_rhs_3
 decideEquals (S k) (S j) = ?decide_rhs_4
@@ -852,7 +852,7 @@ That was where we left off last time. Except now that we have shown that there
 are links between proofs and counter-proofs and `S`, we can complete the
 definition by applying these as relevant:
 
-```idirs
+```idris
 decEqNat (S k) (S j) = case decEqNat k j of
                             (Yes prf) => Yes (succInjective prf)
                             (No contra) => No (succDiffers contra)
@@ -1012,7 +1012,7 @@ This `absurd` function expresses that if we have some instance of something
 `Uninhabited`, then that's the same as having constructed `Void` (since
 uninhabited means the type cannot exist).
 
-#### Putting it all together
+#### This is generally nice
 
 The `DecEq` and `Uninhabited` interfaces, combined with the `absurd` function,
 allow us to write `Dec` things more nicely (if we can define the interfaces for
@@ -1029,9 +1029,6 @@ DecEq Bool where
 
 Look at how nice and simple that implementation is! It's so much easier to read
 than writing out custom proofs.
-
-Of course, this only works if your type is nice and easy to define `Uninhabited`
-and `Equal` for...
 
 ### And this, is to go even further beyond!
 
@@ -1139,19 +1136,20 @@ can show that the `Refl` used for the repetition must be contradictory.
 
 In the second line of the definition, we have the same thing, except there's
 more than one element in the list involving `y`. However, the other elements are
-irrelevant since we know the first one forms a contradiction, so we again show
-that the `Refl` used for the repetition must be contradictory.
+irrelevant since we know the first one forms a contradiction. So we use the
+first element to show that the `Refl` used for the repetition must be
+contradictory.
 
 Now let's do the tail case: If we have a proof that some repetition of `x` is
 actually a contradiction, then it doesn't matter if we extend the repetition,
-it'll still be a contradiction!
+it'll still contain a contradiction!
 
 ```idris
 public export
 tailDiffers :  (contra : Repetition x (z :: xs) -> Void)
             -> (prf : Repetition x (y :: (z :: xs)))
             -> Void
-tailDiffers contra (More x falseRep) = contra falseRep
+tailDiffers contra (More x absurdTail) = contra absurdTail
 ```
 
 We can only match on `More` since `(y :: (z :: xs))` is not a singleton list (it
@@ -1162,7 +1160,7 @@ contradiction.
 ### Plus ça change...
 
 Finally, let's put together the `isRepetition` function. Note that we could not
-have written this definition if we'd missed _any_ of the above steps...
+have written this definition if we'd missed _any_ of the steps above...
 
 ```idris
 public export
@@ -1173,12 +1171,12 @@ isRepetition x [] = No absurd
 
 isRepetition x (y :: []) =
   case decEq x y of
-       (Yes prf) => Yes (justHead prf)        -- rewrite prf in Yes Just
+       (Yes prf) => Yes (singletonRep prf)    -- rewrite prf in Yes Just
        (No contra) => No (headDiffers contra)
 
 isRepetition x (y :: (z :: xs)) =
   case decEq x y of
-       (Yes headOK) =>                        -- rewrite headOK in
+       (Yes headOK) =>                        -- rewrite headOK in case...
           case isRepetition x (z :: xs) of
                (Yes tailOK) => Yes (allGood headOK tailOK)  -- rewrite tailOK...
                (No contra) => No (tailDiffers contra)
@@ -1194,9 +1192,4 @@ likely get it wrong, both your datatypes and the properties involving them, but
 that's just part of the _"Type, define, refine"_ mantra of Idris.
 
 gl hf!
-
-(final, final pointers: Chapter 9 of the Idris book,  
-and
-[PreorderReasoning.idr](https://github.com/idris-lang/Idris2/blob/main/libs/contrib/Syntax/PreorderReasoning.idr)
-(here be dragons!))
 
