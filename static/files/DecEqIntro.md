@@ -669,8 +669,8 @@ For the first hole, we get:
 ---   k : Nat
 ---   j : Nat
 ---   prf : Equal k j
----  ------------------------------
----  decNat_rhs_5 : Equal (S k) (S j)
+--- ------------------------------
+--- decNat_rhs_5 : Equal (S k) (S j)
 ```
 
 So we have a proof that `k === j`, but we want a proof that `(S k) === (S j)`.
@@ -719,17 +719,17 @@ Well then. Let's make the final push!
 
 First things first: The missing link between equality and the successor
 function. If `k` and `j` are the same, then applying `S` doesn't change that.
-For the mathematically inclined, this is also known as the "injective" property:
+For the mathematically inclined, this is also known as a "congruence" relation:
 
 ```idris
 public export
-succInjective : (prf : k === j) -> (S k) === (S j)
+succCongruent : (prf : k === j) -> (S k) === (S j)
 ```
 
 This definition gets interesting! If we start by defining:
 
 ```idris
--- succInjective prf = ?succInjective_rhs
+-- succCongruent prf = ?succCongruent_rhs
 ```
 
 Then the type of the hole becomes:
@@ -737,21 +737,21 @@ Then the type of the hole becomes:
 ```idris
 ---  0 k : Nat
 ---  0 j : Nat
----  prf : Equal k j
+---    prf : Equal k j
 --- ------------------------------
---- succInjective_rhs : Equal (S k) (S j)
+--- succCongruent_rhs : Equal (S k) (S j)
 ```
 
 Which isn't very helpful; it's just re-told us what we're trying to prove.
 **However,** if we now case-split on `prf`, the picture suddenly changes:
 
 ```idris
--- succInjective Refl = ?succInjective_rhs_0
+-- succCongruent Refl = ?succCongruent_rhs_0
 
 ---  0 k : Nat
 ---  0 j : Nat
 --- ------------------------------
---- succInjective_rhs_0 : Equal (S j) (S j)
+--- succCongruent_rhs_0 : Equal (S j) (S j)
 ```
 
 What's happened?? Suddenly we only care about `j`! This is because matching on
@@ -762,7 +762,7 @@ with `MkBronze`!!). This is supremely useful, since `Equal (S j) (S j)` is
 trivial to prove:
 
 ```idris
-succInjective Refl = Refl
+succCongruent Refl = Refl
 ```
 
 Once again, the implicit arguments confuse us here: The left hand side (lhs) and
@@ -786,7 +786,7 @@ Another way to read this type is "If I know that `k === j` is nonsense, but at
 the same time someone has given me a proof that `(S k) === (S j)`, then that
 proof must also be nonsense!".
 
-Like with `succInjective`, our initial definition doesn't match on anything but
+Like with `succCongruent`, our initial definition doesn't match on anything but
 let's us inspect the type of the rhs.
 
 ```idris
@@ -867,13 +867,13 @@ definition by applying these as relevant:
 
 ```idris
 decEqNat (S k) (S j) = case decEqNat k j of
-                            (Yes prf) => Yes (succInjective prf)
+                            (Yes prf) => Yes (succCongruent prf)
                             (No contra) => No (succDiffers contra)
 ```
 
 This final case shows that if we have _proved_ `k` and `j` to be equal, then a
 proof for "Are `(S k)` and `(S j)` equal?" is decidably `Yes`, and we obtain the
-relevant proof via `succInjective`.
+relevant proof via `succCongruent`.
 
 And vice-versa, if we have proved that `k` and `j` _cannot_ be equal, then we
 can use that counter-proof to construct another one using `succDiffers`, which
@@ -922,6 +922,8 @@ the concept and inner workings of decidable equality. Thanks for reading along!
 
 - Zoe Stafford (z-snails/z_snail) and Guillaume Allais (gallais) for help with
     understanding `rewrite` and `void`.
+- Tom Harley (magnostherobot) for reading this once I'd published it, and
+    spotting that I'd confused "injective" for "congruent".
 - the hacker known as "Alex" (mangopdf), for making me realise I was
     [writing a textbook when I didn't need to](https://mango.pdf.zone/i-give-you-feedback-on-your-blog-post-draft-but-you-dont-send-it-to-me)
 
