@@ -10,7 +10,7 @@ summary: "One of the more difficult concepts in Idris, I've found, is proving
 authors: [thomas-e-hansen]
 tags: [idris2, intro, formal-methods]
 categories: []
-date: 2022-03-08
+date: 2022-03-15
 lastmod:
 featured: false
 draft: false
