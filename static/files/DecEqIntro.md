@@ -41,9 +41,8 @@ But I do know a lot more than I started out with! And having tried to explain
 this to various people, both friends and family, hopefully I can write something
 at least semi-coherent which provides a nice explanation.
 
-By the way, this post is also a Literate Idris file, which means you can load
-[the markdown it's based on](/files/DecEqIntro.md)
-at the REPL and try using the functions it defines!
+By the way, this post is also a Literate Idris file, which means you can load it
+at the REPL and test the functions it defines!
 
 ## Hiding the built-in stuff
 
