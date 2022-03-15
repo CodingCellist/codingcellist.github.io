@@ -1184,6 +1184,12 @@ isRepetition x (y :: (z :: xs)) =
        (No contra) => No (headDiffers contra)
 ```
 
+This may look familiar to the other `Dec` function we wrote, and that's because
+it is! The general strategy for writing these is the same, but the intermediary
+steps and proofs/lemmas/functions are really where things get hairy. A good rule
+of thumb is "If it seems trivial, prove it!!" -- chances are you'll need that
+trivial (counter-)proof at some point in your more involved proofs.
+
 ## That's all folks!
 
 Genuinely this time. If there's more you want to learn, I strongly encourage you
