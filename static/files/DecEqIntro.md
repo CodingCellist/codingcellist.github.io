@@ -41,8 +41,20 @@ But I do know a lot more than I started out with! And having tried to explain
 this to various people, both friends and family, hopefully I can write something
 at least semi-coherent which provides a nice explanation.
 
-By the way, this post is also a Literate Idris file, which means you can load it
-at the REPL and test the functions it defines!
+By the way, this post is also a Literate Idris file, which means you can load
+[the markdown it's based on](/files/DecEqIntro.md)
+at the REPL and try using the functions it defines!
+
+
+## What we're aiming for
+
+The goal at the end of this journey, is to be able to write the `Dec` interface
+(which models properties that either provably hold or provably _cannot_ hold)
+and some instances of it. However, in order to do this we need to understand and
+implement certain other things like `Equal` and `Void`.
+
+Worry not! This will all become clear in due course!
+
 
 ## Hiding the built-in stuff
 
@@ -72,6 +84,7 @@ module DecEqIntro
 
 %default total
 ```
+
 
 ## Fundamentals
 
@@ -867,6 +880,7 @@ can use that counter-proof to construct another one using `succDiffers`, which
 shows that `(S k)` and `(S j)` cannot be equal. And with that, the answer is
 decidably `No`.
 
+
 ## We did it!
 
 That's decidable equality. Having `Refl` and `Void` allows us to write functions
@@ -902,6 +916,7 @@ genuinely me getting caught off-guard having forgotten a thing.
 I hope that you still think it was worth it, and that you now understand both
 the concept and inner workings of decidable equality. Thanks for reading along!
  : )
+
 
 ## Acknowledgements
 
@@ -1189,6 +1204,7 @@ it is! The general strategy for writing these is the same, but the intermediary
 steps and proofs/lemmas/functions are really where things get hairy. A good rule
 of thumb is "If it seems trivial, prove it!!" -- chances are you'll need that
 trivial (counter-)proof at some point in your more involved proofs.
+
 
 ## That's all folks!
 
