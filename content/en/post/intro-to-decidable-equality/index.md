@@ -885,12 +885,13 @@ boolEqNat : (m : Nat) -> (n : Nat) -> Bool
 decEqNat' : (m : Nat) -> (n : Nat) -> Dec (m === n)
 ```
 
-(I've had to call it `decEqNat'` since we already have `decEqNat`). We can see
-that the _type_ of the function now provides a relationship between the inputs.
-Where `Bool` doesn't have any mention of whether it's actually looking at `m`
-and `n`, `Dec` explicitly mentions `m` and `n` _and_ states that the function
-will return a proof datatype relating them, if it returns a `Yes`. That's pretty
-cool, no?
+(I've had to call the function `decEqNat'` since we already have `decEqNat`).
+
+We can see that the _type_ of the function now provides a relationship between
+the inputs.  Where `Bool` doesn't have any mention of whether it's actually
+looking at `m` and `n`, `Dec` explicitly mentions `m` and `n` _and_ states that
+the function will return a proof datatype relating them, if it returns a `Yes`.
+That's pretty cool, no?
 
 ### It _is_... but that sure took a while!...
 
@@ -927,7 +928,7 @@ Without further ado, let's get to it!
 
 Decidable equality is a thing we can define for lots of types. So it would be
 nice to be able to just use a general function, e.g. `decEq`, for all these
-types. I hear ya fam!
+types. I got ya fam!
 
 ```idris
 public export
@@ -1038,6 +1039,164 @@ Simple equality is not always the most interesting. Quite often, it is more fun
 to reason about more complicated properties of more complex structures. And that
 is totally possible! As long as you're willing to do the work...
 
+```idris
+public export
+data Repetition : a -> List a -> Type where
+  Just : Repetition x [x]
+  More : (x : a) -> Repetition x xs -> Repetition x (x :: xs)
+```
+
+Here we have a proof showing that a list `xs` consists purely of repetitions of
+`x`. It's slightly a toy example, but it illustrates the point of being "willing
+to do the work" quite well.
+
+We'd like to just write:
+
+```idris
+-- isRepetition : DecEq a => (x : a) -> (xs : List a) -> Dec (Repetition x xs)
+```
+
+But, as with natural numbers, we need some intermediary proofs before we can do
+that. Except, this time we've thrown a `List` into the mix! How is that a
+problem? Well, proofs over lists can fail in multiple places: either the head
+(the first element), or somewhere in the tail (the following elements). This
+means there's a lot more to prove before we can write the final decidable thing.
+
+```idris
+public export
+Uninhabited (Repetition x []) where
+  uninhabited Just impossible
+  uninhabited (More x ys) impossible
+```
+
+The easiest is to prove that we cannot have a repetition if the list is empty.
+There is no way to call either of the constructors, so we simply use
+`Uninhabited` and `impossible`. So far, so good.
+
+Next, let's try the positive cases. If we have a proof that `x` is the same as
+`y`, then we can put that in a singleton list for `Repetition` purposes:
+
+```idris
+public export
+singletonRep : (prf : x === y) -> Repetition x [y]
+singletonRep Refl = Just
+```
+
+Matching on `Refl` makes Idris recognise that the two are the same thing, so we
+can call `Just` without any problem; we only have one thing, which we can put in
+a list.
+
+With that taken care of, let's show that if `x` is the same as `y`, and we have
+an existing repetition of `x`, then we can extend the repetition to one more
+element:
+
+```idris
+public export
+allGood :  {x : _}
+        -> (another : x === y)
+        -> (rep : Repetition x (z :: xs))
+        -> Repetition x (y :: (z :: xs))
+allGood Refl rep = More x rep
+```
+
+Again, matching on `Refl` makes Idris realise that `x` and `y` are the same
+thing, and we already know that `(z :: xs)` is just a repetition of `x`, so we
+can extend it with the extra `x` using `More`.
+
+{{< spoiler text="Another side note on `rewrite`..." >}}
+If we weren't defining everything from scratch, we could use `rewrite` to prove
+the positive cases. We wouldn't define intermediary proofs for each and every
+one of the positive cases. But unfortunately for us, we _are_ defining
+everything from scratch, and so we need these extra positive proofs.
+
+Ah well. It's probably good for the soul or something.
+{{< /spoiler >}}
+
 ### Proving things impossible is _hard_
 
+We've shown that we can prove things to be okay for a this more complicated
+property, but what about the cases where things are not okay? Well, those are
+pretty difficult: We don't need to show that it is unlikely to succeed, we need
+to show that it is _guaranteed_ to fail!
+
+We'll start with showing that if `x` _cannot_ be the same as `y`, then a proof
+of repetition involving both (where `y` was the first element in the list) is a
+contradiction:
+
+```idris
+public export
+headDiffers :  (contra : (x === y) -> Void)
+            -> (prf : Repetition x (y :: _))
+            -> Void
+headDiffers contra Just = contra Refl
+headDiffers contra (More x _) = contra Refl
+```
+
+This is already more confusing than the positive proofs. In the first line of
+the definition, we have a singleton list containing `y` as a repetition of `x`
+(meaning they are equal), but we also proved that `x` doesn't equal `y`, so we
+can show that the `Refl` used for the repetition must be contradictory.
+
+In the second line of the definition, we have the same thing, except there's
+more than one element in the list involving `y`. However, the other elements are
+irrelevant since we know the first one forms a contradiction, so we again show
+that the `Refl` used for the repetition must be contradictory.
+
+Now let's do the tail case: If we have a proof that some repetition of `x` is
+actually a contradiction, then it doesn't matter if we extend the repetition,
+it'll still be a contradiction!
+
+```idris
+public export
+tailDiffers :  (contra : Repetition x (z :: xs) -> Void)
+            -> (prf : Repetition x (y :: (z :: xs)))
+            -> Void
+tailDiffers contra (More x falseRep) = contra falseRep
+```
+
+We can only match on `More` since `(y :: (z :: xs))` is not a singleton list (it
+has at least 2 elements). And when matching on `More`, we also gain access to
+the sublist that we know contains a contradiction! So we just refer to that
+contradiction.
+
+### Plus ça change...
+
+Finally, let's put together the `isRepetition` function. Note that we could not
+have written this definition if we'd missed _any_ of the above steps...
+
+```idris
+public export
+covering
+isRepetition : DecEq a => (x : a) -> (xs : List a) -> Dec (Repetition x xs)
+
+isRepetition x [] = No absurd
+
+isRepetition x (y :: []) =
+  case decEq x y of
+       (Yes prf) => Yes (justHead prf)        -- rewrite prf in Yes Just
+       (No contra) => No (headDiffers contra)
+
+isRepetition x (y :: (z :: xs)) =
+  case decEq x y of
+       (Yes headOK) =>                        -- rewrite headOK in
+          case isRepetition x (z :: xs) of
+               (Yes tailOK) => Yes (allGood headOK tailOK)  -- rewrite tailOK...
+               (No contra) => No (tailDiffers contra)
+
+       (No contra) => No (headDiffers contra)
+```
+
+## That's all folks!
+
+Genuinely this time. If there's more you want to learn, I strongly encourage you
+to experiment with datatypes for custom properties and proving these! You'll
+likely get it wrong, both your datatypes and the properties involving them, but
+that's just part of the _"Type, define, refine"_ mantra of Idris.
+
+gl hf!
+
+(final, final pointers: Chapter 9 of the Idris book,  
+and
+[PreorderReasoning.idr](https://github.com/idris-lang/Idris2/blob/main/libs/contrib/Syntax/PreorderReasoning.idr)
+(here be dragons!))
 
