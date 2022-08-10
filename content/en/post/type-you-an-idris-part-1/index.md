@@ -41,13 +41,13 @@ time I've encountered these in the past, I've gone "I really ought to learn this
 at some point!", and then promptly gotten distracted by a project or some
 reading I was doing.
 
-So now, 1½ years into my PhD, armed with at least _some_ understanding of the
-underlying concepts and terms, I've decided to try and jump back in to Edwin's
-course from the Scottish Programming Language and Verification Summer School
-(SPLV) in 2020, which has you implement `TinyIdris` --- a scaled down version of
-full Idris. When I attended this live, I hadn't even technically started yet, so
-the whole thing was a bit overwhelming and above my level; hopefully this time
-it's manageable.
+So now, just short of 2 years into my PhD, armed with at least _some_
+understanding of the underlying concepts and terms, I've decided to try and jump
+back in to Edwin's course from the Scottish Programming Language and
+Verification Summer School (SPLV) in 2020, which has you implement `TinyIdris`
+--- a scaled down version of full Idris. When I attended this live, I hadn't
+even technically started yet, so the whole thing was a bit overwhelming and
+above my level; hopefully this time it's manageable.
 
 If you're also confused, or just want to know more, come along for the ride!
 
@@ -77,14 +77,14 @@ which meant the following needed fixed in TinyIdris before it would even build:
     is no longer allowed (and we can't just stick an `ignore` in front because,
     for performance reasons, `Core` is not an implementation of `Monad`).
 * `Data.List1.toList` has been generalised to `Prelude.Foldable.toList` (so
-    just, `toList`).
+    just `toList`).
 * `Data.List1` now uses `:::` as a constructor, not `::`, meaning that we can't
     pattern-match on `[p']` or similar since it desugars to `p' :: []`. Instead,
     we need to match on `(p' ::: [])`. There were also some similar problems in
     terms of constructing and returning new `List1`s.
 * `Show` is now `total`, but this introduces some... _difficulties_ when
     implementing it for certain datatypes. A solution is to just stick a
-    `covering` at the top.
+    `covering` at the top of the function declaration.
 * A couple of functions in `Core.Env` use `tm` from `Weaken tm` without
     declaring that `tm` is implicit and with ω-multiplicity
     (runtime accessible).
@@ -159,7 +159,8 @@ Eq Name where
 
 Proving that two `Name`s are equal is a bit more complicated. Although,
 thankfully, this is not a `DecEq` (_decidable_ equality) implementation, which
-means we don't need to prove how it is impossible for the `Name`s to be equal.  
+means we don't need to prove how it is impossible for the `Name`s to be equal.
+
 Again, start by interactively generating a definition using `<localleader> d`,
 then case-splitting on the arguments, and introducing a generic pattern match
 for different types of `Name`s:
@@ -249,9 +250,11 @@ proof that their internal strings differ. Sounds like we need a helper function
 ```idris
 unStringsDiffer : (contra : x = y -> Void) -> (prf : UN x = UN y) -> Void
 ```
-
-(If you are uncertain about `DecEq`, proofs and contras, there are more details
-in [this blog post](/en/post/intro-to-decidable-equality))
+{{< spoiler text="If you are uncertain about `DecEq`..." >}}
+If you are uncertain about `DecEq`, proofs and contras, I've written an intro
+(well, more of a complete explanation) to decidable equality which you can find
+in [this blog post](/en/post/intro-to-decidable-equality).
+{{< /spoiler >}}
 
 This lemma is trivial enough that Idris can actually figure it out from the type
 declaration. Ask Idris to _generate_ a definition by putting the cursor on
@@ -317,8 +320,9 @@ mnNumbersDiffer : MN x i = MN y j -> Void
 ```
 
 Here, although _we_, the human, know that we're under a `(Yes prfXY)`-case, we
-have never actually told Idris that/what that means, so it doesn't know that the
-strings `x` and `y` are the same and that only `i` and `j` might differ.
+have never actually told Idris that/told Idris what that means, so it doesn't
+know that the strings `x` and `y` are the same and that only `i` and `j` might
+differ.
 
 If we now lift both the holes (using `<localleader> l`), making sure to lift
 these all the way above the `DecEq Name` declaration,  we'll get some useful
@@ -353,9 +357,9 @@ mnStringsDiffer : (contra : x = y -> Void) -> (prf : MN x _ = MN y _) -> Void
 mnStringsDiffer contra Refl = contra Refl
 ```
 
-By the way, this is why I said that the first `rewrite` doesn't technically
-matter for the `No` case: The `mnNumbersDiffer` lemma holds without needing any
-info about the strings.
+The underscores in the types here are why I said that the first `rewrite`
+doesn't technically matter for the `No` case: The `mnNumbersDiffer` lemma holds
+without needing any info about the strings.
 
 Coming back to the cross-comparing cases. To us, clearly we cannot construct an
 instance of `Refl` for these, since `MN` takes more arguments than `UN`.
@@ -479,7 +483,7 @@ For the second part, it helps a bit to look at the type of `Later`:
   Later : IsVar n i ns -> IsVar n (S i) (m :: ns)
 ```
 
-That is: "If I have a proof that `i` is a valid index for `n` in `ns`, then I
+This means: "If I have a proof that `i` is a valid index for `n` in `ns`, then I
 can extend `ns` with `m`, as long as I increment the index." How does this help
 us, you might ask? Let's have a look at the type for our final pattern-match in
 `dropFirst` again:
@@ -527,7 +531,8 @@ dropFirst ((MkVar (Later x)) :: xs) = (MkVar x) :: dropFirst xs
 ```
 
 Phew! For a warmup, it's certainly picked up a bit (at least if you, like me,
-are new to this stuff and feel like you're out of your depth). On to part 2...
+are new to this stuff and feel like you're way out of your depth). On to part
+2...
 
 #### Part 2: Variable insertion
 
@@ -600,7 +605,7 @@ aNN_rhs_1 : x :: xs = x :: xs
 Well that certainly improved things! We've won!! The logic here, is that since
 Idris now knows that appending `Nil` to the tail of the list doesn't change the
 tail, all that remains is to prove that reconstructing the list (from our
-"destructive" pattern-match on `x :: xs`) doesn't change the list. That
+destructive pattern-match on `x :: xs`) doesn't change the list. That
 _definitely_ sounds trivial! And indeed, a proof-search on `?aNN_rhs_1` finds it
 is `Refl`, completing the definition:
 
@@ -613,9 +618,9 @@ appendNilNeutral (x :: xs) = rewrite appendNilNeutral xs in Refl
 #### Part 2: List appending is associative
 
 Next up is to prove that appending lists is associative, i.e. it doesn't matter
-if we append list `a` to list `b` and then append list `c` to the result, or if
-we first append list `c` to list `b` and then append that to list `a`. In mathsy
-notation (also seen in the type):
+if we append list `b` to list `a` and then append list `c` to the result, or if
+we first append list `c` to list `b` and then append that result to list `a`. In
+mathsy notation (also seen in the type):
 
 ```idris
 xs ++ (ys ++ zs) = (xs ++ ys) ++ zs
@@ -683,12 +688,13 @@ If we now inspect the hole, we get:
 appendAssoc_rhs_1 : x :: ((xs ++ ys) ++ zs) = x :: ((xs ++ ys) ++ zs)
 ```
 
-Again, the logic is that we'll either keep recursing on the tail, or reach the
-base-case `[] ys zs`, in which case we've won. We know we'll eventually reach
-the base-case since lists in Idris cannot be infinite and we're removing an
-element each time, so we know that eventually everything will be fine. All that
-remains to prove is that restoring `x` to the front of the list doesn't change
-the recursive append result. This is trivial and completes the definition/proof:
+Remember that the logic is that we'll either keep recursing on the tail, or
+reach the base-case `[] ys zs`, in which case we've won. We know we'll
+eventually reach the base-case since lists in Idris cannot be infinite and we're
+removing an element each time, so we know that eventually everything will be
+fine. All that remains to prove is that restoring `x` to the front of the list
+doesn't change the recursive append result. This is trivial and completes the
+proof/definition:
 
 ```idris
 appendAssoc :  (xs : List a) -> (ys : List a) -> (zs : List a)
@@ -697,7 +703,7 @@ appendAssoc [] ys zs = Refl
 appendAssoc (x :: xs) ys zs = rewrite appendAssoc xs ys zs in Refl
 ```
 
-That also concludes the parts on lists. Now we move on to trees.
+This also concludes the parts on lists. Now we move on to trees.
 
 #### Part 3: Rotating trees left
 
