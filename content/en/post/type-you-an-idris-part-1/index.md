@@ -837,10 +837,9 @@ $
 $
 \Box
 $
-{{< \math >}}
+{{< /math >}}
 
 {{< /spoiler >}}
-</details>
 
 Nicely done! With that, we can now transfer the proof into Idris. If you kept
 track of what rules you applied where (which is generally a good idea when
