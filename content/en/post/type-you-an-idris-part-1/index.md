@@ -845,6 +845,15 @@ Nicely done! With that, we can now transfer the proof into Idris. If you kept
 track of what rules you applied where (which is generally a good idea when
 writing formal proofs), this should be almost trivial.
 
+{{< spoiler text="If you have a shorter solution... (don't worry if not)" >}}
+
+If you read the above solution and thought "What on Earth?? My solution is just
+one line", then you're likely correct (put it into Idris to check). There _is_ a
+much shorter solution, and I'll come back to it, but for now we're going to take
+the long route.
+
+{{< /spoiler >}}
+
 Let's start by lifting the `rotateLemma` to a new function using `<localleader>
 l`:
 
@@ -1022,6 +1031,179 @@ Almost there! For the final part of this exercise, we "just" need to rotate
 trees right as well.
 
 ### Part 4: Rotating trees right
+
+Unsurprisingly, this is going to be very similar to the `rotateL` exercise.
+
+This should hopefully be almost second-nature by now: Start by generating a
+definition and case-splitting on the argument:
+
+```idris
+rotateR : Tree xs -> Tree xs
+rotateR Leaf = ?rotateR_rhs_0
+rotateR (Node left n right) = ?rotateR_rhs_1
+```
+
+In the first case, we're rotating a tree consisting only of a single leaf. There
+isn't anything to do in this case, so we just return the leaf:
+
+```idris
+rotateR Leaf = Leaf
+```
+
+In the second case, however, we need to do something similar to `rotateL`. But
+here we're trying to rotate the tree right (or clockwise), not left, so we care
+about the mirror-case compared to `rotateL`: the right half of the tree is
+general, the left half of the tree is interesting. Let's start by defining that:
+
+```idris
+rotateR (Node Leaf n right) = ?rotateR_rhs_1
+rotateR ((Node leftl n' leftr) n right) = ?rotateR_rhs_2
+```
+
+In the case where the left side of the tree is a leaf, we cannot rotate the tree
+right, so we just return the existing tree:
+
+```idris
+rotateR (Node Leaf n right) = Node Leaf n right
+```
+
+When we _do_ have a left side of the tree, we need to:
+
+1. Move the left node to be the current/top node,
+2. move the former top node to be the right child of the old left node,
+3. and move the former left node's right subtree (the "left-right" tree, if you
+   will) to be the left branch of the old top node.
+
+(This is hard to explain in text, so I'd strongly recommend drawing a diagram to
+better illustrate things.)
+
+As with `rotateL`, Idris won't just accept that the two trees are the same. We
+need to help it by defining a lemma. Put a hole in its place for now:
+
+```idris
+rotateR (Node (Node leftl n' leftr) n right) =
+    ?rotateRLemma $ Node leftl n' (Node leftr n right)
+```
+
+Inspecting the type of this hole gives us some insight into what needs to be
+done:
+
+```idris
+   n' : a
+   leftr : Tree ys
+   leftl : Tree xs
+   n : a
+   right : Tree ys
+ 0 xs : List a
+------------------------------
+rotateRLemma :  Tree (xs ++ (n' :: (ys ++ (n :: ys))))
+             -> Tree ((xs ++ (n' :: ys)) ++ (n :: ys))
+```
+
+This looks oddly familiar... It's the inverse of `rotateLemma`!
+
+Now, I'd love to say that there is some `sym`-like function we could just stick
+in front of `rotateLemma`, but unfortunately not. Since not all functions are
+invertible, we have to write this one by hand. Start by lifting the hole to a
+new function (using `<localleader> l`) and cleaning up all the extra stuff Idris
+adds:
+
+```idris
+rotateRLemma :  Tree (xs ++ (n' :: (ys' ++ (n :: ys))))
+             -> Tree ((xs ++ (n' :: ys')) ++ (n :: ys))
+
+[...]
+
+rotateR (Node (Node leftl n' leftr) n right) =
+    rotateRLemma $ Node leftl n' (Node leftr n right)
+```
+
+And then generate the start of a definition (using `<localleader> d`):
+
+```idris
+rotateRLemma :  Tree (xs ++ (n' :: (ys' ++ (n :: ys))))
+             -> Tree ((xs ++ (n' :: ys')) ++ (n :: ys))
+rotateRLemma x = ?rotateRLemma_rhs
+```
+
+Once again, remember that we are working right-to-left here and _not_
+left-to-right; we're trying to slot `x` into the `?rotateRLemma_rhs` hole. Now
+you _could_ go about this the long way as with the original `rotateLemma`, but
+there is a shorter way. It just requires a bit more thinking.
+
+Start by looking at the appends (the `++` operations). Those are the things we
+want to reorder using `appendAssoc`. There are 3 terms:
+
+* `xs`
+* `n' :: ys'`
+* `n :: ys`
+
+{{< spoiler text="If you came up with a one-line solution to 3.3..." >}}
+
+If you came up with a one-line solution to 3.3, then there _is_ an inverse for
+the definition of this proof. It's simply `sym`. Stick that in front of the same
+thing you wrote as the definition for 3.3 and you're done!
+
+{{< /spoiler >}}
+
+These can be reordered using a single call to `appendAssoc`: the inner grouping
+is between the first two terms (`xs` and `(n' :: ys)`), and the outer grouping
+is with the third term (`n :: ys`). As I mentioned earlier though, we're going
+the other way from `rotateL`, and so we need a `sym` for the single
+`appendAssoc` call to work. Putting it all together gives:
+
+```idris
+rotateRLemma x =
+    rewrite sym $ appendAssoc xs (n' :: ys') (n :: ys) in ?rotateRLemma_rhs
+```
+
+I don't blame you if you didn't spot this in 3.3. I didn't until I wrote this
+and went "Hang on a minute! That should just work for 3.3!!". It requires being
+able to squint at the type right, which is something that takes a bit of
+practice. Hopefully taking both the long and the short way has helped a bit with
+this  : )
+
+If we inspect the hole in our one-line definition we get:
+
+```idris
+ 0 ys : List a
+ 0 ys' : List a
+ 0 xs : List a
+ 0 n : a
+ 0 n' : a
+   x : Tree (xs ++ (n' :: (ys' ++ (n :: ys))))
+------------------------------
+rotateRLemma_rhs : Tree (xs ++ (n' :: (ys' ++ (n :: ys))))
+```
+
+Which is exactly the type of `x`. As with `rotateLemma`, slot `x` into the
+`x`-shaped hole to complete the definition:
+
+```idris
+rotateRLemma x =
+    rewrite sym $ appendAssoc xs (n' :: ys') (n :: ys) in x
+```
+
+And just to neatly finish with having the symmetry in the source code: if you
+haven't already, tidy up the definition of the first `rotateLemma`:
+
+```idris
+rotateLemma x =
+    rewrite sym $ appendAssoc xs (n :: xs') (n' :: ys) in x
+```
+
+(N.B.: Due to the way Idris names things when lifting the holes and the fact
+that we're dealing with the left tree vs the right tree, you'll need to swap `n`
+and `n'`, as well as rename `ys'` to `xs'`)
+
+
+## End of warmup
+
+Well that certainly took a bit! I was originally going to write this as a
+walkthrough of the entire SPLV'20 TinyIdris course, but then this got to over
+6000 words and I thought "Hmm, maybe this should be multiple parts..."  ^^;;
+
+Thanks for reading this far, I hope it was helpful!  : )
 
 <!--
 With our warm-up done, let's move on to the real stuff!
