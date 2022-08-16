@@ -30,7 +30,7 @@ image:
 projects: []
 ---
 
-### Introduction
+## Introduction
 
 I've personally struggled with properly understanding the internals of Idris2.
 By "properly", I mean: knowing where to look when I encounter errors,
@@ -54,8 +54,9 @@ If you're also confused, or just want to know more, come along for the ride!
 (oh, and in case you just want to watch the course, it is on
 [this YouTube playlist](https://www.youtube.com/playlist?list=PLmYPUe8PWHKqBRJfwBr4qga7WIs7r60Ql))
 
+{{< toc >}}
 
-### Setting up
+## Setting up
 
 First, we'll need a copy of the starting source code for TinyIdris. Use `git` to
 clone it to a directory of your choice (I've gone with `splv20-tinyidris`):
@@ -105,11 +106,11 @@ With the patch applied, we're ready to build TinyIdris, when we eventually get
 to that. For now, let's start with the Warmup Exercises.
 
 
-### Exercise 1 - Equalities
+## Exercise 1 - Equalities
 
 This exercise is just to get into Idris again: A bit of equality and proofs.
 
-#### Part 1: Name equality
+### Part 1: Name equality
 
 First, we need to write an `Eq Name` implementation. Here, the interactive
 editing can help us a lot: Let's start by giving a base definition of `==` (I
@@ -155,11 +156,18 @@ Eq Name where
   (==) _        _        = False
 ```
 
-#### Part 2: Provably equal names
+### Part 2: Provably equal names
 
 Proving that two `Name`s are equal is a bit more complicated. Although,
 thankfully, this is not a `DecEq` (_decidable_ equality) implementation, which
 means we don't need to prove how it is impossible for the `Name`s to be equal.
+
+{{< spoiler text="If you are uncertain about proofs, `DecEq`, etc..." >}}
+If you are uncertain about `DecEq`, proofs and contras, I've written an intro
+(well, more of a complete explanation) to proof-by-datatype and decidable
+equality which you can find in
+[this blog post](/en/post/intro-to-decidable-equality).
+{{< /spoiler >}}
 
 Again, start by interactively generating a definition using `<localleader> d`,
 then case-splitting on the arguments, and introducing a generic pattern match
@@ -206,7 +214,7 @@ nameEq (MN x i) (MN y j) =
 nameEq _        _        = Nothing
 ```
 
-#### Part 3: _Decidedly_ equal names
+### Part 3: _Decidably_ equal names
 
 Remember how I just said we thankfully didn't have to implement `DecEq Name`?
 Psych! That's part 3 ^^
@@ -250,12 +258,6 @@ proof that their internal strings differ. Sounds like we need a helper function
 ```idris
 unStringsDiffer : (contra : x = y -> Void) -> (prf : UN x = UN y) -> Void
 ```
-{{< spoiler text="If you are uncertain about `DecEq`..." >}}
-If you are uncertain about `DecEq`, proofs and contras, I've written an intro
-(well, more of a complete explanation) to decidable equality which you can find
-in [this blog post](/en/post/intro-to-decidable-equality).
-{{< /spoiler >}}
-
 This lemma is trivial enough that Idris can actually figure it out from the type
 declaration. Ask Idris to _generate_ a definition by putting the cursor on
 `unStringsDiffer` and pressing `<localleader> g`:
@@ -404,18 +406,19 @@ Together with all the previous definitions, we can reload and confirm that
 Now, let's move on to slightly more relevant exercises.
 
 
-### Exercise 2 - Scope manipulation
+## Exercise 2 - Scope manipulation
 
-#### Part 1: Variable removal
+### Part 1: Variable removal
 
-Part 1 is to implement `dropFirst`, which will remove all references to the most
-recently bound variable. The type of `dropFirst` is given as:
+The first part of the scope manipulation exercises is to implement `dropFirst`,
+which will remove all references to the most recently bound variable. The type
+of `dropFirst` is given as:
 
 ```idris
 dropFirst : List (Var (v :: vs)) -> List (Var vs)
 ```
 
-As with exercise 1, let's start by defining and case-splitting on the argument:
+As with Exercise 1, let's start by defining and case-splitting on the argument:
 
 ```idris
 dropFirst : List (Var (v :: vs)) -> List (Var vs)
@@ -468,8 +471,7 @@ dropFirst ((MkVar (Later x)) :: xs) = ?dropFirst_rhs_4
 ```
 
 Ah ha! Now we're finally getting somewhere! `First` is a proof that the variable
-`v` was the first thing in the list (or actually, that the index 0 was a valid
-index for the variable; same same, but different). How do we drop that?  Well,
+`v` was the first thing in the list. How do we drop that?  Well,
 we just do! We just don't mention it on the RHS and continue removing the other
 references:
 
@@ -530,21 +532,28 @@ recursively remove references to `v` from the rest. Like so:
 dropFirst ((MkVar (Later x)) :: xs) = (MkVar x) :: dropFirst xs
 ```
 
+The astute reader (i.e. not me when I was writing this), might have noticed a
+similarity between `First` and `Later`, and `Z` and `S`. This is because they're
+essentially the same! You can think of `First` as a proof that the index `Z` is a
+valid index to retrieve the requested variable, and similarly for `Later x` and
+`S n`. This way of thinking about `Var` and indexes into lists of variables is
+very useful in the next exercise, so keep that in mind  : )
+
 Phew! For a warmup, it's certainly picked up a bit (at least if you, like me,
 are new to this stuff and feel like you're way out of your depth). On to part
 2...
 
-#### Part 2: Variable insertion
+### Part 2: Variable insertion
 
 TODO
 
 
-### Exercise 3 - Lists and Trees
+## Exercise 3 - Lists and Trees
 
 Exercise 3 has us do some more exercises with proofs and lemmas. We start with
 lists.
 
-#### Part 1: Appending Nil does nothing
+### Part 1: Appending Nil does nothing
 
 The first part is to prove that appending `Nil` (typically written `[]`) to a
 list doesn't change the list. This one is not trivial enough for Idris to just
@@ -615,7 +624,7 @@ appendNilNeutral [] = Refl
 appendNilNeutral (x :: xs) = rewrite appendNilNeutral xs in Refl
 ```
 
-#### Part 2: List appending is associative
+### Part 2: List appending is associative
 
 Next up is to prove that appending lists is associative, i.e. it doesn't matter
 if we append list `b` to list `a` and then append list `c` to the result, or if
@@ -705,7 +714,7 @@ appendAssoc (x :: xs) ys zs = rewrite appendAssoc xs ys zs in Refl
 
 This also concludes the parts on lists. Now we move on to trees.
 
-#### Part 3: Rotating trees left
+### Part 3: Rotating trees left
 
 The first part of the exercise on trees is to implement a lemma. We can look at
 the type to get some information as to what this lemma is meant to show:
@@ -723,10 +732,297 @@ rotateLemma :  Tree ((xs ++ (n :: xs)) ++ (n' :: ys))
 ```
 
 This lemma, you may not be surprised to hear, uses parts of the previous
-exercise: We need to show that we can reorder appending in the context of trees,
+exercise. We need to show that we can reorder appending in the context of trees,
 which will inevitably involve manipulating the lists in the nodes. Specifically,
 we need to show that it is okay to sequence the operations, instead of doing
 them out-of-order and then combining those results.
+
+Now, this lemma is a good bit more difficult than the previous stuff. You
+will probably not get it right by just trying to brute-force coding a solution
+(I tried, it didn't go well). When the problem just wouldn't budge, I asked
+Edwin for a hint. He suggested trying to write the proof on paper first, and
+then transfer it into Idris, which is what I'm going to suggest you stop and do
+at this point as well.
+
+There are hints below, but I'll save you from the first pitfall I immediately
+fell into: We need to prove that the _right_ side can be written as the _left_
+side, and not the other way around. Why, you might ask? Because what we're
+trying to prove is that we can slot the expression from the first argument of
+`rotateLemma` into the lemma's rhs without any problems; that expression is the
+only thing we have access to after all.
+
+So your mission, should you choose to accept it, is to prove on paper that
+
+```idris
+Tree (xs ++ (n :: (xs ++ (n' :: ys))))
+```
+
+can be written as
+
+```idris
+Tree ((xs ++ (n :: xs)) ++ (n' :: ys))
+```
+
+Good luck!
+
+
+{{< spoiler text="Hint 1" >}}
+Remember that we've proved that append (`++`) is associative. How might this
+help in terms of cons (`::`)?
+{{< /spoiler >}}
+
+
+{{< spoiler text="Hint 2" >}}
+Recall, from the defininion of `++`, that `a :: as` could technically be written
+`[a] ++ as`.
+{{< /spoiler >}}
+
+
+{{< spoiler text="Solution" >}}
+
+{{< math >}}
+$
+xs ++ (n :: (xs' ++ (n' :: ys)))
+$
+{{< /math >}}
+
+<p align=right>
+by definition of <code>++</code>: (1)
+</p>
+{{< math >}}
+$
+\Leftrightarrow xs ++ ([n] ++ (xs' ++ ([n'] ++ ys)))
+$
+{{< /math >}}
+
+<p align=right>
+by associativity on <code>xs</code>, <code>[n]</code>, and
+<code>xs' ++ ([n'] ++ ys)</code>: (2)
+</p>
+{{< math >}}
+$
+\Leftrightarrow (xs ++ [n]) ++ (xs' ++ ([n'] ++ ys))
+$
+{{< /math >}}
+
+<p align=right>
+by associativity on <code>xs ++ [n]</code>, <code>xs'</code>, and
+<code>[n'] ++ ys</code>: (3)
+</p>
+{{< math >}}
+$
+\Leftrightarrow ((xs ++ [n]) ++ xs') ++ ([n'] ++ ys)
+$
+{{< /math >}}
+
+<p align=right>
+by associativity on <code>xs</code>, <code>[n]</code>, and <code>xs'</code>: (4)
+</p>
+{{< math >}}
+$
+\Leftrightarrow (xs ++ ([n] ++ xs')) ++ ([n'] ++ ys)
+$
+{{< /math >}}
+
+<p align=right>
+by definition of <code>++</code>: (5)
+</p>
+{{< math >}}
+$
+\Leftrightarrow (xs ++ (n :: xs')) ++ (n' :: ys)
+$
+{{< /math >}}
+
+{{< math >}}
+$
+\Box
+$
+{{< \math >}}
+
+{{< /spoiler >}}
+</details>
+
+Nicely done! With that, we can now transfer the proof into Idris. If you kept
+track of what rules you applied where (which is generally a good idea when
+writing formal proofs), this should be almost trivial.
+
+Let's start by lifting the `rotateLemma` to a new function using `<localleader>
+l`:
+
+```idris
+rotateLemma :  (n : a) -> (n' : a) -> Tree ys -> Tree xs_0 -> Tree xs
+            -> Tree ((xs ++ (n :: xs_0)) ++ (n' :: ys))
+            -> Tree (xs ++ (n :: (xs_0 ++ (n' :: ys))))
+
+[...]
+
+rotateL (Node left n (Node rightl n' rightr))
+    = rotateLemma n n' rightr rightl left $ Node (Node left n rightl) n' rightr
+```
+
+As with the lemmas in Exercise 1, Idris has included absolutely everything we
+could need, since it doesn't know exactly what we need. It has also revealed
+that the two `xs` in the original hole are actually different: there is an `xs`
+and an `xs_0`/`xs'`. This changes the paper proof a tiny bit, so make sure to
+change that now (essentially just make sure to keep track of the name, the rest
+is the same).
+
+With that done, let's tidy things up a bit. As indicated by the initial layout
+of the exercise, we don't actually need any of the extra information Idris has
+included:
+
+```idris
+rotateLemma :  Tree ((xs ++ (n :: xs')) ++ (n' :: ys))
+            -> Tree (xs ++ (n :: (xs' ++ (n' :: ys))))
+
+[...]
+
+rotateL (Node left n (Node rightl n' rightr))
+    = rotateLemma $ Node (Node left n rightl) n' rightr
+```
+
+Much better! Now start by sketching the definition of
+`rotateLemma` (using `<localleader> d`):
+
+```idris
+rotateLemma :  Tree ((xs ++ (n :: xs')) ++ (n' :: ys))
+            -> Tree (xs ++ (n :: (xs' ++ (n' :: ys))))
+rotateLemma x =
+    ?rotateLemma_rhs
+```
+
+Inspecting `?rotateLemma_rhs` we get the following type information:
+
+```idris
+ 0 xs_0 : List a
+ 0 xs : List a
+ 0 ys : List a
+ 0 n' : a
+ 0 n : a
+   x : Tree ((xs ++ (n :: xs_0)) ++ (n' :: ys))
+------------------------------
+rotateLemma_rhs : Tree (xs ++ (n :: (xs_0 ++ (n' :: ys))))
+```
+
+This is where our paper proof comes in! Idris can figure out that `a :: as`
+corresponds to `[a] ++ as`, so we don't need to `rewrite` that. Instead, go
+straight to the first associativity step:
+
+```idris
+rotateLemma x =
+    rewrite appendAssoc xs [n] (xs' ++ ([n'] ++ ys)) in
+    ?rotateLemma_rhs
+```
+
+This improves things a bit:
+
+```idris
+ 0 xs' : List a
+ 0 xs : List a
+ 0 ys : List a
+ 0 n' : a
+ 0 n : a
+   x : Tree ((xs ++ (n :: xs')) ++ (n' :: ys))
+------------------------------
+rotateLemma_rhs : Tree ((xs ++ [n]) ++ (xs' ++ (n' :: ys)))
+```
+
+We're successfully rearranging the terms and parentheses!! This is great news
+for formalising the proof in Idris!
+
+Adding in the second associative step improves things further:
+
+```idris
+rotateLemma x =
+    rewrite appendAssoc xs [n] (xs' ++ ([n'] ++ ys)) in
+        rewrite appendAssoc (xs ++ [n]) xs' ([n'] ++ ys) in
+        ?rotateLemma_rhs
+
+ 0 xs' : List a
+ 0 xs : List a
+ 0 ys : List a
+ 0 n' : a
+ 0 n : a
+   x : Tree ((xs ++ (n :: xs')) ++ (n' :: ys))
+------------------------------
+rotateLemma_rhs : Tree (((xs ++ [n]) ++ xs') ++ (n' :: ys))
+```
+
+Almost there! However, if we try to add our third step, Idris complains:
+
+```idris
+rotateLemma x =
+    rewrite appendAssoc xs [n] (xs' ++ ([n'] ++ ys)) in
+        rewrite appendAssoc (xs ++ [n]) xs' ([n'] ++ ys) in
+            rewrite appendAssoc xs [n] xs' in
+            ?rotateLemma_rhs
+
+-- Error: While processing right hand side of rotateLemma. Rewriting by
+-- xs ++ (?u ++ xs') = (xs ++ ?u) ++ xs'
+-- did not change type
+-- Tree (((xs ++ [n]) ++ xs') ++ ([n'] ++ ys)).
+```
+
+What's gone wrong? Well, the problem is that we have the left hand side of an
+equality, namely:
+
+```idris
+xs ++ ([n] ++ xs') = (xs ++ [n]) ++ xs'
+```
+
+Whereas what we actually need is the right hand side:
+
+```idris
+(xs ++ [n]) ++ xs' = xs ++ ([n] ++ xs') 
+```
+
+In short, we need to move the parentheses the other way.
+
+One way of doing this could be to define some `appendAssoc'` which proves the
+other direction. But fortunately, this problem of lhs vs rhs is a fairly common
+problem and Idris provides a built-in function for it: `sym`
+
+```idris
+> :doc sym
+Builtin.sym : (0 _ : x = y) -> y = x
+  Symmetry of propositional equality.
+```
+
+Using `sym`, we can include the final step:
+
+```idris
+rotateLemma x =
+    rewrite appendAssoc xs [n] (xs' ++ ([n'] ++ ys)) in
+        rewrite appendAssoc (xs ++ [n]) xs' ([n'] ++ ys) in
+            rewrite sym $ appendAssoc xs [n] xs' in
+                    ?rotateLemma_rhs
+
+ 0 xs' : List a
+ 0 xs : List a
+ 0 ys : List a
+ 0 n' : a
+ 0 n : a
+   x : Tree ((xs ++ (n :: xs')) ++ (n' :: ys))
+------------------------------
+rotateLemma_rhs : Tree ((xs ++ (n :: xs')) ++ (n' :: ys))
+```
+
+Aha! Now the type of the hole matches the type of `x`; we've won!!
+
+Complete the definition by slotting `x` into the `x`-shaped hole:
+
+```idris
+rotateLemma x =
+    rewrite appendAssoc xs [n] (xs' ++ ([n'] ++ ys)) in
+        rewrite appendAssoc (xs ++ [n]) xs' ([n'] ++ ys) in
+            rewrite sym $ appendAssoc xs [n] xs' in
+                    x
+```
+
+Almost there! For the final part of this exercise, we "just" need to rotate
+trees right as well.
+
+### Part 4: Rotating trees right
 
 <!--
 With our warm-up done, let's move on to the real stuff!

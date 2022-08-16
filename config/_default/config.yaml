@@ -9,11 +9,24 @@ title: Thomas Ekström Hansen
 # root of the website, should contain a trailing slash
 baseurl: 'https://teh6.host.cs.st-andrews.ac.uk'
 
-# footer copyright notice
-# UNUSED because the CC-BY-SA 4.0 International stuff is generated from
-# `params.yaml`
-copyright: ''
+############################
+### PAGE OPTIONS
+#############################
 
+cascade:
+  # Blog post options
+  - _target:
+    path: /post/**
+    pager: true
+    editable: false
+    reading_time: false
+    commentable: false
+    show_related: true
+    show_breadcrumb: false    # `Home / Posts / <title>` at the top?
+    share: false
+    header:
+      navbar:
+        enable: true
 
 ############################
 ## LANGUAGE
@@ -36,19 +49,10 @@ removePathAccents: true
 
 module:
   imports:
-    - path: github.com/wowchemy/wowchemy-hugo-modules/wowchemy-cms/v5
-    - path: github.com/wowchemy/wowchemy-hugo-modules/wowchemy/v5
+    - path: github.com/wowchemy/wowchemy-hugo-themes/modules/wowchemy-plugin-netlify-cms
+    - path: github.com/wowchemy/wowchemy-hugo-themes/modules/wowchemy-plugin-netlify
+    - path: github.com/wowchemy/wowchemy-hugo-themes/modules/wowchemy/v5
 
-
-############################
-## SECURITY
-############################
-
-security:
-  funcs:
-    getenv:
-      - ^HUGO_
-      - ^WC_
 
 ############################
 ## ADVANCED
@@ -104,4 +108,19 @@ related:
       weight: 100
     - name: categories
       weight: 70
+
+sitemap:
+  _merge: deep
+
+
+############################
+## SECURITY
+############################
+
+security:
+  _merge: deep
+  funcs:
+    getenv:
+      - ^HUGO_
+      - ^WC_
 
