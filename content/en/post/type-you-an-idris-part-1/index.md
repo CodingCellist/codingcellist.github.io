@@ -773,7 +773,6 @@ end of this part!
 And now for something completely different.
 
 
-
 ## Exercise 3 - Lists and Trees
 
 Exercise 3 has us do some more exercises with proofs and lemmas. We start with
@@ -1427,7 +1426,7 @@ and `n'`, as well as rename `ys'` to `xs'`)
 
 Well that certainly took a while! I was originally going to write this as a
 walkthrough of the entire SPLV'20 TinyIdris course, but then the warmup alone
-got to over 6000 words and I thought "Hmm, maybe this should be multiple
+got to over 7000 words and I thought "Hmm, maybe this should be multiple
 parts..." ^^;;
 
 Thanks for reading this far, I hope it was helpful!  : )
