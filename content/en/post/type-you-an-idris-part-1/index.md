@@ -7,9 +7,9 @@ summary: "The best way to learn & understand a thing is to implement it. So
           let's implement (a subset) of Idris2! This part is an introduction and
           covers some function exercises that will help later."
 authors: [thomas-e-hansen]
-tags: [idris2, type-theory, functional-programming, splv2020, type-you-an-idris]
+tags: [type-you-an-idris, splv2020, idris2, type-theory, functional-programming]
 categories: []
-date: 2022-02-21
+date: 2022-08-17
 lastmod:
 featured: false
 draft: false
@@ -471,9 +471,8 @@ dropFirst ((MkVar (Later x)) :: xs) = ?dropFirst_rhs_4
 ```
 
 Ah ha! Now we're finally getting somewhere! `First` is a proof that the variable
-`v` was the first thing in the list. How do we drop that?  Well,
-we just do! We just don't mention it on the RHS and continue removing the other
-references:
+`v` was the first thing in the list. How do we drop that? Well, we just do! We
+just don't mention it on the RHS and continue removing the other references:
 
 ```idris
 dropFirst ((MkVar First) :: xs) = dropFirst xs
@@ -539,13 +538,240 @@ valid index to retrieve the requested variable, and similarly for `Later x` and
 `S n`. This way of thinking about `Var` and indexes into lists of variables is
 very useful in the next exercise, so keep that in mind  : )
 
-Phew! For a warmup, it's certainly picked up a bit (at least if you, like me,
-are new to this stuff and feel like you're way out of your depth). On to part
-2...
+Phew! For a warmup, it's certainly picked up a bit. On to part 2...
 
 ### Part 2: Variable insertion
 
-TODO
+Having removed variable references from a scope, we now have to do the opposite:
+add them to a scope. But with the twist of having to insert the reference in the
+middle of the scope. Looking at the type, this is illustrated by the `Var (outer
+++ inner)` part. The `outer` list is the outer scope and the `inner` list is the
+inner scope.
+
+```idris
+insertName : Var (outer ++ inner) -> Var (outer ++ n :: inner)
+```
+
+There is also note from Edwin:
+
+> The type here isn't quite right, you'll need to modify it slightly.
+
+The issue is subtle, but becomes slightly clearer if we define, case-split, and
+inspect the type of the resulting hole without modifying the function type:
+
+```idris
+insertName : Var (outer ++ inner) -> Var (outer ++ n :: inner)
+insertName (MkVar p) = ?insertName_rhs_0
+
+ 0 n : Name
+ 0 inner : List Name
+ 0 outer : List Name
+ 0 p : IsVar n i (outer ++ inner)
+------------------------------
+insertName_rhs_0 : Var (outer ++ (n :: inner))
+```
+
+Look at the type of `p`, what does it tell us? We now know it tells us something
+about an index, but in this case we care about where that index is pointing. If
+we look at the type of `p`, we can see the index concerns `outer ++ inner`. This
+is a problem because we want to insert something in the middle of `outer ++
+inner`, but we have no way of knowing _which_ of the scopes we have an index
+for; we only know that we have an index for the combined scope. So in order to
+update the index for `inner`, in order to insert the variable reference, we need
+to modify the type to give us a bit more information.
+
+Restore the editor to just containing the function declaration. We need to be
+able to reason about at least one of the scopes (in order to know where to
+perform the insertion), so we'll start by making the `outer` scope
+runtime-accessible:
+
+```idris
+insertName : {outer : _} -> Var (outer ++ inner) -> Var (outer ++ n :: inner)
+```
+
+Once again, generate a definition, but this time include the now-accessible
+implicit `outer` scope:
+
+```idris
+insertName : {outer : _} -> Var (outer ++ inner) -> Var (outer ++ n :: inner)
+insertName {outer} x = ?insertName_rhs
+```
+
+Having `outer` be runtime-accessible means we can pattern-match on it, which
+means we can know how each half of the scope looks (`outer` will look like the
+pattern-match case, and `inner` will be restricted by `x`).
+
+Now let's generate some more meaningful pattern-matches by case-splitting first
+on `outer`:
+
+```idris
+insertName {outer = []} x = ?insertName_rhs_0
+insertName {outer = (y :: xs)} x = ?insertName_rhs_1
+```
+
+and then on each of the `x`s:
+
+```idris
+insertName {outer = []} (MkVar p) = ?insertName_rhs_2
+insertName {outer = (y :: xs)} (MkVar p) = ?insertName_rhs_3
+```
+
+The first case is the simplest. If `outer` is empty, then `p` must only index
+`inner`. A quick type-check on the hole confirms this:
+
+```idris
+ 0 n : Name
+ 0 inner : List Name
+ 0 p : IsVar n i inner
+------------------------------
+insertName_rhs_2 : Var (n :: inner)
+```
+
+How do we insert a variable reference into the middle of `outer ++ inner` when
+`outer = []`? The type of the hole hints at it: We can just do it immediately,
+since prepending the empty list doesn't change anything. All we need to do is to
+increment the index, so the definition becomes:
+
+```idris
+insertName {outer = []} (MkVar p) = MkVar (Later p)
+```
+
+The other part of the definition is a bit more challenging. We definitely have
+stuff in the `outer` scope, but we don't know if there's anything in the `inner`
+scope yet. We need to inspect things a bit closer; case-splitting on `p` gets
+us:
+
+```idris
+insertName {outer = (y :: xs)} (MkVar First) = ?insertName_rhs_4
+insertName {outer = (y :: xs)} (MkVar (Later x)) = ?insertName_rhs_5
+```
+
+Here the definitions of `First` and `Later` come into play again:
+
+* `First` is a proof that the index 0 is a valid index for the variable we're
+     looking for.
+* `Later` is a proof that we can insert a new variable as long as we remember to
+    increment the index.
+
+With these bits of information, we can deduce that `inner` must have been empty:
+We're inserting a reference in the middle of the scope, we know `outer` is not
+empty, but we also know that we could insert the reference without incrementing
+the index. This means that the index was originally non-existent, i.e. `inner`
+was empty! (I'm afraid this is another one of those "Run it over a few times to
+convince yourself".)
+
+Since `inner` is empty, we can just insert the variable as the first thing:
+
+```idris
+insertName {outer = (y :: xs)} (MkVar First) = MkVar First
+```
+
+Now for the final, most difficult case: Inserting a variable in the middle of a
+scope where both the `inner` and `outer` scopes contain things! If we inspect
+the type of `?insertName_rhs_5`, we immediately see the difficulty:
+
+```idris
+insertName {outer = (y :: xs)} (MkVar (Later x)) =
+    ?insertName_rhs_5
+
+ 0 n : Name
+ 0 inner : List Name
+   y : Name
+   xs : List Name
+ 0 x : IsVar n i (xs ++ inner)
+------------------------------
+insertName_rhs_5 : Var (y :: (xs ++ (n :: inner)))
+```
+
+Look at the type of `x` in the above. It indexes `inner` _as well as_ the tail
+of the outer scope, `xs`. And we need to insert `n` just after `xs` (see the
+type of the hole). How do we do that? By recursion!
+
+The purpose of the function we're writing, `insertName`, is to insert a
+reference to a variable in the middle of a scope. And here we have a case where
+we need to do exactly that: insert `n` into the middle of `xs ++ inner`. So
+let's recurse on `x` (which contains an index into `xs ++ inner`) to update that
+list of variables!
+
+{{< spoiler text="A couple of extra details..." >}}
+
+* We need to put `x` back in a `Var`, since that's what `insertName` takes.
+* Also, note that since `x` only mentions the `xs` part of the outer scope and
+    not `y`, Idris automagically knows to pass `xs` as `outer` in our recursive
+    call.
+
+{{< /spoiler >}}
+
+```idris
+insertName {outer = (y :: xs)} (MkVar (Later x)) =
+    let p' = insertName (MkVar x) in ?insertName_rhs_5
+```
+
+If we now look at the type of the hole, we see things have improved:
+
+```idris
+ 0 n : Name
+ 0 inner : List Name
+   y : Name
+   xs : List Name
+ 0 x : IsVar n i (xs ++ inner)
+   p' : Var (xs ++ (?n :: inner))
+------------------------------
+insertName_rhs_5 : Var (y :: (xs ++ (n :: inner)))
+```
+
+We now have a term `p'` which contains the new reference! But what we actually
+want is the updated index, not the variable representation. We need to
+deconstruct `p'`, just like we deconstruct `p` when matching on the first
+explicit argument to `insertName`:
+
+```idris
+insertName {outer = (y :: xs)} (MkVar (Later x)) =
+    let (MkVar x') = insertName (MkVar x) in ?insertName_rhs_5
+
+ 0 n : Name
+ 0 inner : List Name
+   y : Name
+   xs : List Name
+ 0 x : IsVar n i (xs ++ inner)
+ 0 x' : IsVar n i (xs ++ (?n :: inner))
+------------------------------
+insertName_rhs_5 : Var (y :: (xs ++ (n :: inner)))
+```
+
+Now we're really getting somewhere! Our new `x'` is an index into the updated
+inner scope! However, if we try to wrap things up by returning it, Idris
+complains:
+
+```idris
+insertName {outer = (y :: xs)} (MkVar (Later x)) =
+    let (MkVar x') = insertName (MkVar x) in MkVar x'
+
+-- Error: While processing right hand side of insertName. Can't solve constraint
+-- between: xs ++ (?n :: inner)
+-- and y :: (xs ++ (n :: inner)).
+```
+
+This is where the types keep us in check! We've recursed correctly, but
+forgotten to restore the larger scope which also includes `y`. Another way of
+looking at it is that we've inserted `n`, but without incrementing the index
+of the larger/overall scope. It is very good that the types let Idris catch
+this! Otherwise scope manipulation ~~would be~~ is extremely easy to get
+wrong! Fix things by remembering to increment the overall index:
+
+```idris
+insertName {outer = (y :: xs)} (MkVar (Later x)) =
+    let (MkVar x') = insertName (MkVar x) in MkVar (Later x')
+```
+
+And that's the scope manipulation exercises done! Congratulations for making it
+this far! Honestly! This bit broke my brain for so long, and took so many
+attempts of just staring really hard at the code and types before it
+occasionally, bit by bit, started to click. So well done for making it to the
+end of this part!
+
+And now for something completely different.
+
 
 
 ## Exercise 3 - Lists and Trees
@@ -1199,9 +1425,10 @@ and `n'`, as well as rename `ys'` to `xs'`)
 
 ## End of warmup
 
-Well that certainly took a bit! I was originally going to write this as a
-walkthrough of the entire SPLV'20 TinyIdris course, but then this got to over
-6000 words and I thought "Hmm, maybe this should be multiple parts..."  ^^;;
+Well that certainly took a while! I was originally going to write this as a
+walkthrough of the entire SPLV'20 TinyIdris course, but then the warmup alone
+got to over 6000 words and I thought "Hmm, maybe this should be multiple
+parts..." ^^;;
 
 Thanks for reading this far, I hope it was helpful!  : )
 
