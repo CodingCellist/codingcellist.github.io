@@ -5,70 +5,94 @@
 
 # Appearance
 
-# theme chosen
-# https://wowchemy.com/docs/customization/#color-themes
-theme: coffee
-
-# light/dark theme support?
-day_night: true
-
-# https://wowchemy.com/docs/getting-started/customization/#fonts
-font: 'minimal'
-
-# XS | S | M | L | XL
-font_size: L
+appearance:
+  # theme chosen
+  # https://wowchemy.com/docs/customization/#color-themes
+  theme_day: coffee
+  theme_night: coffee
+  # https://wowchemy.com/docs/getting-started/customization/#fonts
+  font: minimal
+  # XS | S | M | L | XL
+  font_size: L
 
 # Site header
-
-main_menu:
-  enable: true
-  align: l
-  show_logo: true
-  show_language: true
-  show_day_night: true
-  show_search: true
-  highlight_active_link: true
+header:
+  navbar:
+    enable: true
+    align: l
+    show_logo: true
+    show_language: true
+    show_day_night: true
+    show_search: true
+    highlight_active_link: true
 
 # Localization
-
-# date and time format
-# (https://wowchemy.com/docs/getting-started/customization/#datetime-options)
-
-# NOTE: **must** refer to Monday the 2nd of January 2006
-date_format: 'Mon, 2 Jan 2006'
-
-# NOTE: **must** refer to 15:04 or 3:04 PM
-time_format: '15:04'
-address_format: en-gb
+locale:
+  # date and time format
+  # (https://wowchemy.com/docs/getting-started/customization/#datetime-options)
+  # NOTE: **must** refer to Monday the 2nd of January 2006
+  date_format: 'Mon, 2 Jan 2006'
+  # NOTE: **must** refer to 15:04 or 3:04 PM
+  time_format: '15:04'
+  address_format: en-gb
 
 # Site features
+features:
+  syntax_highlighter:
+    enable: true
+  extra_languages:
+    - c
+    - bash
+    - haskell
+    - idris
+    - java
+    - markdown
+    - scheme
 
-highlight: true
-highlight_languages:
-  - c
-  - bash
-  - haskell
-  - idris
-  - java
-  - markdown
-  - scheme
+  # LaTeX math rendering?
+  math:
+    enable: true
 
-# LaTeX math rendering?
-math: true
+  privacy_pack:
+    enable: false
 
-# diagram rendering?
-diagram: false
+    #edit_page:
+    #  repo_url: ''
+    #  content_dir: ''
+    #  repo_branch: main
+    #  editable:
+    #    page: false
+    #    post: false
+    #    book: false
 
-privacy_pack: false
+  avatar:
+    # gravatar.com?
+    gravatar: false
+    shape: circle
 
-edit_page:
-  repo_url: ''
-  content_dir: ''
-  repo_branch: main
-  editable:
-    page: false
-    post: false
-    book: false
+  comment:
+    provider: ''  # blank to disable
+  #  commentable:
+  #    post: false
+  #    book: false
+  #    project: false
+  #    publication: false
+  #    event: false
+  ##  disqus:
+  ##    shortname: ''
+  ##    show_count: true
+  ##  commento:
+  ##    url: ''
+
+  search:
+    provider: # blank to disable
+  ##  algolia:
+
+  ##map:
+  ##  provider: ''  # blank to disable
+  ##  api_key: ''
+  ##  zoom: 15
+  ##
 
 show_related:
   book: true
@@ -84,23 +108,18 @@ section_pager: false
 
 docs_section_pager: true
 
-sharing: false
-
-# LICENSE: This website is licensed under CC-BY-SA
-copyright_license:
-  enable: true
-  allow_derivatives: true
-  share_alike: true
-  allow_commercial: true
-  notice: 'This work is licensed under {license}'
+footer:
+  # LICENSE: This website is licensed under CC-BY-SA
+  copyright:
+    notice: 'This work is licensed under {license}'
+    license:
+      enable: true
+      allow_derivatives: true
+      share_alike: true
+      allow_commercial: true
 
 abstract_length: 135
 plugins_js: []
-
-avatar:
-  # gravatar.com?
-  gravatar: false
-  shape: circle
 
 publications:
   date_format: January 2006
@@ -116,33 +135,10 @@ breadcrumb:
   page_types:
     book: true
 
-comments:
-  provider: ''  # blank to disable
-  commentable:
-    post: false
-    book: false
-    project: false
-    publication: false
-    event: false
-##  disqus:
-##    shortname: ''
-##    show_count: true
-##  commento:
-##    url: ''
-
-search:
-  provider: # blank to disable
-##  algolia:
-##    app_id: ''
 ##    api_key: ''
 ##    index_name: ''
 ##    show_logo: false
 
-##map:
-##  provider: ''  # blank to disable
-##  api_key: ''
-##  zoom: 15
-##
 ##marketing:
 ##  google_analytics: ''
 ##  google_tag_manager: ''
@@ -150,10 +146,10 @@ search:
 ##  baidu_site_verification: ''
 ##  baidu_tongji: ''
 
-cms:
-  branch: main
-  local_backend: false
+extensions:
+  cms:
+    branch: main
+    local_backend: false
+  academicons:
+    enable: false
 
-icon:
-  pack:
-    ai: false
