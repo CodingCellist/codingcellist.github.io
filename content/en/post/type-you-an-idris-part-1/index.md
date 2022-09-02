@@ -568,6 +568,93 @@ There is also note from Edwin:
 
 > The type here isn't quite right, you'll need to modify it slightly.
 
+Now I'm going to slightly deviate here to explain in more detail what `Var`
+represents, since I got this _completely_ wrong in the first draft of this post.
+
+The `Var` type describes a "de Bruijn index". These are notoriously difficult to
+get right and reason about, which is why Idris puts it in a type: Then the
+type-checker forces us to get it right. Having the function called `insertName`
+is actually slightly misleading: we're technically not inserting anything, we're
+"just" updating a de Bruijn index.
+
+Looking at the type of `insertName` again, the argument has type
+```idris
+Var (outer ++ inner)
+```
+
+This could be read as "I have a de Bruijn index into the list `outer ++
+inner`". With that in mind, our return type reads as:
+
+<p align="center">
+"I want a de Bruijn index into the list <code>outer ++ n :: inner</code>"
+</p>
+
+Now, _what exactly_ does actually that mean? (The numbers Mason! What do they
+mean?!)
+
+Lets consider, for example, `outer` and `inner` each having three elements. In
+this case, our indices would be from 0 to 5, like so:
+
+```
+    outer            inner
+[   |   |   ] ++ [   |   |   ]
+  0   1   2        3   4   5
+```
+
+And what we want, is an index into something which looks like:
+
+```
+    outer                 inner
+[   |   |   ] ++ n :: [   |   |   ]
+```
+
+Some guiding questions to help understand what needs doing:
+
+{{< spoiler text="How does this affect the indices of `outer`?" >}}
+
+It doesn't. They remain the same, i.e. `0 ↦ 0`, `1 ↦ 1`, and `2 ↦ 2`.
+
+{{< /spoiler >}}
+
+{{< spoiler text="How does this affect the indices of `inner`?" >}}
+
+They all get incremented by 1 since `n` now precedes them, i.e. `3 ↦ 4`, `4 ↦
+5`, and `5 ↦ 6`.
+
+{{< /spoiler >}}
+
+{{< spoiler text="What is the range of the new index?" >}}
+
+The new indices range from 0 to 6, since there's an extra thing in the lists
+we're indexing.
+
+{{< /spoiler >}}
+
+So far so good? Now what is the argument to the `insertName` function? It is an
+existing index over `outer ++ innner`! This is important because we need to know
+which part of the combined list it is an index into:
+
+{{< spoiler text="If it is an index into `outer`, what should be done?" >}}
+
+Nothing! It should stay the same since it would still index the same place if
+there was something added to the list after it.
+
+{{< /spoiler >}}
+
+{{< spoiler text="If it is an index into `inner`, what should be done?" >}}
+
+It should get incremented, since our new index describes something where `n`
+occurs before `inner`.
+
+{{< /spoiler >}}
+
+Does your brain hurt yet? Mine is starting to...
+
+In order to be able to reason about where the index falls, we need to know the
+shape of at least one of the lists. This is why there is that comment from
+Edwin: we need one of the implicit arguments in the definition, but they're
+currently erased!
+
 The issue is subtle, but becomes slightly clearer if we define, case-split, and
 inspect the type of the resulting hole without modifying the function type:
 
@@ -583,26 +670,21 @@ insertName (MkVar p) = ?insertName_rhs_0
 insertName_rhs_0 : Var (outer ++ (n :: inner))
 ```
 
-Look at the type of `p`, what does it tell us? We now know it tells us something
-about an index, but in this case we care about where that index is pointing. If
-we look at the type of `p`, we can see the index concerns `outer ++ inner`. This
-is a problem because we want to insert something in the middle of `outer ++
-inner`, but we have no way of knowing _which_ of the scopes we have an index
-for; we only know that we have an index for the combined scope. So in order to
-update the index for `inner`, in order to insert the variable reference, we need
-to modify the type to give us a bit more information.
+Here we can see that `p` indexes the combined list, but we don't know which part
+of it. And we _can't_ know because both `inner` and `outer` are erased by
+default.
 
-Restore the editor to just containing the function declaration. We need to be
-able to reason about at least one of the scopes (in order to know where to
-perform the insertion), so we'll start by making the `outer` scope
-runtime-accessible:
+Restore the editor to only contain the original function declaration. We need to
+be able to reason about at least one of the lists/scopes, and we saw that
+nothing needs to be done if we're indexing `outer`. So lets start by making the
+`outer` scope runtime-accessible:
 
 ```idris
 insertName : {outer : _} -> Var (outer ++ inner) -> Var (outer ++ n :: inner)
 ```
 
-Once again, generate a definition, but this time include the now-accessible
-implicit `outer` scope:
+With the type now in the correct shape, generate a definition again, and bring
+the `outer` list into context in the definition:
 
 ```idris
 insertName : {outer : _} -> Var (outer ++ inner) -> Var (outer ++ n :: inner)
@@ -610,26 +692,74 @@ insertName {outer} x = ?insertName_rhs
 ```
 
 Having `outer` be runtime-accessible means we can pattern-match on it, which
-means we can know how each half of the scope looks (`outer` will look like the
-pattern-match case, and `inner` will be restricted by `x`).
+means we can know where we're currently indexing. There are three distinct cases
+to consider:
 
-Now let's generate some more meaningful pattern-matches by case-splitting first
-on `outer`:
+{{< spoiler text="1. Outer is empty. Where does the given index point and what should be done as a result?" >}}
+
+If `outer` is empty, the only possibility is that the index was pointing into
+`inner`, and any index into `inner` needs incrementing (we're adding stuff to
+the front of it), so it should always be incremented.
+
+{{< /spoiler >}}
+
+The next two cases depend on whether the index was 0 or not:
+
+{{< spoiler text="2. Outer is non-empty, but the given index is 0. Where does the given index point and what should be done as a result?" >}}
+
+If the given index is 0, then it points to the start of the current `outer`
+(remember, we're given an index over `outer ++ inner`), and so it should be left
+as it is (no need to update an index which occurs prior to where the scope
+extension happened).
+
+{{< /spoiler >}}
+
+{{< spoiler text="3. Outer is non-empty, but the given index is also non-zero. What options are there in terms of where the index points?" >}}
+
+If both `outer` is non-empty and the given index is non-zero, then there are two
+options: either the index points to somewhere in `outer` and we just haven
+discovered that yet; or it points to somewhere in `inner` and should always be
+updated.
+
+{{< spoiler text="How do we know which it is?" >}}
+
+We check on a sub-term, i.e. a smaller `outer` and a smaller index, and see
+which of the two previously covered cases we hit first.
+
+{{< /spoiler >}}
+
+{{< /spoiler >}}
+
+Please take your time to read over this several times and try and think it
+through in your head (or on paper!). It is a really complicated, but
+unfortunately also crucial part of handling variables, so having an idea of how
+it's supposed to work is essential. I'll go over two examples after the code has
+been written, so if you're mostly convinced you get it, feel free to read ahead
+to double-check.
+
+Right then! Let's put this into code, shall we? We pulled `outer` into scope, so
+we'll start by generating some insightful pattern-matches by case-splitting on
+it:
 
 ```idris
 insertName {outer = []} x = ?insertName_rhs_0
 insertName {outer = (y :: xs)} x = ?insertName_rhs_1
 ```
 
-and then on each of the `x`s:
+This tells us whether `outer` was empty (in which case we should always update
+the index) or whether it was non-empty.
+
+We still don't know what the index was, however, so case-split on both `x`s:
 
 ```idris
 insertName {outer = []} (MkVar p) = ?insertName_rhs_2
 insertName {outer = (y :: xs)} (MkVar p) = ?insertName_rhs_3
 ```
 
-The first case is the simplest. If `outer` is empty, then `p` must only index
-`inner`. A quick type-check on the hole confirms this:
+Now that we have the index, let's code in the first scenario: `outer` is empty
+and we've been given an index to update. Since we know `outer` is empty, the
+index must point into `inner`, which we're adding stuff in front of, so it needs
+to be updated. Checking the type of the `?insertName_rhs_2` hole confirms this:
 
 ```idris
  0 n : Name
@@ -639,87 +769,88 @@ The first case is the simplest. If `outer` is empty, then `p` must only index
 insertName_rhs_2 : Var (n :: inner)
 ```
 
-How do we insert a variable reference into the middle of `outer ++ inner` when
-`outer = []`? The type of the hole hints at it: We can just do it immediately,
-since prepending the empty list doesn't change anything. All we need to do is to
-increment the index, so the definition becomes:
+Note that `p` now only refers to `inner` (since `[] ++ inner === inner`), and
+the type of the hole says that the index must be into a list one bigger than
+`inner`. How do we update the index in this case? We increment it using `Later`!
+We can double-check that this has the desired effect by adding the following
+`let`-expression and examining the type of the hole again:
+
+```idris
+insertName {outer = []} (MkVar p) = let 0 p' = Later p in ?insertName_rhs_2
+
+
+ 0 n : Name
+ 0 inner : List Name
+ 0 p : IsVar n i inner
+ 0 p' : IsVar n (S i) (?m :: inner)
+------------------------------
+insertName_rhs_2 : Var (n :: inner)
+```
+
+Here we can see that the type of our new index, `p'`, contains an incremented
+number and indexes a list where something occurs in front of `inner`. The types
+are keeping us sane while we do the de Bruijn index updates! (We have to write
+`0 p'` in the `let`-expression because `p` is erased and so we're only allowed
+to create new expressions from it if those are also erased.)
+
+Put the updated index in a `Var` to complete the definition of the first case:
 
 ```idris
 insertName {outer = []} (MkVar p) = MkVar (Later p)
 ```
 
-The other part of the definition is a bit more challenging. We definitely have
-stuff in the `outer` scope, but we don't know if there's anything in the `inner`
-scope yet. We need to inspect things a bit closer; case-splitting on `p` gets
-us:
+For the remaining cases, we need to know what the index was.
+
+```idris
+insertName {outer = (y :: xs)} (MkVar p) = ?insertName_rhs_3
+```
+
+Case-splitting on `p` gives us:
 
 ```idris
 insertName {outer = (y :: xs)} (MkVar First) = ?insertName_rhs_4
 insertName {outer = (y :: xs)} (MkVar (Later x)) = ?insertName_rhs_5
 ```
 
-Here the definitions of `First` and `Later` come into play again:
-
-* `First` is a proof that the index 0 is a valid index for the variable we're
-     looking for.
-* `Later` is a proof that we can insert a new variable as long as we remember to
-    increment the index.
-
-With these bits of information, we can deduce that `inner` must have been empty:
-We're inserting a reference in the middle of the scope, we know `outer` is not
-empty, but we also know that we could insert the reference without incrementing
-the index. This means that the index was originally non-existent, i.e. `inner`
-was empty! (I'm afraid this is another one of those "Run it over a few times to
-convince yourself".)
-
-Since `inner` is empty, we can just insert the variable as the first thing:
+In the first case, `First` is the same as saying that the given index was zero
+(i.e.  it indexes the front of `outer`). In this case we should **not** update
+the index! It stays the same since the update concerns a position further down
+in the combined list, so just reconstruct the index as it was:
 
 ```idris
-insertName {outer = (y :: xs)} (MkVar First) = MkVar First
+insertName {outer = (y :: xs)} (MkVar First) = (MkVar First)
 ```
 
-Now for the final, most difficult case: Inserting a variable in the middle of a
-scope where both the `inner` and `outer` scopes contain things! If we inspect
-the type of `?insertName_rhs_5`, we immediately see the difficulty:
+Now we get to the truly challenging bit! The index is non-zero, but the `outer`
+list is also non-empty, and as a result we don't know what to do with the index.
+To update or not to update, that is the question.
 
 ```idris
-insertName {outer = (y :: xs)} (MkVar (Later x)) =
-    ?insertName_rhs_5
-
- 0 n : Name
- 0 inner : List Name
-   y : Name
-   xs : List Name
- 0 x : IsVar n i (xs ++ inner)
-------------------------------
-insertName_rhs_5 : Var (y :: (xs ++ (n :: inner)))
+insertName {outer = (y :: xs)} (MkVar (Later x)) = ?insertName_rhs_5
 ```
 
-Look at the type of `x` in the above. It indexes `inner` _as well as_ the tail
-of the outer scope, `xs`. And we need to insert `n` just after `xs` (see the
-type of the hole). How do we do that? By recursion!
+Are we stuck? No! If we decrement the index, it must now point into the list `xs
+++ inner` (by the pattern-match, it originally pointed into the list `(y :: xs)
+++ inner`). This brings us one step closer to knowing where the index points:
+Either `xs` will turn out to be empty, in which case the index points to
+somewhere in `inner` and we should update it; or the reduced index will turn out
+to be zero, in which case it points to the start of `xs` and should be left
+alone.
 
-The purpose of the function we're writing, `insertName`, is to insert a
-reference to a variable in the middle of a scope. And here we have a case where
-we need to do exactly that: insert `n` into the middle of `xs ++ inner`. So
-let's recurse on `x` (which contains an index into `xs ++ inner`) to update that
-list of variables!
-
-{{< spoiler text="A couple of extra details..." >}}
-
-* We need to put `x` back in a `Var`, since that's what `insertName` takes.
-* Also, note that since `x` only mentions the `xs` part of the outer scope and
-    not `y`, Idris automagically knows to pass `xs` as `outer` in our recursive
-    call.
-
-{{< /spoiler >}}
+We do this by recursion. Since `outer` is an implicit argument, Idris
+automatically figures out that `xs` is the new outer:
 
 ```idris
 insertName {outer = (y :: xs)} (MkVar (Later x)) =
-    let p' = insertName (MkVar x) in ?insertName_rhs_5
+  let rec = insertName (MkVar x) in ?insertName_rhs_5   -- rec has {outer=xs}
 ```
 
-If we now look at the type of the hole, we see things have improved:
+This line may look like it's not doing anything, but note that we have put `x`
+back in a `Var` _without_ the `Later` that previously surrounded it. This is the
+same as when we recurse on `n` from an `(S n)`-expression, so the given index
+_has_ been decremented.
+
+If we inspect the type of the hole now, we get:
 
 ```idris
  0 n : Name
@@ -727,19 +858,18 @@ If we now look at the type of the hole, we see things have improved:
    y : Name
    xs : List Name
  0 x : IsVar n i (xs ++ inner)
-   p' : Var (xs ++ (?n :: inner))
+   rec : Var (xs ++ (?n :: inner))
 ------------------------------
 insertName_rhs_5 : Var (y :: (xs ++ (n :: inner)))
 ```
 
-We now have a term `p'` which contains the new reference! But what we actually
-want is the updated index, not the variable representation. We need to
-deconstruct `p'`, just like we deconstruct `p` when matching on the first
-explicit argument to `insertName`:
+Since `insertName` returns something of type `Var`, we need to remember to
+extract the new index:
 
 ```idris
 insertName {outer = (y :: xs)} (MkVar (Later x)) =
-    let (MkVar x') = insertName (MkVar x) in ?insertName_rhs_5
+  let (MkVar x') = insertName (MkVar x) in ?insertName_rhs_5
+
 
  0 n : Name
  0 inner : List Name
@@ -751,38 +881,204 @@ insertName {outer = (y :: xs)} (MkVar (Later x)) =
 insertName_rhs_5 : Var (y :: (xs ++ (n :: inner)))
 ```
 
-Now we're really getting somewhere! Our new `x'` is an index into the updated
-inner scope! However, if we try to wrap things up by returning it, Idris
-complains:
+Hey look at that! We've done it!! Our new index, `x'`, is an index into `xs`
+followed by something in front of `inner`. That's exactly what we were trying to
+do!  However, if we try to wrap things up by returning it, Idris complains:
 
 ```idris
 insertName {outer = (y :: xs)} (MkVar (Later x)) =
     let (MkVar x') = insertName (MkVar x) in MkVar x'
+
 
 -- Error: While processing right hand side of insertName. Can't solve constraint
 -- between: xs ++ (?n :: inner)
 -- and y :: (xs ++ (n :: inner)).
 ```
 
-This is where the types keep us in check! We've recursed correctly, but
-forgotten to restore the larger scope which also includes `y`. Another way of
-looking at it is that we've inserted `n`, but without incrementing the index
-of the larger/overall scope. It is very good that the types let Idris catch
-this! Otherwise scope manipulation ~~would be~~ is extremely easy to get
-wrong! Fix things by remembering to increment the overall index:
+This is where the types keep us in check! In order to recurse on a smaller term,
+we decremented the index. Which means the recursively updated index is
+off-by-one! We've recursed correctly, but forgotten to restore the larger scope
+which also includes `y`. It is very good that the type makes Idris catch this,
+otherwise de Bruijn manipulation ~~would be~~ is extremely easy to get wrong!
+Fix things by remembering that the index actually needs to be one greater since
+we decremented it in the recursive call:
 
 ```idris
 insertName {outer = (y :: xs)} (MkVar (Later x)) =
     let (MkVar x') = insertName (MkVar x) in MkVar (Later x')
 ```
 
-And that's the scope manipulation exercises done! Congratulations for making it
-this far! Honestly! This bit broke my brain for so long, and took so many
-attempts of just staring really hard at the code and types before it
-occasionally, bit by bit, started to click. So well done for making it to the
-end of this part!
+Now. If you're not convinced that this actually does what I've said it does, I
+don't blame you. I wasn't convinced either. So let's go through a couple of
+examples:
 
-And now for something completely different.
+{{< spoiler text="Example 1" >}}
+
+Consider once more the case where both `outer` and `inner` contain three
+elements, indexed 0 through 5:
+
+```
+    outer            inner
+[   |   |   ] ++ [   |   |   ]
+  0   1   2        3   4   5
+```
+
+If we're given, for example, the index `1` as the argument to the `insertName`
+function, what happens?
+
+```
+index         outer            inner
+  1       [   |   |   ] ++ [   |   |   ]
+            0   1   2        3   4   5
+```
+
+Neither of the first two patterns match: `outer` is non-empty, and the index is
+non-zero. So we recurse, reducing both the index and the `outer` list in size:
+
+```
+index         outer            inner
+  1       [   |   |   ] ++ [   |   |   ]
+            0   1   2        3   4   5
+
+index         outer            inner
+  0           [   |   ] ++ [   |   |   ]
+                0   1        2   3   4
+```
+
+(Note here that since our combined scope shrunk, so did the indices! This
+(hopefully) makes sense: we're considering a smaller problem, with a slightly
+different, smaller scope, but indices start at 0.)
+
+Here we've hit our second case! The given index is zero, but there is still
+stuff in `outer`, so the index must point to the start of `outer`. What do we do
+with those indices? We leave them alone since adding things to the front of
+`inner` wouldn't change where the index points. So our returned index stays the
+same as the given one, i.e. `0`.
+
+```
+index         outer            inner
+  1       [   |   |   ] ++ [   |   |   ]
+            0   1   2        3   4   5
+
+index         outer            inner
+  0           [   |   ] ++ [   |   |   ]
+                0   1        2   3   4
+
+ANSWER: Don't change anything, leave index as given: 0
+```
+
+HOWEVER, once this comes back up the recursive call, we can see the index is
+clearly wrong: it was correct in a smaller scope, but not the larger scope;
+specifically, it's off by one! So we restore the index to its correct state by
+incrementing it. Incrementing `0` gives `1`, which is the index we were given.
+We, the human, know it pointed into `outer` (check the diagrams), so we've left
+it alone, which was the point! Hurray!
+
+```
+index         outer                 inner
+  1       [   |   |   ]   ++    [   |   |   ]
+            0   1   2             3   4   5
+
+  |
+  v
+
+index         outer                 inner
+0+1= 1    [   |   |   ] ++ n :: [   |   |   ]
+            0   1   2      3      4   5   6
+```
+
+{{< /spoiler >}}
+
+{{< spoiler text="Example 2" >}}
+
+Consider yet again the case where both `outer` and `inner` contain three
+elements, indexed 0 through 5:
+
+```
+    outer            inner
+[   |   |   ] ++ [   |   |   ]
+  0   1   2        3   4   5
+```
+
+Now if we're given, for example, the index `4` as the argument to the
+`insertName` function, what happens?
+
+```
+index         outer            inner
+  4       [   |   |   ] ++ [   |   |   ]
+            0   1   2        3   4   5
+```
+
+Neither of the first two patterns match: `outer` is non-empty, and the index is
+non-zero. So we recurse, reducing both the index and the `outer` list in size.
+And we keep doing this while neither of the first two patterns of `insertName`,
+neither of our base-cases, match:
+
+```
+index         outer            inner
+  4       [   |   |   ] ++ [   |   |   ]
+            0   1   2        3   4   5
+
+index         outer            inner
+  3           [   |   ] ++ [   |   |   ]
+                0   1        2   3   4
+
+index         outer            inner
+  2               [   ] ++ [   |   |   ]
+                    0        1   2   3
+
+index         outer            inner
+  1                   Ø ++ [   |   |   ]
+                             0   1   2
+```
+
+This is our first pattern! The `outer` part is empty, so the given index must
+point somewhere in the `inner` list (and indeed we, the human, can see this).
+Any index into `inner` must be incremented, since we're adding stuff to the
+front of `inner`, so we increment the index by 1, giving 2. We can confirm this
+would match the same place by drawing the result of prepending `n`:
+
+```
+index         outer                 inner
+1+1= 2                Ø ++ n :: [   |   |   ]
+                           0      1   2   3
+```
+
+Now. As with the previous example, we did some subtraction and reducing to reach
+this point. For every recursive call, we removed an element from `outer` and
+subtracted one from the given index. In order to get the correct result, we
+therefore need to undo this. Travelling back up the recursive calls, we undo
+this step three times, resulting in a final index of `2 + 3 = 5`. Is this
+correct?
+
+```
+index         outer                 inner
+  4       [   |   |   ]   ++    [   |   |   ]
+            0   1   2             3   4   5
+
+  |
+  v
+
+index         outer                 inner
+2+3= 5    [   |   |   ] ++ n :: [   |   |   ]
+            0   1   2      3      4   5   6
+```
+
+Yes it is! Everything lines up, and our updated index points to the same
+location as before the combined list was extended! Fantastic!!
+
+
+{{< /spoiler >}}
+
+So yeah... That's de Bruijn indices... A good warmup exercise, huh?... Please go
+for a walk or a cup of coffee or something at this point. It took so long to get
+here, with so many tiny details to get exactly right, so I don't blame you if
+you feel mentally fatigued by this point.
+
+Well done for making it to the end of this part! I hope it made somewhat sense.
+
+And now for something completely different. (Which is fortunately a bit simpler,
+in my opinion.)
 
 
 ## Exercise 3 - Lists and Trees
