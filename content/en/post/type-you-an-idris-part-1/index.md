@@ -9,7 +9,7 @@ summary: "The best way to learn & understand a thing is to implement it. So
 authors: [thomas-e-hansen]
 tags: [type-you-an-idris, splv2020, idris2, type-theory, functional-programming]
 categories: []
-date: 2022-08-17
+date: 2022-09-02
 lastmod:
 featured: false
 draft: false
