@@ -105,6 +105,11 @@ which meant the following needed fixed in TinyIdris before it would even build:
 With the patch applied, we're ready to build TinyIdris, when we eventually get
 to that. For now, let's start with the Warmup Exercises.
 
+(note: in this post, I'll assume you're familiar with interactive editing since
+it makes life so much easier. If you're not, check out the Type-Development with
+Idris book, or the
+[Idris editor wiki](https://github.com/idris-lang/Idris2/wiki/1-%5BLanguage%5D-Editor-support).)
+
 
 ## Exercise 1 - Equalities
 
@@ -163,15 +168,15 @@ thankfully, this is not a `DecEq` (_decidable_ equality) implementation, which
 means we don't need to prove how it is impossible for the `Name`s to be equal.
 
 {{< spoiler text="If you are uncertain about proofs, `DecEq`, etc..." >}}
-If you are uncertain about `DecEq`, proofs and contras, I've written an intro
+If you are uncertain about `DecEq`, proofs, and contras, I've written an intro
 (well, more of a complete explanation) to proof-by-datatype and decidable
 equality which you can find in
 [this blog post](/en/post/intro-to-decidable-equality).
 {{< /spoiler >}}
 
-Again, start by interactively generating a definition using `<localleader> d`,
-then case-splitting on the arguments, and introducing a generic pattern match
-for different types of `Name`s:
+Again, start by interactively generating a definition, then case-splitting on
+the arguments, and introducing a generic pattern match for different types of
+`Name`s:
 
 ```idris
 nameEq : (x : Name) -> (y : Name) -> Maybe (x = y)
@@ -187,9 +192,11 @@ the `Name`s must be too. Recall that `Refl` is a proof of equality, and that
 
 ```idris
 nameEq : (x : Name) -> (y : Name) -> Maybe (x = y)
-nameEq (UN x)   (UN y)   = case decEq x y of
-                                (Yes prf)   => rewrite prf in Just Refl
-                                (No contra) => Nothing
+nameEq (UN x)   (UN y)   =
+  case decEq x y of
+       (Yes prf)   => rewrite prf in Just Refl
+       (No contra) => Nothing
+
 nameEq (MN x i) (MN y j) = ?nameEq_rhs_5
 nameEq _        _        = Nothing
 ```
@@ -200,9 +207,11 @@ guessed its layout. Here it is:
 
 ```idris
 nameEq : (x : Name) -> (y : Name) -> Maybe (x = y)
-nameEq (UN x)   (UN y)   = case decEq x y of
-                                (Yes prf)   => rewrite prf in Just Refl
-                                (No contra) => Nothing
+nameEq (UN x)   (UN y)   =
+  case decEq x y of
+       (Yes prf)   => rewrite prf in Just Refl
+       (No contra) => Nothing
+
 nameEq (MN x i) (MN y j) =
   case decEq x y of
        (Yes prfXY) => case decEq i j of
@@ -238,29 +247,25 @@ DecEq Name where
          (Yes prf)   => rewrite prf in Yes Refl
          (No contra) => No ?decEq_rhs_7
 
-  decEq (UN x)   (MN y j) =
-    ?decEq_rhs_3
-
-  decEq (MN x i) (UN y)   =
-    ?decEq_rhs_4
-
-  decEq (MN x i) (MN y j) =
-    ?decEq_rhs_5
-
+  decEq (UN x)   (MN y j) = ?decEq_rhs_3
+  decEq (MN x i) (UN y)   = ?decEq_rhs_4
+  decEq (MN x i) (MN y j) = ?decEq_rhs_5
 ```
 
 The problem is that the type of `?decEq_rhs_7` is `UN x = UN y -> Void`, i.e. a
 proof that if the two names are equal, then we have a contradiction; in other
 words, a proof that the two names _cannot_ be equal. However, we only have a
-proof that their internal strings differ. Sounds like we need a helper function
-(or a lemma, if you will):
+proof that their internal strings differ. Sounds like we need a helper function!
+Rename the `?decEq_rhs_7` hole to `?unStringsDiffer` and interactively lift it
+to a new function:
 
 ```idris
 unStringsDiffer : (contra : x = y -> Void) -> (prf : UN x = UN y) -> Void
 ```
+
 This lemma is trivial enough that Idris can actually figure it out from the type
-declaration. Ask Idris to _generate_ a definition by putting the cursor on
-`unStringsDiffer` and pressing `<localleader> g`:
+declaration. With your text cursor on `unStringsDiffer`, ask Idris to
+interactively generate a definition:
 
 ```idris
 unStringsDiffer : (contra : x = y -> Void) -> (prf : UN x = UN y) -> Void
@@ -278,17 +283,13 @@ DecEq Name where
          (Yes prf)   => rewrite prf in Yes Refl
          (No contra) => No (unStringsDiffer contra)
 
-  decEq (UN x)   (MN y j) = No ?decEq_rhs_3
-
-  decEq (MN x i) (UN y)   = No ?decEq_rhs_4
-
-  decEq (MN x i) (MN y j) =
-    ?decEq_rhs_5
+  decEq (UN x)   (MN y j) = ?decEq_rhs_3
+  decEq (MN x i) (UN y)   = ?decEq_rhs_4
+  decEq (MN x i) (MN y j) = ?decEq_rhs_5
 
 ```
 
-Reloading the file (`<localleader> r`) confirms that things type-check and Idris
-is happy.
+Reloading the file confirms that things type-check and Idris is happy.
 
 We'll come back to the cross-comparing cases in a bit. First, let's handle
 `MN`s (I'll be omitting the preceding definitions from hereon, for brevity):
@@ -313,22 +314,22 @@ mnNumbersDiffer : MN y i = MN y j -> Void
 
 By using the `rewrite` outside the `case`-block, Idris knows that the names are
 the same, but that the numbers might not be; i.e. that the numbers are the only
-plausible difference. This makes for slightly nicer logic/reasoning in my
-opinion (although, as we'll see shortly, it doesn't technically matter). If we'd
-used the `rewrite` _inside_ the `case`-block, we'd get:
+possible difference. This makes for slightly nicer logic/reasoning in my opinion
+(although, as we'll see shortly, it doesn't technically matter). If we'd used
+the `rewrite` _inside_ the `case`-block, we'd get:
 
 ```idris
 mnNumbersDiffer : MN x i = MN y j -> Void
 ```
 
 Here, although _we_, the human, know that we're under a `(Yes prfXY)`-case, we
-have never actually told Idris that/told Idris what that means, so it doesn't
-know that the strings `x` and `y` are the same and that only `i` and `j` might
-differ.
+have never actually applied that to the terms we're working with, so Idris
+doesn't know that the strings `x` and `y` are the same and that only `i` and `j`
+might differ.
 
-If we now lift both the holes (using `<localleader> l`), making sure to lift
-these all the way above the `DecEq Name` declaration,  we'll get some useful
-lemma types from which we can generate definitions:
+If we now lift both the holes, making sure to lift these all the way above the
+`DecEq Name` declaration, we'll get some useful lemma types from which we can
+generate definitions:
 
 ```idris
 mnNumbersDiffer : x = y -> (i = j -> Void) -> MN y i = MN y j -> Void
@@ -336,11 +337,11 @@ mnNumbersDiffer : x = y -> (i = j -> Void) -> MN y i = MN y j -> Void
 mnStringsDiffer : (x = y -> Void) -> MN x i = MN y j -> Void
 ```
 
-For `mnNumbersDiffer`, you'll notice that Idris has actually included more
-information than we need: the proof that `x = y`. This is because the
-hole-lifting functionality uses a "better safe than sorry" approach, including
-as much information from the context where the hole was as it can. Refine the
-types a bit (and name the arguments, just for neatness) to get:
+For `mnNumbersDiffer`, you'll notice that Idris has included more information
+than we need: the proof that `x = y`. This is because the hole-lifting
+functionality uses a "better safe than sorry" approach, including as much
+information from the context where the hole was as it can. Refine the types a
+bit (and name the arguments, just for neatness) to get:
 
 ```idris
 mnNumbersDiffer : (contra : i = j -> Void) -> (prf : MN _ i = MN _ j) -> Void
@@ -365,12 +366,18 @@ without needing any info about the strings.
 
 Coming back to the cross-comparing cases. To us, clearly we cannot construct an
 instance of `Refl` for these, since `MN` takes more arguments than `UN`.
-However, Idris doesn't know this (yet)! If we look at the type of `?decEq_rhs_3`
-we see that need some way of saying that `UN x = MN y j -> Void`. Having
-something which cannot be constructed is known as that thing being
-`Uninhabited`, with its construction resulting in something `absurd` (i.e. if we
-constructed it, we clearly broke the rules somehow). We can sketch the two
-`Uninhabited` implementations:
+However, Idris doesn't know this (yet)! Start by adding `No` to both instances:
+
+```idris
+  decEq (UN x)   (MN y j) = No ?decEq_rhs_3
+  decEq (MN x i) (UN y)   = No ?decEq_rhs_4
+```
+
+If we now look at the type of `?decEq_rhs_3` we see that need some way of saying
+that `UN x = MN y j -> Void`. Having something which cannot be constructed is
+known as that thing being `Uninhabited`, with its construction resulting in
+something `absurd` (i.e. if we constructed it, we clearly broke the rules
+somehow). We can sketch the two `Uninhabited` implementations:
 
 ```idris
 Uninhabited ((UN _) = (MN _ _)) where
@@ -380,16 +387,20 @@ Uninhabited ((MN _ _) = (UN _)) where
   uninhabited prf = ?mn_un_uninhabited
 ```
 
-Now, if we simply case-split on `prf` in each definition, Idris generates the
-following for both:
+Now, if we simply case-split on `prf` in each definition, Idris generates an
+`impossible` pattern for both:
 
 ```idris
+Uninhabited ((UN _) = (MN _ _)) where
+  uninhabited Refl impossible
+
+Uninhabited ((MN _ _) = (UN _)) where
   uninhabited Refl impossible
 ```
 
 The `impossible` keyword means that there is no way to make the expression
-type-check. Which is correct, since there is no way we can have `Refl` take its
-expected implicit arguments in these two cases.
+type-check. Which is correct: there is no way we pass arguments to `Refl` which
+make `UN` be identical to `MN`.
 
 Having `Uninhabited` implementations allows us to use `absurd` to finish off the
 `DecEq Name` implementation:
@@ -446,8 +457,9 @@ dropFirst_rhs_1 : List (Var vs)
 ```
 
 Seems like we somehow need to deconstruct and reconstruct a `Var` term, in order
-to remove `v` from `x`, and then probably recurse. The question is how to
-deconstruct `x`? I guess we could try case-splitting again:
+to remove `v` from `x` (and there'll probably be some recursion to deal with
+`vs`). The question is how to deconstruct `x`? I guess we could always try
+case-splitting again:
 
 ```idris
 dropFirst ((MkVar p) :: xs) = ?dropFirst_rhs_2
@@ -460,10 +472,10 @@ dropFirst ((MkVar p) :: xs) = ?dropFirst_rhs_2
 dropFirst_rhs_2 : List (Var vs)
 ```
 
-Hmm, now we have the proof that the index is a valid index for `n` in `(v ::
+Hmm, now we have the proof that the index `i` is a valid index for `n` in `(v ::
 vs)`. It doesn't really seem closer, but this is actually partway there: We now
 have a mention of the variable we're trying to remove! Let's case-split one more
-time:
+time, this time on `p`:
 
 ```idris
 dropFirst ((MkVar First) :: xs) = ?dropFirst_rhs_3
@@ -507,7 +519,7 @@ dropFirst_rhs_4 : List (Var vs)
 
 Notice the type of `x`. Since `Later` determines that we could extend something
 as long as we incremented the index, this entails that `v` never was present in
-`x` in the first place; it occurs _later_. If you're still not convinced,
+`x` in the first place; it occurs _later_! If you're still not convinced,
 construct and inspect the type of the following `let`-expression:
 
 ```idris
@@ -1079,8 +1091,7 @@ the long route.
 
 {{< /spoiler >}}
 
-Let's start by lifting the `rotateLemma` to a new function using `<localleader>
-l`:
+Let's start by lifting the `rotateLemma` to a new function:
 
 ```idris
 rotateLemma :  (n : a) -> (n' : a) -> Tree ys -> Tree xs_0 -> Tree xs
@@ -1114,8 +1125,8 @@ rotateL (Node left n (Node rightl n' rightr))
     = rotateLemma $ Node (Node left n rightl) n' rightr
 ```
 
-Much better! Now start by sketching the definition of
-`rotateLemma` (using `<localleader> d`):
+Much better! Now start by interactively sketching the definition of
+`rotateLemma`:
 
 ```idris
 rotateLemma :  Tree ((xs ++ (n :: xs')) ++ (n' :: ys))
@@ -1330,8 +1341,7 @@ This looks oddly familiar... It's the inverse of `rotateLemma`!
 Now, I'd love to say that there is some `sym`-like function we could just stick
 in front of `rotateLemma`, but unfortunately not. Since not all functions are
 invertible, we have to write this one by hand. Start by lifting the hole to a
-new function (using `<localleader> l`) and cleaning up all the extra stuff Idris
-adds:
+new function and cleaning up all the extra stuff Idris adds:
 
 ```idris
 rotateRLemma :  Tree (xs ++ (n' :: (ys' ++ (n :: ys))))
@@ -1343,7 +1353,7 @@ rotateR (Node (Node leftl n' leftr) n right) =
     rotateRLemma $ Node leftl n' (Node leftr n right)
 ```
 
-And then generate the start of a definition (using `<localleader> d`):
+And then generate the start of a definition:
 
 ```idris
 rotateRLemma :  Tree (xs ++ (n' :: (ys' ++ (n :: ys))))
@@ -1384,9 +1394,9 @@ rotateRLemma x =
 
 I don't blame you if you didn't spot this in 3.3. I didn't until I wrote this
 and went "Hang on a minute! That should just work for 3.3!!". It requires being
-able to squint at the type right, which is something that takes a bit of
-practice. Hopefully taking both the long and the short way has helped a bit with
-this  : )
+able to squint at the type right, which is a skill/art that unfortunately just
+takes some practice. Hopefully taking both the long and the short way has
+helped a bit with this  : )
 
 If we inspect the hole in our one-line definition we get:
 
@@ -1401,8 +1411,8 @@ If we inspect the hole in our one-line definition we get:
 rotateRLemma_rhs : Tree (xs ++ (n' :: (ys' ++ (n :: ys))))
 ```
 
-Which is exactly the type of `x`. As with `rotateLemma`, slot `x` into the
-`x`-shaped hole to complete the definition:
+Which is the type of `x`! As with `rotateLemma`, slot `x` into the `x`-shaped
+hole to complete the definition:
 
 ```idris
 rotateRLemma x =
@@ -1414,7 +1424,7 @@ haven't already, tidy up the definition of the first `rotateLemma`:
 
 ```idris
 rotateLemma x =
-    rewrite sym $ appendAssoc xs (n :: xs') (n' :: ys) in x
+    rewrite appendAssoc xs (n :: xs') (n' :: ys) in x
 ```
 
 (N.B.: Due to the way Idris names things when lifting the holes and the fact
