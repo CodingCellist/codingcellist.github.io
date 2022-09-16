@@ -1,7 +1,7 @@
 ---
 # Documentation: https://wowchemy.com/docs/managing-content/
 
-title: "Type You an Idris for Great Good - Part 1: Warmup"
+title: "Type You an Idris – Part 1: Warmup"
 subtitle: ""
 summary: "The best way to learn & understand a thing is to implement it. So
           let's implement (a subset) of Idris2! This part is an introduction and
