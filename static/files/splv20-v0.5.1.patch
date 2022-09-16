@@ -1,3 +1,800 @@
+diff --git a/Code/Lecture2/Core/Core.idr b/Code/Lecture2/Core/Core.idr
+index dc61461..9eb1a08 100644
+--- a/Code/Lecture2/Core/Core.idr
++++ b/Code/Lecture2/Core/Core.idr
+@@ -74,6 +74,10 @@ export %inline
+                                Left err => pure (Left err)
+                                Right val => runCore (f val)))
+ 
++export %inline
++(>>) : Core () -> Lazy (Core b) -> Core b
++(>>) c l = c >>= (\_ => Force l)
++
+ -- Applicative (specialised)
+ export %inline
+ pure : a -> Core a
+@@ -116,7 +120,7 @@ traverse f xs = traverse' f xs []
+ 
+ export
+ traverseList1 : (a -> Core b) -> List1 a -> Core (List1 b)
+-traverseList1 f (x :: xs) = [| f x :: traverse f xs |]
++traverseList1 f (x ::: xs) = [| f x ::: traverse f xs |]
+ 
+ export
+ traverseVect : (a -> Core b) -> Vect n a -> Core (Vect n b)
+@@ -132,13 +136,13 @@ export
+ traverse_ : (a -> Core b) -> List a -> Core ()
+ traverse_ f [] = pure ()
+ traverse_ f (x :: xs)
+-    = do f x
++    = do _ <- f x
+          traverse_ f xs
+ 
+ export
+ traverseList1_ : (a -> Core b) -> List1 a -> Core ()
+-traverseList1_ f (x :: xs) = do
+-  f x
++traverseList1_ f (x ::: xs) = do
++  _ <- f x
+   traverse_ f xs
+ 
+ export
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Core/CaseBuilder.idr b/Code/Lecture3/TinyIdris-v1/src/Core/CaseBuilder.idr
+index 41e2229..fed4604 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Core/CaseBuilder.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Core/CaseBuilder.idr
+@@ -10,7 +10,7 @@ import Core.Value
+ 
+ import Data.LengthMatch
+ import Data.List
+-import Data.Strings
++import Data.String
+ 
+ import Decidable.Equality
+ 
+@@ -22,6 +22,7 @@ data ArgType : List Name -> Type where
+      Unknown : ArgType vars
+          -- arg's type is not yet known due to a previously stuck argument
+ 
++covering
+ {ns : _} -> Show (ArgType ns) where
+   show (Known t) = "Known " ++ show t
+   show (Stuck t) = "Stuck " ++ show t
+@@ -72,7 +73,7 @@ updatePats {todo = pvar :: ns} env (NBind _ (Pi _ farg) fsc) (p :: ps)
+          Unknown =>
+             do defs <- get Ctxt
+                empty <- clearDefs defs
+-               pure (record { argType = Known !(quote empty env farg) } p
++               pure ({ argType := Known !(quote empty env farg) } p
+                           :: !(updatePats env !(fsc defs (toClosure env (Ref Bound pvar))) ps))
+          _ => pure (p :: ps)
+ updatePats env nf (p :: ps)
+@@ -80,7 +81,7 @@ updatePats env nf (p :: ps)
+          Unknown =>
+             do defs <- get Ctxt
+                empty <- clearDefs defs
+-               pure (record { argType = Stuck !(quote empty env nf) } p :: ps)
++               pure ({ argType := Stuck !(quote empty env nf) } p :: ps)
+          _ => pure (p :: ps)
+ 
+ substInPatInfo : {pvar, vars, todo : _} ->
+@@ -90,14 +91,14 @@ substInPatInfo : {pvar, vars, todo : _} ->
+                  Core (PatInfo pvar vars, NamedPats vars todo)
+ substInPatInfo {pvar} {vars} n tm p ps
+     = case argType p of
+-           Known ty => pure (record { argType = Known (substName n tm ty) } p, ps)
++           Known ty => pure ({ argType := Known (substName n tm ty) } p, ps)
+            Stuck fty =>
+              do defs <- get Ctxt
+                 empty <- clearDefs defs
+                 let env = mkEnv vars
+                 case !(nf defs env (substName n tm fty)) of
+                      NBind _ (Pi _ farg) fsc =>
+-                       pure (record { argType = Known !(quote empty env farg) } p,
++                       pure ({ argType := Known !(quote empty env farg) } p,
+                                  !(updatePats env
+                                        !(fsc defs (toClosure env
+                                              (Ref Bound pvar))) ps))
+@@ -131,21 +132,21 @@ Weaken ArgType where
+   weaken (Stuck fty) = Stuck (weaken fty)
+   weaken Unknown = Unknown
+ 
+-Weaken (PatInfo p) where
++{p : _} -> Weaken (PatInfo p) where
+   weaken (MkInfo p el fty) = MkInfo p (Later el) (weaken fty)
+ 
+ -- FIXME: perhaps 'vars' should be second argument so we can use Weaken interface
+ weaken : {x, vars : _} ->
+          NamedPats vars todo -> NamedPats (x :: vars) todo
+-weaken [] = []
+-weaken (p :: ps) = weaken p :: weaken ps
++-- weaken [] = []
++-- weaken (p :: ps) = weaken p :: weaken ps
+ 
+ weakenNs : {vars : _} ->
+            (ns : List Name) ->
+            NamedPats vars todo -> NamedPats (ns ++ vars) todo
+-weakenNs ns [] = []
+-weakenNs ns (p :: ps)
+-    = weakenNs ns p :: weakenNs ns ps
++-- weakenNs ns [] = []
++-- weakenNs ns (p :: ps)
++--     = weakenNs ns p :: weakenNs ns ps
+ 
+ (++) : NamedPats vars ms -> NamedPats vars ns -> NamedPats vars (ms ++ ns)
+ (++) [] ys = ys
+@@ -305,7 +306,7 @@ newPats : (pargs : List Pat) -> LengthMatch pargs ns ->
+           NamedPats vars ns
+ newPats [] NilMatch rest = []
+ newPats (newpat :: xs) (ConsMatch w) (pi :: rest)
+-  = record { pat = newpat} pi :: newPats xs w rest
++  = { pat := newpat} pi :: newPats xs w rest
+ 
+ updateNames : List (Name, Pat) -> List (Name, Name)
+ updateNames = mapMaybe update
+@@ -317,7 +318,7 @@ updateNames = mapMaybe update
+ updatePatNames : List (Name, Name) -> NamedPats vars todo -> NamedPats vars todo
+ updatePatNames _ [] = []
+ updatePatNames ns (pi :: ps)
+-    = record { pat $= update } pi :: updatePatNames ns ps
++    = { pat $= update } pi :: updatePatNames ns ps
+   where
+     update : Pat -> Pat
+     update (PCon n i a ps) = PCon n i a (map update ps)
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Core/CaseTree.idr b/Code/Lecture3/TinyIdris-v1/src/Core/CaseTree.idr
+index 0d0dd66..eb9f4b5 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Core/CaseTree.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Core/CaseTree.idr
+@@ -72,6 +72,7 @@ data Pat : Type where
+      PUnmatchable : Term [] -> Pat
+ 
+ export
++covering
+ Show Pat where
+   show (PCon n t a args) = show n ++ show (t, a) ++ show args
+   show (PLoc n) = "{" ++ show n ++ "}"
+@@ -105,6 +106,7 @@ mkTerm vars (PUnmatchable tm) = embed tm
+ 
+ mutual
+   export
++  covering
+   {vars : _} -> Show (CaseTree vars) where
+     show (Case {name} idx prf ty alts)
+         = "case " ++ show name ++ "[" ++ show idx ++ "] : " ++ show ty ++ " of { " ++
+@@ -114,6 +116,7 @@ mutual
+     show Impossible = "Impossible"
+ 
+   export
++  covering
+   {vars : _} -> Show (CaseAlt vars) where
+     show (ConCase n tag args sc)
+         = show n ++ " " ++ showSep " " (map show args) ++ " => " ++
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Core/Core.idr b/Code/Lecture3/TinyIdris-v1/src/Core/Core.idr
+index dfce5a7..3e709b7 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Core/Core.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Core/Core.idr
+@@ -37,6 +37,7 @@ data Error : Type where
+      FileErr : String -> FileError -> Error
+ 
+ export
++covering
+ Show Error where
+   show (CantConvert env x y)
+       = "Type mismatch: " ++ show x ++ " and " ++ show y
+@@ -111,6 +112,10 @@ export %inline
+                                Left err => pure (Left err)
+                                Right val => runCore (f val)))
+ 
++export %inline
++(>>) : Core () -> Lazy (Core b) -> Core b
++(>>) c l = c >>= (\_ => Force l)
++
+ -- Applicative (specialised)
+ export %inline
+ pure : a -> Core a
+@@ -120,6 +125,10 @@ export
+ (<*>) : Core (a -> b) -> Core a -> Core b
+ (<*>) (MkCore f) (MkCore a) = MkCore [| f <*> a |]
+ 
++export %inline
++ignore : Core _ -> Core ()
++ignore _ = pure ()
++
+ export %inline
+ when : Bool -> Lazy (Core ()) -> Core ()
+ when True f = f
+@@ -153,7 +162,7 @@ traverse f xs = traverse' f xs []
+ 
+ export
+ traverseList1 : (a -> Core b) -> List1 a -> Core (List1 b)
+-traverseList1 f (x :: xs) = [| f x :: traverse f xs |]
++traverseList1 f (x ::: xs) = [| f x ::: traverse f xs |]
+ 
+ export
+ traverseVect : (a -> Core b) -> Vect n a -> Core (Vect n b)
+@@ -169,13 +178,13 @@ export
+ traverse_ : (a -> Core b) -> List a -> Core ()
+ traverse_ f [] = pure ()
+ traverse_ f (x :: xs)
+-    = do f x
++    = do ignore $ f x
+          traverse_ f xs
+ 
+ export
+ traverseList1_ : (a -> Core b) -> List1 a -> Core ()
+-traverseList1_ f (x :: xs) = do
+-  f x
++traverseList1_ f (x ::: xs) = do
++  ignore $ f x
+   traverse_ f xs
+ 
+ namespace Binder
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Core/Env.idr b/Code/Lecture3/TinyIdris-v1/src/Core/Env.idr
+index 83683c8..2ed8b4b 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Core/Env.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Core/Env.idr
+@@ -28,7 +28,7 @@ revNs (v :: vs) ns
+ -- in big environments
+ -- Also reversing the names at the end saves significant time over concatenating
+ -- when environments get fairly big.
+-getBinderUnder : Weaken tm =>
++getBinderUnder : {tm : _} -> Weaken tm =>
+                  {vars : _} -> {idx : Nat} ->
+                  (ns : List Name) ->
+                  (0 p : IsVar x idx vars) -> Env tm vars ->
+@@ -39,7 +39,7 @@ getBinderUnder {idx = S k} {vars = v :: vs} ns (Later lp) (b :: env)
+     = getBinderUnder (v :: ns) lp env
+ 
+ export
+-getBinder : Weaken tm =>
++getBinder : {tm : _} -> Weaken tm =>
+             {vars : _} -> {idx : Nat} ->
+             (0 p : IsVar x idx vars) -> Env tm vars -> Binder (tm vars)
+ getBinder el env = getBinderUnder [] el env
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Core/TT.idr b/Code/Lecture3/TinyIdris-v1/src/Core/TT.idr
+index 44e30a9..f5fec09 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Core/TT.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Core/TT.idr
+@@ -385,6 +385,7 @@ nameAt {vars = n :: ns} Z First = n
+ nameAt {vars = n :: ns} (S k) (Later p) = nameAt k p
+ 
+ export 
++covering
+ {vars : _} -> Show (Term vars) where
+   show tm = let (fn, args) = getFnArgs tm in showApp fn args
+     where
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Idris/Main.idr b/Code/Lecture3/TinyIdris-v1/src/Idris/Main.idr
+index d8961ee..0fdfed6 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Idris/Main.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Idris/Main.idr
+@@ -41,7 +41,7 @@ runMain decls
+ main : IO ()
+ main = do [_, fname] <- getArgs
+               | _ => putStrLn "Usage: tinyidris <filename>"
+-          Right decls <- parseFile fname (do p <- prog fname; eoi; pure p)
++          Right decls <- parseFile fname (do p <- prog fname; _ <- eoi; pure p)
+               | Left err => printLn err
+           coreRun (runMain decls)
+                   (\err => printLn err)
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Package.idr b/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Package.idr
+index 1a063c7..bf1052f 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Package.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Package.idr
+@@ -6,7 +6,7 @@ import public Text.Parser
+ 
+ import Data.List
+ import Data.List1
+-import Data.Strings
++import Data.String
+ import Data.String.Extra
+ import Utils.String
+ 
+@@ -27,7 +27,7 @@ Show Token where
+   show (Comment str) = "Comment: " ++ str
+   show EndOfInput = "EndOfInput"
+   show Equals = "Equals"
+-  show (DotSepIdent dsid) = "DotSepIdentifier: " ++ dotSep (List1.toList dsid)
++  show (DotSepIdent dsid) = "DotSepIdentifier: " ++ dotSep (toList dsid)
+   show Separator = "Separator"
+   show Space = "Space"
+   show (StringLit s) = "StringLit: " ++ s
+@@ -50,7 +50,7 @@ rawTokens =
+   ]
+   where
+     splitNamespace : String -> List1 String
+-    splitNamespace = Data.Strings.split (== '.')
++    splitNamespace = Data.String.split (== '.')
+ 
+ export
+ lex : String -> Either (Int, Int, String) (List (TokenData Token))
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Source.idr b/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Source.idr
+index f2910cc..5f90383 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Source.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Parser/Lexer/Source.idr
+@@ -4,7 +4,7 @@ import public Parser.Lexer.Common
+ 
+ import Data.List1
+ import Data.List
+-import Data.Strings
++import Data.String
+ import Data.String.Extra
+ 
+ import Utils.Hex
+@@ -46,7 +46,7 @@ Show Token where
+   -- Identifiers
+   show (HoleIdent x) = "hole identifier " ++ x
+   show (Ident x) = "identifier " ++ x
+-  show (DotSepIdent xs) = "namespaced identifier " ++ dotSep (List1.toList $ reverse xs)
++  show (DotSepIdent xs) = "namespaced identifier " ++ dotSep (toList $ reverse xs)
+   show (DotIdent x) = "dot+identifier " ++ x
+   show (Symbol x) = "symbol " ++ x
+   -- Comments
+@@ -222,8 +222,8 @@ rawTokens =
+                    else Ident x
+     parseNamespace : String -> Token
+     parseNamespace ns = case List1.reverse . split (== '.') $ ns of
+-                             [ident] => parseIdent ident
+-                             ns      => DotSepIdent ns
++                             ident ::: [] => parseIdent ident
++                             ns           => DotSepIdent ns
+ 
+ export
+ lexTo : (TokenData Token -> Bool) ->
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Package.idr b/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Package.idr
+index 643d4b5..2fbbaee 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Package.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Package.idr
+@@ -34,7 +34,7 @@ export
+ exactProperty : String -> Rule String
+ exactProperty p = terminal ("Expected property " ++ p)
+                            (\x => case tok x of
+-                                       DotSepIdent [p'] =>
++                                       DotSepIdent (p' ::: []) =>
+                                          if p == p' then Just p
+                                          else Nothing
+                                        _ => Nothing)
+@@ -64,7 +64,7 @@ export
+ packageName : Rule String
+ packageName = terminal "Expected package name"
+                        (\x => case tok x of
+-                                   DotSepIdent [str] =>
++                                   DotSepIdent (str ::: []) =>
+                                      if isIdent AllowDashes str then Just str
+                                      else Nothing
+                                    _ => Nothing)
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Source.idr b/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Source.idr
+index 63b721e..25b4e4e 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Source.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Parser/Rule/Source.idr
+@@ -6,7 +6,7 @@ import public Parser.Support
+ 
+ import Core.TT
+ import Data.List1
+-import Data.Strings
++import Data.String
+ 
+ %default total
+ 
+@@ -21,7 +21,7 @@ SourceEmptyRule = EmptyRule Token
+ export
+ eoi : SourceEmptyRule ()
+ eoi
+-    = do nextIs "Expected end of input" (isEOI . tok)
++    = do _ <- nextIs "Expected end of input" (isEOI . tok)
+          pure ()
+   where
+     isEOI : Token -> Bool
+@@ -124,7 +124,7 @@ namespacedIdent
+     = terminal "Expected namespaced name"
+         (\x => case tok x of
+             DotSepIdent ns => Just ns
+-            Ident i => Just [i]
++            Ident i => Just (i ::: [])
+             _ => Nothing)
+ 
+ export
+@@ -133,7 +133,7 @@ moduleIdent
+     = terminal "Expected module identifier"
+         (\x => case tok x of
+             DotSepIdent ns => Just ns
+-            Ident i => Just [i]
++            Ident i => Just (i ::: [])
+             _ => Nothing)
+ 
+ export
+@@ -168,8 +168,8 @@ init = 0
+ 
+ continueF : SourceEmptyRule () -> (indent : IndentInfo) -> SourceEmptyRule ()
+ continueF err indent
+-    = do eoi; err
+-  <|> do keyword "where"; err
++    = do _ <- eoi; err
++  <|> do _ <- keyword "where"; err
+   <|> do col <- Common.column
+          if col <= indent
+             then err
+@@ -237,7 +237,7 @@ export
+ atEnd : (indent : IndentInfo) -> SourceEmptyRule ()
+ atEnd indent
+     = eoi
+-  <|> do nextIs "Expected end of block" (isTerminator . tok)
++  <|> do _ <- nextIs "Expected end of block" (isTerminator . tok)
+          pure ()
+   <|> do col <- Common.column
+          if (col <= indent)
+@@ -259,9 +259,9 @@ atEndIndent indent
+ -- must start, given where the current block entry started
+ terminator : ValidIndent -> Int -> SourceEmptyRule ValidIndent
+ terminator valid laststart
+-    = do eoi
++    = do _ <- eoi
+          pure EndOfBlock
+-  <|> do symbol ";"
++  <|> do _ <- symbol ";"
+          pure (afterSemi valid)
+   <|> do col <- column
+          afterDedent valid col
+@@ -299,7 +299,7 @@ blockEntry : ValidIndent -> (IndentInfo -> Rule ty) ->
+              Rule (ty, ValidIndent)
+ blockEntry valid rule
+     = do col <- column
+-         checkValid valid col
++         _ <- checkValid valid col
+          p <- rule col
+          valid' <- terminator valid col
+          pure (p, valid')
+@@ -307,7 +307,7 @@ blockEntry valid rule
+ blockEntries : ValidIndent -> (IndentInfo -> Rule ty) ->
+                SourceEmptyRule (List ty)
+ blockEntries valid rule
+-     = do eoi; pure []
++     = do _ <- eoi; pure []
+    <|> do res <- blockEntry valid rule
+           ts <- blockEntries (snd res) rule
+           pure (fst res :: ts)
+@@ -316,10 +316,10 @@ blockEntries valid rule
+ export
+ block : (IndentInfo -> Rule ty) -> SourceEmptyRule (List ty)
+ block item
+-    = do symbol "{"
+-         commit
++    = do _ <- symbol "{"
++         _ <- commit
+          ps <- blockEntries AnyIndent item
+-         symbol "}"
++         _ <- symbol "}"
+          pure ps
+   <|> do col <- column
+          blockEntries (AtPos col) item
+@@ -332,10 +332,10 @@ block item
+ export
+ blockAfter : Int -> (IndentInfo -> Rule ty) -> SourceEmptyRule (List ty)
+ blockAfter mincol item
+-    = do symbol "{"
+-         commit
++    = do _ <- symbol "{"
++         _ <- commit
+          ps <- blockEntries AnyIndent item
+-         symbol "}"
++         _ <- symbol "}"
+          pure ps
+   <|> do col <- Common.column
+          if col <= mincol
+@@ -345,8 +345,8 @@ blockAfter mincol item
+ export
+ blockWithOptHeaderAfter : Int -> (IndentInfo -> Rule hd) -> (IndentInfo -> Rule ty) -> SourceEmptyRule (Maybe hd, List ty)
+ blockWithOptHeaderAfter {ty} mincol header item
+-    = do symbol "{"
+-         commit
++    = do _ <- symbol "{"
++         _ <- commit
+          hidt <- optional $ blockEntry AnyIndent header
+          restOfBlock hidt
+   <|> do col <- Common.column
+@@ -358,20 +358,20 @@ blockWithOptHeaderAfter {ty} mincol header item
+   where
+   restOfBlock : Maybe (hd, ValidIndent) -> Rule (Maybe hd, List ty)
+   restOfBlock (Just (h, idt)) = do ps <- blockEntries idt item
+-                                   symbol "}"
++                                   _ <- symbol "}"
+                                    pure (Just h, ps)
+   restOfBlock Nothing = do ps <- blockEntries AnyIndent item
+-                           symbol "}"
++                           _ <- symbol "}"
+                            pure (Nothing, ps)
+ 
+ export
+ nonEmptyBlock : (IndentInfo -> Rule ty) -> Rule (List ty)
+ nonEmptyBlock item
+-    = do symbol "{"
+-         commit
++    = do _ <- symbol "{"
++         _ <- commit
+          res <- blockEntry AnyIndent item
+          ps <- blockEntries (snd res) item
+-         symbol "}"
++         _ <- symbol "}"
+          pure (fst res :: ps)
+   <|> do col <- column
+          res <- blockEntry (AtPos col) item
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Parser/Unlit.idr b/Code/Lecture3/TinyIdris-v1/src/Parser/Unlit.idr
+index e0ca498..fcd80f0 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Parser/Unlit.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Parser/Unlit.idr
+@@ -1,7 +1,7 @@
+ module Parser.Unlit
+ 
+ import public Text.Literate
+-import Data.Strings
++import Data.String
+ 
+ %default total
+ 
+diff --git a/Code/Lecture3/TinyIdris-v1/src/TTImp/Parser.idr b/Code/Lecture3/TinyIdris-v1/src/TTImp/Parser.idr
+index a9a9921..6663f48 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/TTImp/Parser.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/TTImp/Parser.idr
+@@ -10,7 +10,7 @@ import public Text.Parser
+ import        Data.List
+ import        Data.List.Views
+ import        Data.List1
+-import        Data.Strings
++import        Data.String
+ 
+ import Debug.Trace
+ 
+@@ -41,7 +41,7 @@ collectDefs : List ImpDecl -> List ImpDecl
+ 
+ atom : FileName -> Rule RawImp
+ atom fname
+-    = do exactIdent "Type"
++    = do _ <- exactIdent "Type"
+          pure IType
+ --   <|> do start <- location
+ --          symbol "_"
+@@ -56,7 +56,7 @@ getRight (Right v) = Just v
+ 
+ bindSymbol : Rule PiInfo
+ bindSymbol
+-    = do symbol "->"
++    = do _ <- symbol "->"
+          pure Explicit
+ 
+ mutual
+@@ -68,16 +68,16 @@ mutual
+ 
+   argExpr : FileName -> IndentInfo -> Rule RawImp
+   argExpr fname indents
+-      = do continue indents
++      = do _ <- continue indents
+            simpleExpr fname indents
+ 
+   simpleExpr : FileName -> IndentInfo -> Rule RawImp
+   simpleExpr fname indents
+       = atom fname
+     <|> binder fname indents
+-    <|> do symbol "("
++    <|> do _ <- symbol "("
+            e <- expr fname indents
+-           symbol ")"
++           _ <- symbol ")"
+            pure e
+ 
+   export
+@@ -87,7 +87,7 @@ mutual
+   typeExpr : FileName -> IndentInfo -> Rule RawImp
+   typeExpr fname indents
+       = do arg <- appExpr fname indents
+-           (do continue indents
++           (do _ <- continue indents
+                rest <- some (do exp <- bindSymbol
+                                 op <- appExpr fname indents
+                                 pure (exp, op))
+@@ -112,7 +112,7 @@ mutual
+                (do n <- unqualifiedName
+                    ty <- option
+                             Implicit
+-                            (do symbol ":"
++                            (do _ <- symbol ":"
+                                 appExpr fname indents)
+                    pure (UN n, ty))
+ 
+@@ -121,13 +121,13 @@ mutual
+                    Rule (List (Name, RawImp))
+   pibindListName fname indents
+        = do ns <- sepBy1 (symbol ",") unqualifiedName
+-            symbol ":"
++            _ <- symbol ":"
+             ty <- expr fname indents
+-            atEnd indents
++            _ <- atEnd indents
+             pure (map (\n => (UN n, ty)) ns)
+      <|> sepBy1 (symbol ",")
+                 (do n <- name
+-                    symbol ":"
++                    _ <- symbol ":"
+                     ty <- expr fname indents
+                     pure (n, ty))
+ 
+@@ -139,29 +139,29 @@ mutual
+ 
+   forall_ : FileName -> IndentInfo -> Rule RawImp
+   forall_ fname indents
+-      = do keyword "forall"
+-           commit
++      = do _ <- keyword "forall"
++           _ <- commit
+            ns <- sepBy1 (symbol ",") unqualifiedName
+            let binders = map (\n => (Just (UN n), Implicit)) ns
+-           symbol "."
++           _ <- symbol "."
+            scope <- typeExpr fname indents
+            pure (pibindAll Implicit binders scope)
+ 
+   implicitPi : FileName -> IndentInfo -> Rule RawImp
+   implicitPi fname indents
+-      = do symbol "{"
++      = do _ <- symbol "{"
+            binders <- pibindList fname indents
+-           symbol "}"
+-           symbol "->"
++           _ <- symbol "}"
++           _ <- symbol "->"
+            scope <- typeExpr fname indents
+            end <- location
+            pure (pibindAll Implicit binders scope)
+ 
+   explicitPi : FileName -> IndentInfo -> Rule RawImp
+   explicitPi fname indents
+-      = do symbol "("
++      = do _ <- symbol "("
+            binders <- pibindList fname indents
+-           symbol ")"
++           _ <- symbol ")"
+            exp <- bindSymbol
+            scope <- typeExpr fname indents
+            end <- location
+@@ -169,10 +169,10 @@ mutual
+ 
+   lam : FileName -> IndentInfo -> Rule RawImp
+   lam fname indents
+-      = do symbol "\\"
++      = do _ <- symbol "\\"
+            binders <- bindList fname indents
+-           symbol "=>"
+-           mustContinue indents Nothing
++           _ <- symbol "=>"
++           _ <- mustContinue indents Nothing
+            scope <- expr fname indents
+            end <- location
+            pure (bindAll binders scope)
+@@ -184,10 +184,10 @@ mutual
+ 
+   pat : FileName -> IndentInfo -> Rule RawImp
+   pat fname indents
+-      = do keyword "pat"
++      = do _ <- keyword "pat"
+            binders <- bindList fname indents
+-           symbol "=>"
+-           mustContinue indents Nothing
++           _ <- symbol "=>"
++           _ <- mustContinue indents Nothing
+            scope <- expr fname indents
+            end <- location
+            pure (bindAll binders scope)
+@@ -208,18 +208,18 @@ mutual
+ tyDecl : FileName -> IndentInfo -> Rule ImpTy
+ tyDecl fname indents
+     = do n <- name
+-         symbol ":"
++         _ <- symbol ":"
+          ty <- expr fname indents
+-         atEnd indents
++         _ <- atEnd indents
+          pure (MkImpTy n ty)
+ 
+ parseRHS : FileName -> IndentInfo -> RawImp ->
+            Rule (Name, ImpClause)
+ parseRHS fname indents lhs
+-    = do symbol "="
+-         commit
++    = do _ <- symbol "="
++         _ <- commit
+          rhs <- expr fname indents
+-         atEnd indents
++         _ <- atEnd indents
+          pure (!(getFn lhs), PatClause lhs rhs)
+   where
+     getFn : RawImp -> SourceEmptyRule Name
+@@ -244,11 +244,11 @@ definition fname indents
+ 
+ dataDecl : FileName -> IndentInfo -> Rule ImpData
+ dataDecl fname indents
+-    = do keyword "data"
++    = do _ <- keyword "data"
+          n <- name
+-         symbol ":"
++         _ <- symbol ":"
+          ty <- expr fname indents
+-         keyword "where"
++         _ <- keyword "where"
+          cs <- block (tyDecl fname)
+          pure (MkImpData n ty cs)
+ 
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Text/Lexer/Core.idr b/Code/Lecture3/TinyIdris-v1/src/Text/Lexer/Core.idr
+index ff145fb..437c4ed 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Text/Lexer/Core.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Text/Lexer/Core.idr
+@@ -5,7 +5,7 @@ import Data.Bool.Extra
+ import Data.List
+ import Data.Maybe
+ import Data.Nat
+-import Data.Strings
++import Data.String
+ 
+ %default total
+ 
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Text/Literate.idr b/Code/Lecture3/TinyIdris-v1/src/Text/Literate.idr
+index 557fb12..6dc781c 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Text/Literate.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Text/Literate.idr
+@@ -27,7 +27,7 @@ import Text.Lexer
+ 
+ import Data.List
+ import Data.List.Views
+-import Data.Strings
++import Data.String
+ 
+ %default total
+ 
+@@ -63,12 +63,12 @@ rawTokens delims ls =
+ 
+ ||| Merge the tokens into a single source file.
+ reduce : List (TokenData Token) -> List String -> String
+-reduce [] acc = fastAppend (reverse acc)
++reduce [] acc = fastConcat (reverse acc)
+ reduce (MkToken _ _ _ _ (Any x) :: rest) acc = reduce rest (blank_content::acc)
+   where
+     -- Preserve the original document's line count.
+     blank_content : String
+-    blank_content = fastAppend (replicate (length (lines x)) "\n")
++    blank_content = fastConcat (replicate (length (lines x)) "\n")
+ 
+ reduce (MkToken _ _ _ _ (CodeLine m src) :: rest) acc =
+     if m == trim src
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Text/Parser.idr b/Code/Lecture3/TinyIdris-v1/src/Text/Parser.idr
+index 04852c6..262cd5c 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Text/Parser.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Text/Parser.idr
+@@ -12,7 +12,7 @@ import public Text.Token
+ 
+ ||| Parse a terminal based on a kind of token.
+ export
+-match : (Eq k, TokenKind k) =>
++match : {k : _} -> (Eq k, TokenKind k) =>
+         (kind : k) ->
+         Grammar (Token k) True (TokType kind)
+ match kind = terminal "Unrecognised input" $
+@@ -154,7 +154,7 @@ mutual
+               (skip : Grammar tok True s) ->
+               (p : Grammar tok c a) ->
+               Grammar tok True a
+-  afterSome skip p = do skip
++  afterSome skip p = do _ <- skip
+                         afterMany skip p
+ 
+   ||| Parse zero or more instance of `skip` until `p` is encountered,
+diff --git a/Code/Lecture3/TinyIdris-v1/src/Text/Token.idr b/Code/Lecture3/TinyIdris-v1/src/Text/Token.idr
+index 1327e8a..492f62c 100644
+--- a/Code/Lecture3/TinyIdris-v1/src/Text/Token.idr
++++ b/Code/Lecture3/TinyIdris-v1/src/Text/Token.idr
+@@ -36,5 +36,5 @@ record Token k where
+ ||| Get the value of a `Token k`. The resulting type depends upon
+ ||| the kind of token.
+ public export
+-value : TokenKind k => (t : Token k) -> TokType (kind t)
++value : {k : _} -> TokenKind k => (t : Token k) -> TokType (kind t)
+ value (Tok k x) = tokValue k x
 diff --git a/TinyIdris-v1/src/Core/CaseBuilder.idr b/TinyIdris-v1/src/Core/CaseBuilder.idr
 index 41e2229..2300d48 100644
 --- a/TinyIdris-v1/src/Core/CaseBuilder.idr
@@ -1849,3 +2646,6 @@ index 1327e8a..492f62c 100644
 -value : TokenKind k => (t : Token k) -> TokType (kind t)
 +value : {k : _} -> TokenKind k => (t : Token k) -> TokType (kind t)
  value (Tok k x) = tokValue k x
+-- 
+2.37.3
+
