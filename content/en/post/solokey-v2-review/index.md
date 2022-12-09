@@ -139,3 +139,54 @@ error-free) as possible.
 
 ## Updating the firmware on Windows
 
+
+N.B.: In this section I will be making a lot of comments on how user-friendly
+this process would be for the non-developer/average user. While I know the
+people buying OSHW security tokens probably aren't just your average user, it is
+not impossible. There is also a difference between being computer-savvy and
+knowing how to install various toolchains and how to navigate a Command Line
+Interface (CLI). Finally, if the goal is wide(r)-spread adoption of these
+devices (similar to YubiCo's stuff), then it is crucial that the user manuals
+are comprehensible to everyone.
+
+With that out of the way...
+
+The first thing I did to update the firmware was to go looking for instructions
+for how to do this. The quick-start guide
+([solokey.com/start](https://solokey.com/start))
+has a link for how to update the firmware on Windows, perfect! However, this
+guide doesn't inspire the most confidence: there are minor spelling mistakes
+("than" vs "then") which makes it seem rushed, and the phrase "[it] appears
+complicated to the non-developer" means it will likely be borderline impossible
+and/or terrifying for the average user to follow. But the biggest hurdle is the
+pre-requisite to even getting started: since the firmware is written in Rust, we
+need to install Rust to update it. And installing Rust, it turns out, is not
+simple at all...
+
+### Installing Rust on Windows
+
+The guide points to "rustup", which presents the option of 32- or 64-bit, with
+32-bit selected as the default. This is already too high a barrier in my
+opinion, although the 32-bit version should work on all machines (but not
+everyone knows that, or even know what architecture they're running).
+
+A bigger problem is that the rustup installer immediately differs from the
+provided guide: the guide suggests I should get a prompt for installing Rust,
+but instead it complains about a lack of Microsoft compilers and points to
+installing Visual Studio (VS), Microsoft's Integrated Development Environment
+(IDE). Neither rustup nor the guide explains why this might be required.
+
+I begrudgingly follow the link and download the VS installer. Here, I only
+encounter more confusion (even as a developer): do I need the Windows 10/11
+developer kit? Do I need to log in to VS? Because the latter is the next prompt.
+It turns out the respective answers are "Yes" and "No": you can install VS and
+its compilers without using VS ever. Frustrated, I spent some time trying to
+find a smoother approach, e.g. using `winget`, but _the only way_ to install
+Microsoft's compiler collection is via the VS installer! That's atrocious, but
+I'm getting off-topic.
+
+Finally, after not installing VS but using its installer to install a different
+set of tools, I re-run the rustup installer and get the same prompt as in the
+guide. Now we're at square 1 of the _precursor_ to updating the firmware; that's
+not great.
+
