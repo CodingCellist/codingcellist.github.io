@@ -57,7 +57,7 @@ There had been numerous set-backs and problems discovered, the most egregious
 necessitating a redesign of the hardware and acquiring a new production machine
 (which then later needed an add-on to solve a process bottleneck). It quickly
 became clear that the original delivery window was unfeasible. And, to be fair,
-SoloKey admitted this. Still, the delivery experience wasn't good.
+SoloKey admitted this. Nevertheless...
 
 I received an email with a shipping number from Leetronics (SoloKey's European
 contractor) on the 19th of April 2022. I occasionally checked this, but there
@@ -110,9 +110,10 @@ every key!!
 
 <TODO: Image of BEE!>
 
-Comparing the USB-C with USB-A, it is clear that the USB-C sticks out/tilts a
-bit. This is possibly just how the USB-C connector is attached to the PCB, it is
-taller than the USB-A connector after all, but it looks a bit odd.
+Comparing the USB-C with USB-A, the biggest difference is that the USB-C sticks
+out/tilts a bit. This is possibly just how the USB-C connector is attached to
+the PCB, it is taller than the USB-A connector after all, but it looks a bit
+odd.
 
 <TODO: Image of USB-C tilt>
 
@@ -176,17 +177,46 @@ but instead it complains about a lack of Microsoft compilers and points to
 installing Visual Studio (VS), Microsoft's Integrated Development Environment
 (IDE). Neither rustup nor the guide explains why this might be required.
 
+<TODO: Image of differing prompts?>
+
 I begrudgingly follow the link and download the VS installer. Here, I only
 encounter more confusion (even as a developer): do I need the Windows 10/11
-developer kit? Do I need to log in to VS? Because the latter is the next prompt.
-It turns out the respective answers are "Yes" and "No": you can install VS and
-its compilers without using VS ever. Frustrated, I spent some time trying to
-find a smoother approach, e.g. using `winget`, but _the only way_ to install
-Microsoft's compiler collection is via the VS installer! That's atrocious, but
-I'm getting off-topic.
+developer kit? Do I need to log in to VS? Because logging into VS is the next
+thing I'm prompted for. It turns out the respective answers are "Yes" and "No":
+you can install VS and its compilers without using VS ever. Frustrated, I spent
+some time trying to find a smoother approach, e.g. using `winget`, but _the only
+way_ to install Microsoft's compiler collection is via the VS installer! That's
+atrocious, but I'm getting off-topic.
 
 Finally, after not installing VS but using its installer to install a different
 set of tools, I re-run the rustup installer and get the same prompt as in the
 guide. Now we're at square 1 of the _precursor_ to updating the firmware; that's
 not great.
+
+The install proceeds without problems, but at the end of the process Rust
+informs me that I may need to update the `PATH`. I happen to know what `PATH` is
+and how to change it, but I'm a computer science professional! I seriously doubt
+the average user would be able to change it (and even if they found a guide,
+they might be worried about touching something so technical). Anyway, let's
+continue on with the guide.
+
+The next step is to run `cmd.exe`, run `cargo install solo2`, and then check
+that the `solo2` program works correctly. Fortunately, this goes without any
+problems!
+
+<TODO: Image of things working>
+
+Finally, we can try to update the firmware: `solo2 update`. This warns me that
+the update is major and will break previous credentials, but also includes a
+note saying that if the key has not been used yet, then I can ignore the
+warning. Explicitly stating this is excellent and helps resolve fears if you're
+not a tech-savvy user.
+
+<TODO: Image of warning?>
+
+The update seems to run flawlessly, with the key being registered a couple of
+time by Windows during the update (expected behaviour), and a quick check
+afterwards confirms that everything went fine.
+
+<TODO: Image of successful before/after>
 
