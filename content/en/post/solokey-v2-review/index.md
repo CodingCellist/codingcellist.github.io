@@ -200,9 +200,11 @@ the average user would be able to change it (and even if they found a guide,
 they might be worried about touching something so technical). Anyway, let's
 continue on with the guide.
 
-The next step is to run `cmd.exe`, run `cargo install solo2`, and then check
-that the `solo2` program works correctly. Fortunately, this goes without any
-problems!
+### Updating the firmware (finally)
+
+The next step is to run `cmd.exe`, use `cargo install solo2` to install
+SoloKey's command line tool `solo2`, and then check that the `solo2` program
+works correctly. Fortunately, this goes without any problems!
 
 <TODO: Image of things working>
 
