@@ -138,7 +138,7 @@ update the firmware, to make sure everything was as recent (and hence hopefully
 error-free) as possible.
 
 
-## Updating the firmware on Windows
+## Updating the firmware
 
 
 N.B.: In this section I will be making a lot of comments on how user-friendly
@@ -152,6 +152,8 @@ are comprehensible to everyone.
 
 With that out of the way...
 
+### Updating the firmware on Windows
+
 The first thing I did to update the firmware was to go looking for instructions
 for how to do this. The quick-start guide
 ([solokey.com/start](https://solokey.com/start))
@@ -164,7 +166,7 @@ pre-requisite to even getting started: since the firmware is written in Rust, we
 need to install Rust to update it. And installing Rust, it turns out, is not
 simple at all...
 
-### Installing Rust on Windows
+#### Installing Rust on Windows
 
 The guide points to "rustup", which presents the option of 32- or 64-bit, with
 32-bit selected as the default. This is already too high a barrier in my
@@ -200,7 +202,7 @@ the average user would be able to change it (and even if they found a guide,
 they might be worried about touching something so technical). Anyway, let's
 continue on with the guide.
 
-### Updating the firmware (finally)
+#### Finally updating the firmware
 
 The next step is to run `cmd.exe`, use `cargo install solo2` to install
 SoloKey's command line tool `solo2`, and then check that the `solo2` program
@@ -221,4 +223,34 @@ time by Windows during the update (expected behaviour), and a quick check
 afterwards confirms that everything went fine.
 
 <TODO: Image of successful before/after>
+
+
+### Updating the firmware on Linux
+
+There is no guide for this on the website, which is fair enough considering the
+number of possible combinations and distros. As with Windows, the first step is
+to install Rust if you do not already have it installed. If you are using a
+common distro, the easiest (and most likely) option is that your package manager
+(`apt`, `yum`, `pacman`, `nix`, etc.) has a package which you can just install
+as you would any other piece of software. Alternatively, there may be a
+wiki-page, guide, or blog-post for how to install Rust for your specific setup;
+web search is your friend!
+
+After that, the next step is to update your `PATH` environment variable and then
+install the `solo2` program using `cargo install solo2`.
+
+At this point, the commands work as with Windows (`solo2 app admin version` and
+`solo2 update`). You may need to use `sudo` to update firmware (or add some udev
+rules if you're comfortable with that; the non-root update tool error message
+contains the rules if relevant), but otherwise everything is good.
+
+Overall, this process is a lot smoother than Windows _if_ you are familiar with
+package managers.
+
+### General impression
+
+My general impression is that the tooling feels a bit bare-bones. The lack of a
+single installer executable (or script) for Windows, and the reliance on CLIs
+for everything, feels early-adopter-y. I wouldn't trust the average computer
+user with it, and probably not even the more security conscious ones.
 
