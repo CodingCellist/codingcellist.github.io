@@ -273,11 +273,10 @@ First site I tried was GitHub: `Settings` -> `Password and Authentication` ->
 security key`. This seems to require that you have already set up an
 authenticator app (so that you have a backup second factor should you lose your
 security key), which I have, so that is fine. Then you provide a name for the
-key (e.g. "Solo2-USB-A-1"), click `Add`, the light on the key strobes (this
-seems to be a Linux issue, I'll come back to this), and the operation is
-completed when you touch the key. Rinse and repeat for the backup key (with a
-separate name). All in all, very straightforward and painless, with no need for
-`sudo` or special udev rules or anything like that.
+key (e.g. "Solo2-USB-A-1"), click `Add`, the light on the key pulses, and the
+operation is completed when you touch the key. Rinse and repeat for the backup
+key (with a different name). All in all, very straightforward and painless, with
+no need for `sudo` or special udev rules or anything like that.
 
 Similar to backups though, creating one is not enough, you need to test that it
 works as well: fortunately, there are no issues using the freshly registered
@@ -364,4 +363,17 @@ is not always required, then that should be explained. It is difficult to know
 because, as mentioned, there is _no documentation_ for anything regarding FIDO2
 PIN configuration.
 
+
+## Conclusion
+
+In conclusion then, the Solo v2 is an impressive OSHW project which seems to
+both look and work great despite all the setbacks there have been. The keys feel
+durable and have been working flawlessly with the websites I have registered
+them with so far. However, there appears to be a lot of work still left in the
+tooling and documentation, as some of the documentation appears rushed and the
+support tool seems to completely be missing a core bit of functionality (PIN
+configuration). Hopefully this gets fixed sooner rather than later. I'll update
+this post if/when it does.
+
+As always, I hope this was useful. Thanks for reading  : )
 
