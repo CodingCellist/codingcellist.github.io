@@ -7,7 +7,7 @@ summary: "After numerous delays, production problems (thanks pandemic), and
           little communication on the Kickstarter page, my Solo v2 keys finally
           arrived. Overall, they were mostly worth the wait."     # TODO after article written
 authors: [thomas-e-hansen]
-tags: [review,hardware,oshw,u2f,solo2]        # TODO: think a bit about these
+tags: [review,solo2,hardware,oshw,u2f]        # TODO: think a bit about these
 categories: []
 date: 2022-11-21
 lastmod:
@@ -253,4 +253,115 @@ My general impression is that the tooling feels a bit bare-bones. The lack of a
 single installer executable (or script) for Windows, and the reliance on CLIs
 for everything, feels early-adopter-y. I wouldn't trust the average computer
 user with it, and probably not even the more security conscious ones.
+
+
+## Using the Solo v2
+
+Having talked about the packaging and support tooling, how easy is the Solo v2
+actually to use for U2F? There shouldn't be too much difference between Linux
+and Windows, since the registration is done in the browser, but you never know.
+
+The website's instructions
+([solokey.com/start](https://solokey.com/start))
+are generic and seem straightforward, but as we saw with the firmware update
+setup, that might not be the case. Let's see, shall we?
+
+### Registering the keys under Linux
+
+First site I tried was GitHub: `Settings` -> `Password and Authentication` ->
+`Two-factor authentication` -> `Security keys` -> `Add` -> `Register new
+security key`. This seems to require that you have already set up an
+authenticator app (so that you have a backup second factor should you lose your
+security key), which I have, so that is fine. Then you provide a name for the
+key (e.g. "Solo2-USB-A-1"), click `Add`, the light on the key strobes (this
+seems to be a Linux issue, I'll come back to this), and the operation is
+completed when you touch the key. Rinse and repeat for the backup key (with a
+separate name). All in all, very straightforward and painless, with no need for
+`sudo` or special udev rules or anything like that.
+
+Similar to backups though, creating one is not enough, you need to test that it
+works as well: fortunately, there are no issues using the freshly registered
+keys for 2-factor login.
+
+Moving on to Windows.
+
+### Registering the keys under Windows
+
+As mentioned at the start, SoloKey's instructions are the same regardless of
+operating system. So hopefully the registration process should be as
+straightforward as on Linux.
+
+Unfortunately, as with the Rust setup guide, the process immediately differs
+from what the guide suggests should happen: I am asked to configure a PIN.
+
+<TODO: Image of PIN query>
+
+I tried finding some information on their website, but nowhere on the start
+guide, website FAQ, or KS FAQ is there any mention of needing to configure a
+Personal Identification Number (PIN). The "developers" link at the bottom of
+SoloKey's website is also not helpful, as it redirects to the code for the first
+edition. I eventually managed to find
+[the developer documentation](https://solo2.dev)
+by going to the
+[SoloKeys GitHub](https://github.com/SoloKeys)
+-> `solo2` repository -> `website` field, but it only mentions _hardware_ pins
+and nothing about a key-specific PIN...
+
+#### 2-factor vs Passwordless
+
+After a bit of searching, I found two Reddit threads
+([here](TODO)
+and
+[here](TODOO))
+which helped me understand what was happening: it is a difference between the
+Universal 2-Factor (U2F) and the Fast Identity Online 2 (FIDO2)
+protocol/standard.
+
+U2F uses the key as a second factor in addition to a _regular_ password prompt,
+whereas FIDO2 can provide passwordless login. However, in order to not have the
+passwordless login be less secure, a PIN is required to make passwordless still
+have two factors (something you know: the PIN; and something you have: the key).
+If this seems unnecessarily convoluted, that's understandable. The reasoning is
+that with U2F you still need to send your password over an (encrypted) internet
+connection for the first factor, whereas with passwordless both factors happen
+locally and the only thing that is sent is a proof of authentication.
+
+The fact that this doesn't seem to be documented anywhere is disastrous and will
+undoubtedly lead to much confusion for users: Why do I need to set a PIN? Will
+the key registered on Linux work on Windows? Will adding a PIN prevent the key
+from working on Linux? Are there any limitations on how long the PIN can be or
+what characters it may contain? (Windows allow including alphabetic characters
+and symbols in a PIN)  
+**The PIN behaviour should be documented _somewhere_!**
+
+Unfortunately, it is up to the individual website/server whether they go for U2F
+or FIDO2, so there is no way to force the key to use "more traditional" U2F if
+the website requests a FIDO2 authentication or registration.
+
+#### Registering under Windows?
+
+Given the early stage of the Solo v2, and that there have already been problems
+where the fixed firmware update broke existing registrations
+([details](TODOOO)),
+I am hesitant to register any website on Windows (I tried a couple of other
+websites, but got the same "You need to configure a PIN" prompt)...
+
+The `solo2` Rust app has no mention of a PIN or utilities to
+support checking, setting, or changing one. Not in the generic help text, nor
+the help for each subcommand (I checked all of them). A search on the GitHub
+repo seems to suggest
+([here](TODOOOOO))
+that it is `1234` when unset, although that may just be for testing purposes? If
+it isn't, the default PIN should obviously be changed, and Windows seem to force
+you to, but there does not seem to be a way to set it via SoloKey's official
+tooling.
+
+What's even more confusing, is that the PIN prompt doesn't appear for the same
+websites on Linux (despite having the FIDO2 libraries installed). Instead I
+go through a U2F registration process (password, then key prompt). If this is
+less secure, then I would expect that to be fixed or highlighted, or if the PIN
+is not always required, then that should be explained. It is difficult to know
+because, as mentioned, there is _no documentation_ for anything regarding FIDO2
+PIN configuration.
+
 
