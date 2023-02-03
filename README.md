@@ -25,7 +25,11 @@ present, or future, unless explicitly stated otherwise.
 Theme used is
 [Wowchemy's Academic theme](https://themes.gohugo.io/themes/starter-academic/).
 
-The icon was made using [Picrew #194012](https://picrew.me/image_maker/194012).
+The current icon was made using
+[Picrew #1342558](https://picrew.me/image_maker/1342558).
+
+My previous icon was made using
+[Picrew #194012](https://picrew.me/image_maker/194012).
 
 The following websites helped get things running:
 
