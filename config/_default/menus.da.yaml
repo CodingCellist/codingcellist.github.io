@@ -8,13 +8,17 @@ main:
     url: "#about"
     weight: 10
 
-  - name: Projekter
-    url: "#projects"
-    weight: 20
+#  - name: Seneste opslag
+#    url: "#posts"
+#    weight: 20
 
   - name: Erfaring
     url: "#experience"
     weight: 30
+
+#  - name: Projekter
+#    url: "#projects"
+#    weight: 40
 
   - name: Udmærkelser
     url: "#accomplishments"

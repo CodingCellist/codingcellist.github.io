@@ -7,7 +7,7 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 30  # Order that this section will appear.
 
-title = "All posts"
+title = ""
 subtitle = ""
 
 [content]
@@ -38,6 +38,8 @@ subtitle = ""
   #   3 = Card
   #   4 = Citation (publication only)
   view = 2
+  columns = 1
+
   
 [design.background]
   # Apply a background color, gradient, or image.

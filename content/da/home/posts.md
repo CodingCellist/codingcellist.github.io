@@ -8,16 +8,16 @@ headless: true  # This file represents a page section.
 active: false  # Activate this widget? true/false
 
 # Order that this section appears on the page.
-weight: 60
+weight: 20
 
-title: Recent Posts
+title: Seneste opslag
 subtitle:
 
 content:
   # Page type to display. E.g. post, talk, publication...
-  page_type: post
+  page_type: 'post'
   # Choose how many pages you would like to display (0 = all pages)
-  count: 5
+  count: 3
   # Filter on criteria
   filters:
     author: ""
