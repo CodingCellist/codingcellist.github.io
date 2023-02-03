@@ -18,7 +18,7 @@ title: Biography
 # This should be the username (folder name) of a profile in your `content/authors/` folder.
 # See https://wowchemy.com/docs/get-started/#introduce-yourself
 author: "thomas-e-hansen"
-credit_text: "icon made using "
+credit_text: "icon made using lunevani's"
 picture_credit: "picrew"
-credit_url: "https://picrew.me/image_maker/194012"
+credit_url: "https://picrew.me/image_maker/1342558"
 ---

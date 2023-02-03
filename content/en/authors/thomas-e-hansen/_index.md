@@ -18,15 +18,16 @@ organizations:
   url: "https://www.st-andrews.ac.uk/computer-science/"
 
 # Short bio (displayed in user profile at end of posts)
-bio: My research interests include low-level programming, type systems, and formal methods.
+bio: My interests include information visualisation, formal methods,
+     and low-level programming.
 
 interests:
+- Information visualisation
 - Systems/Low-level programming
 - Computer security
-- Information visualisation
-- Type systems
 - Formal methods
 - Data ethics
+- Type systems
 
 education:
   courses:
@@ -77,9 +78,12 @@ I am currently doing a PhD in Computer Science on
 [something along the lines of combining Type Theory and Formal Methods](../files/phd-proposal.pdf)
 (although this may change over the course of the project), supervised by
 [Dr Edwin Brady](https://www.type-driven.org.uk/edwinb/). I enjoy writing code,
-collaborating on projects, and helping people write or fix code. 
+collaborating on projects, and helping people write or fix code.
 
-When I'm not doing PhD things, I do Japanese Jujitsu (or rather 'did', in the
-Before Times) and occasionally play the cello. I enjoy music, hiking and
+When I'm not doing PhD things, I enjoy music of various kinds, hiking and
 camping, as well as a wide variety of video games, both old and new.
+<!--
+I do Japanese Jujitsu (or rather 'did', in the Before Times) and occasionally
+play the cello
+-->
 

@@ -18,16 +18,16 @@ organizations:
   url: "https://www.st-andrews.ac.uk/computer-science/"
 
 # Short bio (displayed in user profile at end of posts)
-bio: Jeg interesserer mig blandt andet for lav-level (C/C++) programmering,
-     type systems, og formelle metoder.
+bio: Jeg interesserer mig blandt andet for informationsvisualisering, formelle
+     metoder og lav-level (C/C++) programmering,
 
 interests:
+- Informationsvisualisering
+- Formelle methoder
 - System/Lav-level programmering
 - Computer sikkerhed
-- Informationsvisualisering
-- Type systems
-- Formelle methoder
 - Data-etik
+- Type systems
 
 education:
   courses:
@@ -78,11 +78,13 @@ I øjeblikket er jeg i gang med en ph.d. i datalogi, angående
 [noget i retning af at kombinere Typeteory og Formelle Metoder](../files/phd-proposal.pdf)
 (men emnet kan ændre sig, efterhånden som projektet skrider frem), under
 vejledning af [Dr. Edwin Brady](https://www.type-driven.org.uk/edwinb/). Jeg kan
-godt lide at kode, samarbejde på projekter og hjælpe andre med, at skrive eller
+godt lide at kode, samarbejde på projekter, og hjælpe andre med at skrive eller
 fikse kode.
 
-Når jeg ikke laver ph.d.-ting, dyrker jeg japansk jujitsu (eller snarere
-"dyrkede"; inden verden gik af lave) og indimellem spiller jeg også cello. Jeg
-nyder at lytte til musik, vandre og campe, samt at spille diverse videospil,
-både nye og gamle.
+Når jeg ikke laver ph.d.-ting, nyder jeg at lytte til al mulig slags musik, at
+vandre og campe, og at spille diverse videospil, både nye og gamle.
+<!--
+dyrker jeg japansk jujitsu (eller snarere
+"dyrkede"; inden verden gik af lave) og indimellem spiller jeg også cello.
+-->
 
