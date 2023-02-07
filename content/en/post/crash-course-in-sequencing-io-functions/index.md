@@ -5,7 +5,7 @@ title: "A Crash Course in Sequencing IO Functions"
 subtitle: ""
 summary: ""
 authors: [thomas-e-hansen]
-tags: []
+tags: [idris2]
 categories: []
 date: 2022-03-25
 lastmod:
