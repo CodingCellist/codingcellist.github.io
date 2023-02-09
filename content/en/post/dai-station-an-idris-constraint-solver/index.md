@@ -29,6 +29,10 @@ projects: []
 ---
 
 
+**If you are a CS4402 student at the University of St Andrews reading this for
+"inspiration", remember to cite it!**
+
+
 # Intro
 
 As part of my Ph.D. exploration on how we know the types we're using model what
@@ -90,8 +94,174 @@ dayjob; sounds exactly like a constraint solver! ^^
 
 ![A still of Dai Station: a moustachioed man wearing a conductors uniform and hat, holding a regulations book](/media/ivortheengine-fandom-wiki-dai-station.jpg "Dai Station (Image from [Fandom wiki](https://static.wikia.nocookie.net/ivortheengine/images/a/a7/D1-1-.gif/revision/latest?cb=20081114013036), CC-BY-SA)")
 
-With the hardest bit out of the way, it was time to write a constraint solver!
+With the hardest bit out of the way, let's write a constraint solver!
 
 
 # Writing a constraint solver
+
+Turns out these are somewhat difficult to write; who knew?...
+
+I am not starting from nothing, but I'm not exactly an expert either: many years
+ago, as part of my undergrad, I took a course on constraint solvers. One of the
+practicals was to write one. Which is good, because it means I have some
+(distant) knowledge of how this is meant to work. What is not good is that the
+pseudocode is all imperative, not functional; my old implementation is in Java;
+and it is only somewhat coherent because I only got it working on my 4th "go
+back to the beginning, branch, and start from scratch"-attempt, with about 24
+hours to go before the deadline (the branch is called `death` and the commit
+messages include gems like "The definition of insanity" and "YEET!")...
+
+So. Not the best starting point, but better than nothing.
+
+## General idea
+
+The algorithm we'll be using is 2-way branching forward-checking. The general
+idea is: given some variables which have some value-domains, along with
+constraints between these variables:
+
+  1. Select a variable and a value from its domain to try.
+  2. Try the assignment. If the constraints still hold, try a new variable+value
+       which satisfy the constraints given this assignment.
+  3. If we tried the assignment and discovered we violated a constraint, remove
+       the value from the domain and try again (unless we're out of options, in
+       which case no solution could be found).
+  4. If we have successfully managed to assign all the variables without finding
+       any inconsistencies, a solution has been found and we're done!
+
+The devil in the detail, which makes this algorithm better than a simple
+brute-force "try everything until something works" approach, is "try a new
+variable+value _which satisfy the constraints given this assignment_". When
+trying a value, we "forward check" all the other variables with respect to the
+constraints and the hypothetical assignment. This saves us from trying sub-trees
+that involve values which we know are invalid in the current attempt.
+
+Steps 2 and 3 above are called the left and right branches respectively, hence
+"2-way branching".
+
+## Arcs
+
+"Arcs" are just constraints terminology for "directional constraints". When
+talking about constraints between two variables, it can be useful to specify "v1
+must be less than v2" _and_ "v2 must be greater than v1". The reason for this is
+that some algorithms use this to spot that they don't need to revise all the
+arcs; one direction is enough.
+
+(As we'll see next, forward-checking isn't one of these algorithms by the way.
+But it still uses arcs rather than generic constraints.)
+
+## Pseudocode
+
+Based on the general idea, we can come up with some pseudocode.
+
+### Main recursive function / starting-point
+
+```
+// main function
+forwardCheck(varList):
+  if allAssigned(varList):
+    return the solution and stop
+
+  else:
+    var := selectVar(varList)
+    val := selectVal(var.domain)
+    branchLeft(varList, var, val)
+    branchRight(varList, var, val)
+```
+
+### Left-branching
+
+(attempted assignment and forward-checking)
+
+```
+// try the given assignment
+branchLeft(varList, var, val):
+  assign(var, val)
+
+  // don't revise the variable against itself
+  forall forwardVar in (varList excluding var):
+    if there is an arc between forwardVar and var:
+
+      revise(forwardVar.domain, arc<forwardVar, var>)
+
+      if nonEmpty(forwardVar.revisedDomain):
+        // continue with the new state
+        forwardCheck(varList)
+
+      else:
+        // incorrect attempt detected
+        // our attempt resulted in no candidates for forwardVar
+        // undo ALL our changes and break out of the loop
+        undoRevise
+        undoAssign
+        break
+```
+
+### Right-branching
+
+(value deletion and forward-checking)
+
+```
+// try deleting the value
+branchRight(varList, var, val):
+  delete(val, var.domain)
+
+  // don't revise the variable against itself
+  forall forwardVar in (varList excluding var):
+    if there is an arc between forwardVar and var:
+
+      revise(forwardVar.domain, arc<forwardVar, var>)
+
+      if nonEmpty(forwardVar.revisedDomain):
+        // continue with the new state
+        forwardCheck(varList)
+
+      else:
+        // incorrect deletion detected
+        // our value deletion resulted in no candidates for
+        // forwardVar; undo ALL our changes and break out
+        // of the loop
+        undoRevise
+        undoDelete
+        break
+```
+
+### Arc revision
+
+(update a domain based on the directional constraint)
+
+```
+// arc revision (domain updating)
+revise(arc):
+  candidates := arc.from.domain   // possible values
+  pairings := arc.to.domain       // possible supporting values
+
+  forall candidate in candidates:
+    forall pairing in pairings:
+      if arc.supports(candidate, pairing):
+        // the candidate has at least one possible
+        // pairing where the constraint still holds
+        arc.from.keep(candidate)
+
+    // all pairings were tried without success
+    arc.from.discard(candidate)
+```
+
+
+## Function declarations
+
+TODO
+
+From the general idea, the first thing to do is forward-declare the main
+functions:
+
+```idris
+forwardCheck : ?forwardCheckTy
+
+branchFCLeft : ?branchFCLeftTy
+
+branchFCRight : ?branchFCRightTy
+```
+
+Here, Idris's support for type-level holes really help, given that we don't know
+how to best pass around the problem yet.
 
