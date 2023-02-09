@@ -305,3 +305,105 @@ follows:
         assigned to `3`, and vice versa.
   * Input files are newline terminated.
 
+(I won't bore you with how this is represented as datatypes, other than that
+there is a `Variable`, `Arc`, and `CSP` datatype. Please refer to the code on
+GitHub if you need the details.)
+
+
+## The tooling needed
+
+Before even making a start on writing the main functions, we need some tooling.
+Mostly this is for arc revision, but there are a couple of annoying consequences
+implied when doing arc revision, which will also require some custom functions.
+
+### Some notes on state
+
+Annoyingly, most descriptions (including mine) assume that domains, variables,
+and arcs exist globally and uniquely. That is, updating a variable in one
+function updates it everywhere in the general context. This is very convenient
+for thinking about how the algorithm works, but less so for implementing it
+(especially in a functional language).
+
+I initially tried having everything return a pair with a boolean and the new
+state. The idea being that the boolean would indicate whether or not the
+revision was successful (and potentially help integrate this into Liam
+O'Connor's [Half Deciders](http://liamoc.net/images/applications.pdf), to have
+a constraint-solver at the type-level!)
+
+Unfortunately, this proved way too error-prone; passing failed states around
+accidentally, forgetting to properly undo an update, etc. At one point I had a
+constraint solver which found the solution, but somehow had ended up with 10
+times as many variables as initially given, and so kept exploring a (now much
+bigger) search space before eventually giving up. Not ideal.
+
+I discussed this with gallais, who had the brilliant suggestion that
+I could just use `Maybe` instead, since the work was done anyway (there was
+nothing gained by potentially delaying a `False` computation) and what I really
+wanted was to discard the bad state. By returning `Nothing` in case of failure,
+there was no way to continue with the incorrect state; it simply wasn't there.
+
+### Arc Revision
+
+Since we're not as lucky to have globally accessible state, in order to revise
+arcs, we'll need the list of variables, _the list of arcs_, and the current
+variable. We'll also store the list of revised variables (as a `SnocList` to
+preserve the ordering) so that we can recurse on the list of variables and use
+it being empty as a termination case.
+
+```idris
+fcReviseFutureArcs :  (vars  : List Variable)
+                   -> (rArcs :  List Arc)
+                   -> (currVar : Variable)
+                   -> (newVars : SnocList Variable)
+                   -> Maybe (List Variable, List Arc)
+```
+
+If we have exhausted the list of variables without encountering an
+inconsistency, we're done:
+
+```idris
+fcReviseFutureArcs [] rArcs currVar newVars =
+  Just (asList newVars, rArcs)
+```
+
+Otherwise, we need to revise the arc between the variable in the list and the
+current variable, _unless_ it is the current variable (which would be
+nonsensical to revise against), _or_ there is no arc between the variables (in
+which case there is nothing constraining the pair's current configuration).
+
+```idris
+fcReviseFutureArcs (fv :: fvs) rArcs currVar newVars =
+  if fv == currVar
+     then fcReviseFutureArcs fvs rArcs currVar (newVars :< fv)
+```
+
+Hmm, we need some way to retrieve a specific arc. That sounds slightly
+complicated, so let's make a helper function!
+
+```idris
+findArc :  (v1 : Variable)
+        -> (v2 : Variable)
+        -> (arcs : List Arc)
+        -> Maybe Arc
+findArc v1 v2 arcs =
+  case filter (connects v1 v2) arcs of
+       [] => Nothing
+       (arc :: []) => Just arc
+       (arc :: (_ :: _) => assert_total $ idris_crash "findArc_multiarc_ERROR"
+```
+
+We filter the list of arcs based on whether there is a directed connection
+from `v1` to `v2`, and if there isn't one, that's fine: the variables don't
+constrain each other; if there is exactly one, we return it; and if there's more
+than one, something's gone wrong so we have to crash. (This was initially a
+hole, but due to a funky bug with Sub-Expression Elimination, holes can get
+called despite being in unreachable code, so I had to convert it to a crash.)
+
+TODO: fcRevise, reviseDom, hasSupport; explain why not `Maybe List1`
+
+## Acknowledgements
+
+* Guillaume Allais (gallais) for the idea of using `Maybe` for the state
+    updates, thereby eliminating the possibility of accidentally using a bad
+    state when a guess failed.
+
