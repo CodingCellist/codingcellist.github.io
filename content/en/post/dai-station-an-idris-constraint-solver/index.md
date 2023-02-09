@@ -33,7 +33,10 @@ projects: []
 "inspiration", remember to cite it!**
 
 
-# Intro
+{{< toc >}}
+
+
+## Intro
 
 As part of my Ph.D. exploration on how we know the types we're using model what
 we think they do, I decided to try to implement a constraint solver in Idris
@@ -68,7 +71,7 @@ implement; if nothing else for the fun of it (for a suitable definition of
 'fun'.)
 
 
-# The most important step: naming
+## The most important step: naming
 
 As with any project, the most important (and often most difficult) challenge is
 finding a good name for it. Fortunately, the
@@ -97,23 +100,26 @@ dayjob; sounds exactly like a constraint solver! ^^
 With the hardest bit out of the way, let's write a constraint solver!
 
 
-# Writing a constraint solver
+## Starting point
 
-Turns out these are somewhat difficult to write; who knew?...
+Turns out it is somewhat difficult to write a constraint solver; who knew?...
 
 I am not starting from nothing, but I'm not exactly an expert either: many years
 ago, as part of my undergrad, I took a course on constraint solvers. One of the
 practicals was to write one. Which is good, because it means I have some
-(distant) knowledge of how this is meant to work. What is not good is that the
-pseudocode is all imperative, not functional; my old implementation is in Java;
-and it is only somewhat coherent because I only got it working on my 4th "go
-back to the beginning, branch, and start from scratch"-attempt, with about 24
-hours to go before the deadline (the branch is called `death` and the commit
-messages include gems like "The definition of insanity" and "YEET!")...
+(distant) knowledge of how this is meant to work. What is not good is that my
+old implementation is in Java; and it is only somewhat coherent because I only
+got it working on my 4th "go back to the beginning, branch, and start from
+scratch"-attempt, with about 24 hours to go before the deadline (the branch is
+called `death` and the commit messages include gems like "The definition of
+insanity" and "YEET!")...
 
 So. Not the best starting point, but better than nothing.
 
+
 ## General idea
+
+### Forward-Checking
 
 The algorithm we'll be using is 2-way branching forward-checking. The general
 idea is: given some variables which have some value-domains, along with
@@ -129,16 +135,17 @@ constraints between these variables:
        any inconsistencies, a solution has been found and we're done!
 
 The devil in the detail, which makes this algorithm better than a simple
-brute-force "try everything until something works" approach, is "try a new
-variable+value _which satisfy the constraints given this assignment_". When
-trying a value, we "forward check" all the other variables with respect to the
-constraints and the hypothetical assignment. This saves us from trying sub-trees
-that involve values which we know are invalid in the current attempt.
+brute-force "try everything until something works" approach, is the second half
+of step 2: "try a new variable+value _which satisfy the constraints given this
+assignment_". When trying a value, we "forward check" all the other variables
+with respect to the constraints and the hypothetical assignment. This saves us
+from trying sub-trees that involve values which we know are invalid in the
+current attempt.
 
 Steps 2 and 3 above are called the left and right branches respectively, hence
 "2-way branching".
 
-## Arcs
+### Arcs
 
 "Arcs" are just constraints terminology for "directional constraints". When
 talking about constraints between two variables, it can be useful to specify "v1
@@ -146,8 +153,9 @@ must be less than v2" _and_ "v2 must be greater than v1". The reason for this is
 that some algorithms use this to spot that they don't need to revise all the
 arcs; one direction is enough.
 
-(As we'll see next, forward-checking isn't one of these algorithms by the way.
+(Forward-Checking isn't one of these algorithms by the way.
 But it still uses arcs rather than generic constraints.)
+
 
 ## Pseudocode
 
@@ -246,10 +254,15 @@ revise(arc):
     arc.from.discard(candidate)
 ```
 
+### Wait a minute!...
+
+This is imperative pseudocode!
+
+I know, I know. But unfortunately, I felt it was the clearest+easiest way to
+write things. It will come back to bite me in the implementation though...
+
 
 ## Function declarations
-
-TODO
 
 From the general idea, the first thing to do is forward-declare the main
 functions:
@@ -264,4 +277,31 @@ branchFCRight : ?branchFCRightTy
 
 Here, Idris's support for type-level holes really help, given that we don't know
 how to best pass around the problem yet.
+
+
+## Input format
+
+Constraint problems can be modelled and input in many formats. However, I still
+have the CSP instance inputs from my old coursework, so I am just going to use
+that.
+
+Each problem is stored in a plain-text `.csp`-file, which is structured as
+follows:
+  * Lines starting with `//` are considered comments and ignored
+  * The first entry is the number of variables.
+  * Then follows a number of domains, each on a new line, written  
+      `lower, upper`  
+      respectively indicating the lower and upper-inclusive
+      bounds of the n-th variable. There must be as many of these lines as the
+      declared number of variables.
+  * Finally, any number of binary constraints follows. (These are _undirected_
+      constraints and _not arcs_.)
+    - The start of a constraint declaration is `c(v0,v1)`, where `v0` and `v1`
+        are the zero-based indices of the variables the constraint concerns. 
+    - After the declaration, some number of value-pairs `val0, val1` are listed
+        (each on a new line). These indicate the valid value pairings of the two
+        variables referenced in the constraint declaration. For example, an
+        entry `2, 3` would mean that `v0` can be assigned to `2` if `v1` is
+        assigned to `3`, and vice versa.
+  * Input files are newline terminated.
 
