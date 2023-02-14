@@ -384,11 +384,25 @@ making the logic easier to follow.
 
 ### Arc Revision
 
-Since we're not as lucky to have globally accessible state, in order to revise
-arcs, we'll need the list of variables, _the list of arcs_, and the current
-variable. We'll also store the list of revised variables (as a `SnocList` to
-preserve the ordering) so that we can recurse on the list of variables and use
-it being empty as a termination case.
+Let's think a bit more thoroughly about what needs doing for arc revision (I
+often find putting these things into words helps a lot more than just staring at
+pseudocode): Arc revision involves accessing the arcs and variables in the
+problem, checking their domains and values against the accepted pairs in the
+relevant arc, and then removing any value from its parent domain if it isn't
+consistent with the arc. And all of this is done as part of either an
+assignment- or a deletion-attempt, meaning there is a current, special variable
+which is the one we're attempting to manipulate. Okay, that (hopefully) makes
+things clearer!
+
+Since we're not as lucky as to have globally accessible state, in order to
+revise arcs, we'll need the list of variables, _the list of arcs_, and the
+current variable. We don't get `ConcurrentModificationException`s in Idris, but
+it's still good to avoid modifying the list we're iterating over, especially
+when we ideally want a nice termination condition (like the list being empty).
+So to help with that, we'll store the list of revised variables as a separate
+_`Snoc`_`List` (to preserve the ordering).
+
+Let's put all of that into a function declaration!
 
 ```idris
 fcReviseFutureArcs :  (vars  : List Variable)
@@ -398,33 +412,47 @@ fcReviseFutureArcs :  (vars  : List Variable)
                    -> Maybe (List Variable, List Arc)
 ```
 
-If we have exhausted the list of variables without encountering an
-inconsistency, we're done:
+"Iterate, but make it functional" -- The easiest way to do this is often to use
+recursions, so we need a base-case: If we have exhausted the list of variables
+without creating any problems, we're done:
 
 ```idris
 fcReviseFutureArcs [] rArcs currVar newVars =
   Just (asList newVars, rArcs)
 ```
 
-Otherwise, we need to revise the arc between the variable in the list and the
-current variable, _unless_ it is the current variable (which would be
-nonsensical to revise against), _or_ there is no arc between the variables (in
-which case there is nothing constraining the pair's current configuration).
+Otherwise, we "iterate": we look at the first variable in the list and revise
+the arc between it and the current variable, _unless_ we've reached the current
+variable (which it would be nonsensical to revise with itself), in which case we
+keep it as-is and keep going on the rest of the variables.
 
 ```idris
 fcReviseFutureArcs (fv :: fvs) rArcs currVar newVars =
   if fv == currVar
      then fcReviseFutureArcs fvs rArcs currVar (newVars :< fv)
+     else ?reviseTheArc
 ```
 
-Hmm, we need some way to retrieve a specific arc. That sounds slightly
-complicated, so let's make a helper function!
+But in order to revise the arc, we need to actually have it; we need some way to
+retrieve a specific arc. That sounds slightly complicated, so let's make a
+helper function!
+
+#### Finding a specific arc
 
 ```idris
 findArc :  (v1 : Variable)
         -> (v2 : Variable)
         -> (arcs : List Arc)
         -> Maybe Arc
+```
+
+An arc _connects_ `v1` to `v2` iff it goes _from_ `v1` _to_ `v2`. It is possible
+that there is no arc between the two variables, which means they don't constrain
+each other in any way, which is completely fine; less revision work for us! On
+the other hand, if we somehow ended up with more than one arc between the
+variables, something's gone horribly wrong...
+
+```idris
 findArc v1 v2 arcs =
   case filter (connects v1 v2) arcs of
        [] => Nothing
@@ -432,14 +460,151 @@ findArc v1 v2 arcs =
        (arc :: (_ :: _) => assert_total $ idris_crash "findArc_multiarc_ERROR"
 ```
 
-We filter the list of arcs based on whether there is a directed connection
-from `v1` to `v2`, and if there isn't one, that's fine: the variables don't
-constrain each other; if there is exactly one, we return it; and if there's more
-than one, something's gone wrong so we have to crash. (This was initially a
-hole, but due to a funky bug with Sub-Expression Elimination, holes can get
-called despite being in unreachable code, so I had to convert it to a crash.)
+#### Back to arc revision
 
-TODO: fcRevise, reviseDom, hasSupport; explain why not `Maybe List1`
+Now that we can retrieve a specific arc, we can revise it! (Unless there is
+nothing to revise against, in which case we just keep going.)
+
+```idris
+fcReviseFutureArcs (fv :: fvs) rArcs currVar newVars =
+  if fv == currVar
+     then fcReviseFutureArcs fvs rArcs currVar (newVars :< fv)
+     else case findArc fv currVar of
+          Nothing => fcReviseFutureArcs fvs rArcs currVar (newVars :< fv)
+          Just arc => ?reviseTheArc arc
+```
+
+Now. How do we actually revise a specific arc? Like, how do we do it in a
+functional style?
+
+First things first. Revising an arc is the act of taking an arc and pruning the
+domain of one of its variables. This changes the arc (since one of its variables
+change), so we get a new, revised arc back. However, pruning the domain may
+result in it being wiped out, which is indicative of a dead end in our current
+attempt, in which case we should discard the defective attempt.
+
+This gives us a starting point:
+
+```idris
+fcRevise : (arc : Arc) -> Maybe Arc
+fcRevise arc@(MkArc from to validTups) = ?fcRevise_rhs
+```
+
+Now we "just" need to prune a domain. The arc is between a forward-checked
+variable and the current variable, so we only want to update the `from`
+variable's domain. A domain is a list of values, so revising it should yield a
+new list of values (which may be empty, in which case something's wrong!):
+
+```idris
+fcRevise : (arc : Arc) -> Maybe Arc
+fcRevise arc@(MkArc from to validTups) =
+  case ?reviseDom (getDom from) to validTups [<] of
+       [] => Nothing
+       revisedDom@(_ :: _) => ?fcRevise_success_rhs
+```
+
+#### A subtlety with domains
+
+You may have noticed we use `getDom` rather than `from.dom` in the code above.
+This is because there is an incredibly subtle, but critical problem with just
+using the projection: what happens if we are partially through trying a solution
+and the forward-checked variable is assigned? Its domain may still have
+candidate values which could be tried in a different attempt, _but_ it doesn't
+make sense to check against those here! What matters is the value the variable
+_currently_ holds.
+
+When we're forward-checking, we want to know if our current attempt on a
+variable is consistent with respect to (wrt) some other variable and the arc
+between them. Now, if the other variable, the one we are forward-checking, is
+already assigned, then we don't care about confirming our attempt with values it
+_may_ take in the future, we care about if our attempt is consistent with our
+overall attempt so far! In other words, we only want to check against the
+assigned value!
+
+So the `.dom` projection is not good enough: it doesn't consider whether the
+variable is assigned (why would it?). We need a function which returns the
+domain iff the variable is _unassigned_ and, if the variable _is_ assigned,
+returns a singleton list containing the assigned value as the "domain". This is
+what the `getDom` function does.
+
+This subtlety took me a lot of `Debug.Trace`-ing to narrow down, since without
+it, the code looks perfectly correct, except the resulting arc revisor ends up
+trying nonsense despite it having established earlier on that there is a value
+assignment which works, and it is checking a subtree of that earlier assignment.
+
+#### Back to revising a domain
+
+Out of the frying pan, into the fire. Domain revision also requires a bit of
+thinking about. Mostly because of imperative pseudocode: it has us iterate
+through the list of value pairings, testing each one until a support is found or
+we've exhausted the possible pairings, in which case the value needs to be
+removed from the domain.
+
+As with the main arc revision, the obvious alternative to iterating is to
+recurse on something. In this case, we are iterating over a domain, which is a
+list of values. That sounds like it should work recursively. However, we also
+need to remember that we're doing this wrt. a current variable and some valid
+tuples from an arc. _And_, we're constructing a new domain, so best keep track
+of that as well!
+
+All in all, this becomes:
+
+```idris
+reviseDom :  (fvDom : List Nat)
+          -> (currVar : Variable)
+          -> (validTups : List (Nat, Nat))
+          -> (newDom : SnocList Nat)
+          -> List Nat
+```
+
+If we have exhausted our list of values, we are done and can present our new
+domain (it may be empty, but we've dealt with that in `fcRevise`):
+
+```idris
+reviseDom [] currVar validTups newDom = toList newDom
+```
+
+Otherwise, we need to try the potential value from the domain with all possible
+pairings from the current variable's domain (still remembering that domains are
+fickle, tricksy things). We're in functional-land, so rather than trying a
+pairing one at a time, we just construct all of them!
+
+```idris
+reviseDom (fVal :: fVals) currVar validTups newDom =
+  let pairings := map (MkPair fVal) (getDom currVar)
+```
+
+Now that we have the pairings, we need to check if there is at least one pair
+which is supported/valid, i.e. if _any_ of the pairings are an _element_ of the
+`validTups`.
+
+```idris
+      supported := any (\pairing => elem pairing validTups) pairings
+```
+
+As a bonus, `any` is lazy and short-circuits from the left, meaning we'll stop
+as soon as a supporting pair is found.
+
+The whole point of this was to revise the domain, so if we found a support, we
+keep the value, and if we didn't, we don't.
+
+```idris
+  in if supported
+        then reviseDom fvs currVar validTups (newDom :< fv)
+        else reviseDom fvs currVar validTups newDom
+```
+
+TODO: why not `Maybe List1`
+
+{{< spoiler text="Why not use `Maybe List1`?" >}}
+
+{{</ spoiler >}}
+
+#### Putting it all together
+
+TODO: Recap what `reviseArc` looks like (hoo boy, this was a detour!); arc and
+      variable update functions / state propagation in general.
+
 
 ## Acknowledgements
 
