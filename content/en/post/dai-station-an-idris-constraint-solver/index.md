@@ -61,19 +61,19 @@ These are called "constraint problems" (or CSPs) because they all have some
 variables which are _constrained_ in certain ways (for example, in Sudoku, one
 constraint is that no line may contain duplicate digits).
 
-The idea was that verifying correctness via something like model-checking is
-very expensive, whereas constraint solving is less expensive and so might be
-"good enough" for certain scenarios (side-note: I haven't come up with one of
-those yet...). Of course, there is no such thing as a free lunch: constraint
+The motivation was that verifying correctness via something like model-checking
+is very expensive, whereas constraint solving is less expensive and so might be
+"good enough" for certain scenarios (side-note: I haven't come up with such a
+scenario yet...). Of course, there is no such thing as a free lunch: constraint
 modelling is a whole science on its own, and we don't get counterexamples when
 no solutions can be found. Nevertheless, it seemed like a worthwhile thing to
-implement; if nothing else for the fun of it (for a suitable definition of
-'fun'.)
+implement; if nothing else, just for the fun of it (for a suitable definition of
+"fun".)
 
 
 ## The most important step: naming
 
-As with any project, the most important (and often most difficult) challenge is
+As with any project, the most important (and often most difficult) challenge is:
 finding a good name for it. Fortunately, the
 [Ivor the Engine Wiki](https://ivortheengine.fandom.com/wiki/Ivor_the_Engine_Wiki)
 has a list of characters and places we can pick from to expand the "Idris
@@ -97,19 +97,19 @@ dayjob; sounds exactly like a constraint solver! ^^
 
 ![A still of Dai Station: a moustachioed man wearing a conductors uniform and hat, holding a regulations book](/media/ivortheengine-fandom-wiki-dai-station.jpg "Dai Station (Image from [Fandom wiki](https://static.wikia.nocookie.net/ivortheengine/images/a/a7/D1-1-.gif/revision/latest?cb=20081114013036), CC-BY-SA)")
 
-With the hardest bit out of the way, let's write a constraint solver!
+With the hardest bit out of the way, time to write a constraint solver!
 
 
 ## Starting point
 
-Turns out it is somewhat difficult to write a constraint solver; who knew?...
+Turns out writing constraint solvers is somewhat difficult; who knew?...
 
 I am not starting from nothing, but I'm not exactly an expert either: many years
 ago, as part of my undergrad, I took a course on constraint solvers. One of the
 practicals was to write one. Which is good, because it means I have some
 (distant) knowledge of how this is meant to work. What is not good is that my
-old implementation is in Java; and it is only somewhat coherent because I only
-got it working on my 4th "go back to the beginning, branch, and start from
+old implementation is in Java, and it is only somewhat coherent because I got it
+working on my 4th "go back to the beginning, branch, and start from
 scratch"-attempt, with about 24 hours to go before the deadline (the branch is
 called `death` and the commit messages include gems like "The definition of
 insanity" and "YEET!")...
@@ -126,8 +126,8 @@ idea is: given some variables which have some value-domains, along with
 constraints between these variables:
 
   1. Select a variable and a value from its domain to try.
-  2. Try the assignment. If the constraints still hold, try a new variable+value
-       which satisfy the constraints given this assignment.
+  2. Try assigning the variable to the value. If the constraints still hold, try
+       a new variable+value which satisfy the constraints given this assignment.
   3. If we tried the assignment and discovered we violated a constraint, remove
        the value from the domain and try again (unless we're out of options, in
        which case no solution could be found).
@@ -138,23 +138,25 @@ The devil in the detail, which makes this algorithm better than a simple
 brute-force "try everything until something works" approach, is the second half
 of step 2: "try a new variable+value _which satisfy the constraints given this
 assignment_". When trying a value, we "forward check" all the other variables
-with respect to the constraints and the hypothetical assignment. This saves us
-from trying sub-trees that involve values which we know are invalid in the
-current attempt.
+with respect to the constraints and the hypothetical assignment, removing any
+value which no longer works from their domains. This saves us from trying
+sub-trees that involve values which we _know_ are invalid in the current
+attempt.
 
 Steps 2 and 3 above are called the left and right branches respectively, hence
 "2-way branching".
 
 ### Arcs
 
-"Arcs" are just constraints terminology for "directional constraints". When
-talking about constraints between two variables, it can be useful to specify "v1
-must be less than v2" _and_ "v2 must be greater than v1". The reason for this is
-that some algorithms use this to spot that they don't need to revise all the
-arcs; one direction is enough.
+"Arcs" are constraints terminology for "directional constraints". When talking
+about constraints between two variables, it can be useful to specify "v1 must be
+less than v2" _and_ "v2 must be greater than v1". The reason for this is that
+some algorithms use this to spot that they don't need to revise all the arcs;
+sometimes revising in one direction is enough.
 
 (Forward-Checking isn't one of these algorithms by the way.
-But it still uses arcs rather than generic constraints.)
+But it still uses arcs rather than generic constraints; it's simply a useful way
+to think about them.)
 
 
 ## Pseudocode
@@ -256,10 +258,10 @@ revise(arc):
 
 ### Wait a minute!...
 
-This is imperative pseudocode!
+This is imperative pseudocode, not functional!
 
-I know, I know. But unfortunately, I felt it was the clearest+easiest way to
-write things. It will come back to bite me in the implementation though...
+I know, I know. But I felt it was the clearest+easiest way to write things. It
+will come back to bite me in the implementation though...
 
 
 ## Function declarations
@@ -305,10 +307,45 @@ follows:
         assigned to `3`, and vice versa.
   * Input files are newline terminated.
 
-(I won't bore you with how this is represented as datatypes, other than that
-there is a `Variable`, `Arc`, and `CSP` datatype. Please refer to the code on
-GitHub if you need the details.)
+### Idris representation
 
+Thinking about how to represent this in Idris, I decided on 3 components:
+`Variable`, `Arc`, and `CSP`. And making them records seemed like a sensible
+idea, since we'll be doing a lot of updates on the variables as part of
+arc revision.
+
+{{< spoiler text="View Idris code" >}}
+
+```idris
+record Variable where
+  constructor MkVar
+
+  idx : Nat
+
+  assigned : Maybe Nat
+
+  dom : List Nat
+```
+
+```idris
+record Arc where
+  constructor MkArc
+
+  from : Variable
+  to : Variable
+
+  validTuples : List (Nat, Nat)
+```
+
+```idris
+record CSP where
+  constructor MkCSP
+
+  vars : List Variable
+  arcs : List Arc
+```
+
+{{</ spoiler >}}
 
 ## The tooling needed
 
@@ -318,10 +355,10 @@ implied when doing arc revision, which will also require some custom functions.
 
 ### Some notes on state
 
-Annoyingly, most descriptions (including mine) assume that domains, variables,
-and arcs exist globally and uniquely. That is, updating a variable in one
-function updates it everywhere in the general context. This is very convenient
-for thinking about how the algorithm works, but less so for implementing it
+Annoyingly, most pseudocode (including mine) assume that domains, variables, and
+arcs exist globally and uniquely. That is, updating a variable in one function
+updates it everywhere in the general context. This is very convenient for
+thinking about how the algorithm works, but less so for implementing it
 (especially in a functional language).
 
 I initially tried having everything return a pair with a boolean and the new
@@ -330,17 +367,20 @@ revision was successful (and potentially help integrate this into Liam
 O'Connor's [Half Deciders](http://liamoc.net/images/applications.pdf), to have
 a constraint-solver at the type-level!)
 
-Unfortunately, this proved way too error-prone; passing failed states around
-accidentally, forgetting to properly undo an update, etc. At one point I had a
-constraint solver which found the solution, but somehow had ended up with 10
-times as many variables as initially given, and so kept exploring a (now much
-bigger) search space before eventually giving up. Not ideal.
+Unfortunately, this proved way too error-prone. I was passing failed states
+around accidentally, forgetting to properly undo an update, etc. At one point I
+had a constraint solver which did find the solution, but at the same time
+somehow had ended up with 10 times as many variables as initially given, and so
+kept exploring a (now much bigger) search space before eventually giving up. Not
+ideal.
 
-I discussed this with gallais, who had the brilliant suggestion that
-I could just use `Maybe` instead, since the work was done anyway (there was
-nothing gained by potentially delaying a `False` computation) and what I really
-wanted was to discard the bad state. By returning `Nothing` in case of failure,
-there was no way to continue with the incorrect state; it simply wasn't there.
+I discussed this with gallais, who had the brilliant suggestion that I could use
+`Maybe` instead, since the work was done anyway (the boolean represented the
+result of the work, not whether it needed doing) and what I really wanted to do
+was to discard the bad state. By returning `Nothing` in case of failure, there
+was no way to continue with the incorrect state; it simply wasn't there! This
+helped with A) getting the implementation much closer to a working state, and B)
+making the logic easier to follow.
 
 ### Arc Revision
 
