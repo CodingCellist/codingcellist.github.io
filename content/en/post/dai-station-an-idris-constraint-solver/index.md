@@ -532,13 +532,13 @@ it, the code looks perfectly correct, except the resulting arc revisor ends up
 trying nonsense despite it having established earlier on that there is a value
 assignment which works, and it is checking a subtree of that earlier assignment.
 
-#### Back to revising a domain
+#### Revising a domain
 
-Out of the frying pan, into the fire. Domain revision also requires a bit of
-thinking about. Mostly because of imperative pseudocode: it has us iterate
-through the list of value pairings, testing each one until a support is found or
-we've exhausted the possible pairings, in which case the value needs to be
-removed from the domain.
+Out of the frying pan, into the fire. Domain revision (the `?reviseDom` hole)
+also requires a bit of thinking about. Mostly because of imperative pseudocode:
+it has us iterate through the list of value pairings, testing each one until a
+support is found or we've exhausted the possible pairings, in which case the
+value needs to be removed from the domain.
 
 As with the main arc revision, the obvious alternative to iterating is to
 recurse on something. In this case, we are iterating over a domain, which is a
@@ -594,16 +594,110 @@ keep the value, and if we didn't, we don't.
         else reviseDom fvs currVar validTups newDom
 ```
 
-TODO: why not `Maybe List1`
+#### Updating a domain
 
-{{< spoiler text="Why not use `Maybe List1`?" >}}
+Now that we can revise a domain, being careful to respect previous assignments,
+the only piece left in this part of the puzzle is how to propagate the domain
+update.
 
-{{</ spoiler >}}
+```idris
+fcRevise : (arc : Arc) -> Maybe Arc
+fcRevise arc@(MkArc from to validTups) =
+  case reviseDom (getDom from) to validTups [<] of
+       [] => Nothing    -- domain got wiped out, no new state
+       revisedDom@(_ :: _) => ?fcRevise_success_rhs
+```
 
-#### Putting it all together
+Since domains belong to variables, but variables exist both on their own _and_
+as part of arcs (and we don't have shared state/pass-by-reference), we need to
+perform two updates: first, update the variable to have a new domain, and then
+update the arc's `from` variable to the one with the new domain.
 
-TODO: Recap what `reviseArc` looks like (hoo boy, this was a detour!); arc and
-      variable update functions / state propagation in general.
+```idris
+       revisedDom@(_ :: _) =>
+         let revisedVar : Variable := { dom := revisedDom } from
+             revisedArc : Arc := { from := revisedVar } arc
+         in Just revisedArc     -- successfully updated the state
+```
+
+(Idris was having trouble inferring the type of the record updates, hence the
+explicit typing in the let-bindings.)
+
+Remember,
+[a long time ago](#back-to-arc-revision),
+we were "just" trying revise an arc?... It's almost time to fit the pieces
+together; home stretch!
+
+We've now got a function for revising a single arc, which updates its internal
+state, and returns `Nothing` if a domain-wipeout occurred as part of the arc
+revision. In the latter case, we throw away any intermediary computation that
+may have occurred and propagate the `Nothing`/failure indication.
+
+```idris
+     else case findArc fv currVar of
+          Nothing => fcReviseFutureArcs fvs rArcs currVar (newVars :< fv)
+          Just arc =>   -- we can now do something here!
+            case fcRevise arc of
+                 Nothing => Nothing     -- wipeout, discard the state
+                 Just rArc => ?arcRevisionSuccess
+```
+
+In the case where arc revision succeeded, we need to propagate the new state to
+the rest of the problem we're solving. We are already keeping a (snoc)list of
+new variables, so that part is fine. But we also need to be careful to replace
+all outdated copies of the variable in the list of arcs, since any of them may
+use the variable as part of a different constraint!
+
+```idris
+            case fcRevise arc of
+                 Nothing => Nothing     -- wipeout, discard the state
+                 Just rArc =>   -- arc revision succeeded, propagate!
+                   let fv' = rArc.from
+                       rArcs' = map (setArcVar fv') rArcs
+                   in ?arcRevisionSuccess
+```
+
+Here, `setArcVar` takes the new variable and updates the corresponding `from` or
+`to` field of each arc (depending on which contains the old copy), and leaves
+the arc unaffected if it doesn't use `fv'` at all.
+
+#### Recurse!
+
+Finally, we remember that all of this was part of a massive detour to do one
+"small" recursive step: we still need to repeat this entire process for any
+variables we haven't forward-checked yet:
+
+```idris
+                 Just rArc =>   -- arc revision succeeded, propagate!
+                   let fv' = rArc.from
+                       rArcs' = map (setArcVar fv') rArcs
+                       newVars' = newVars :< fv'
+                   in fcReviseFutureArcs fvs rArcs' currVar newVars'
+```
+
+### Propagating changes in general
+
+As if nested record updates weren't enough of a pain to update, there are also
+these pesky lists of records we're passing around. And, annoyingly, we also
+sometimes need to propagate changes to those. However, they are slightly
+trickier as, e.g. in the case of the list of variables, ordering matters: there
+are various heuristics one can apply to variable selection, but the default is
+to try them _in the order given_. This is one of the reasons why we've been
+using `SnocList`s everywhere.
+
+To replace variables, and possibly other things, in the general problem, while
+preserving the order they were given in, we need a couple of helper functions.
+Their logic is straightforward: recurse through the list; if we've found the
+item to replace, do it; otherwise, check the rest of the list. It's possible
+there are functions for this in the standard library, but I found it easier (and
+saner) to just define them here.
+
+TODO: orderedReplace, orderedUpdates
+
+
+## Forward-Checking!
+
+TODO: FC, FCL, FCR
 
 
 ## Acknowledgements
