@@ -5,7 +5,7 @@ title: "Dai Station: an Idris Constraint Solver"
 subtitle: ""
 summary: ""
 authors: [thomas-e-hansen]
-tags: [idris2, functional programming, constraints]
+tags: [idris2, functional programming, constraint programming]
 categories: []
 date: 2023-02-08T16:23:56+01:00
 lastmod:
@@ -30,7 +30,7 @@ projects: []
 
 
 **If you are a CS4402 student at the University of St Andrews reading this for
-"inspiration", remember to cite it!**
+"inspiration" (or just a student in general, actually) _remember to cite it!_**
 
 
 {{< toc >}}
@@ -43,10 +43,10 @@ we think they do, I decided to try to implement a constraint solver in Idris
 (technically Idris2, but Idris1 is deprecated at this point, so I use 'Idris'
 and 'Idris2' interchangeably).
 
-If you are not familiar with the term, a "constraint solver" is a tool which
-solves Constraint Satisfaction Problems (CSPs). CSPs appear a surprising number
-of both real- and game-scenarios:
-  * optimised packing aka. The Knapsack Problem (given a number of items with a
+In case you are not familiar with the term, a "constraint solver" is a tool
+which solves Constraint Satisfaction Problems (CSPs). CSPs appear in a
+surprising number of both real-life and game scenarios:
+  * Optimised packing aka. The Knapsack Problem (given a number of items with a
       value and weight, pack the highest total value in a limited space, e.g. a
       knapsack, while keeping the total weight as low as possible),
   * Sudoku,
@@ -54,21 +54,22 @@ of both real- and game-scenarios:
   * N-Queens (arranging N queens on an N-by-N chess board such that none of them
       threaten each other),
   * solitaire,
-  * ware distribution / routing,
-  * just to name a few...
+  * ware distribution / routing.
 
-These are called "constraint problems" (or CSPs) because they all have some
+These are called "constraint problems" (or CSPs) because they all involve
 variables which are _constrained_ in certain ways (for example, in Sudoku, one
 constraint is that no line may contain duplicate digits).
 
-The motivation was that verifying correctness via something like model-checking
-is very expensive, whereas constraint solving is less expensive and so might be
-"good enough" for certain scenarios (side-note: I haven't come up with such a
-scenario yet...). Of course, there is no such thing as a free lunch: constraint
-modelling is a whole science on its own, and we don't get counterexamples when
-no solutions can be found. Nevertheless, it seemed like a worthwhile thing to
-implement; if nothing else, just for the fun of it (for a suitable definition of
-"fun".)
+The motivation was (partially) that I just wanted to try it to see if it could
+be done, but also (more seriously) because verifying correctness via something
+like model-checking is very expensive, whereas constraint solving is less
+expensive and so might be "good enough" for certain scenarios (side-note: I
+haven't come up with such a scenario yet...). Of course, there is no such thing
+as a free lunch: constraint modelling is a whole science on its own, and we
+don't get counterexamples when no solutions can be found.
+
+So yeah, it seemed like a worthwhile thing to implement. If nothing else, just
+for the fun of it (for a suitable definition of "fun").
 
 
 ## The most important step: naming
@@ -122,8 +123,8 @@ So. Not the best starting point, but better than nothing.
 ### Forward-Checking
 
 The algorithm we'll be using is 2-way branching forward-checking. The general
-idea is: given some variables which have some value-domains, along with
-constraints between these variables:
+idea is: given a number of variables which have some domains of possible values,
+along with some constraints between these variables:
 
   1. Select a variable and a value from its domain to try.
   2. Try assigning the variable to the value. If the constraints still hold, try
@@ -138,10 +139,10 @@ The devil in the detail, which makes this algorithm better than a simple
 brute-force "try everything until something works" approach, is the second half
 of step 2: "try a new variable+value _which satisfy the constraints given this
 assignment_". When trying a value, we "forward check" all the other variables
-with respect to the constraints and the hypothetical assignment, removing any
-value which no longer works from their domains. This saves us from trying
-sub-trees that involve values which we _know_ are invalid in the current
-attempt.
+with respect to the constraints and the hypothetical change (assignment or
+removal), pruning any value which no longer works from their domains. This
+saves us from trying sub-trees that involve values which we _know_ are invalid
+in the current attempt.
 
 Steps 2 and 3 above are called the left and right branches respectively, hence
 "2-way branching".
@@ -161,7 +162,7 @@ to think about them.)
 
 ## Pseudocode
 
-Based on the general idea, we can come up with some pseudocode.
+Based on the general idea, we can come up with some pseudocode:
 
 ### Main recursive function / starting-point
 
@@ -169,7 +170,7 @@ Based on the general idea, we can come up with some pseudocode.
 // main function
 forwardCheck(varList):
   if allAssigned(varList):
-    return the solution and stop
+    stop and return the solution
 
   else:
     var := selectVar(varList)
@@ -198,7 +199,7 @@ branchLeft(varList, var, val):
         forwardCheck(varList)
 
       else:
-        // incorrect attempt detected
+        // invalid assignment detected
         // our attempt resulted in no candidates for forwardVar
         // undo ALL our changes and break out of the loop
         undoRevise
@@ -226,7 +227,7 @@ branchRight(varList, var, val):
         forwardCheck(varList)
 
       else:
-        // incorrect deletion detected
+        // invalid deletion detected
         // our value deletion resulted in no candidates for
         // forwardVar; undo ALL our changes and break out
         // of the loop
@@ -237,7 +238,7 @@ branchRight(varList, var, val):
 
 ### Arc revision
 
-(update a domain based on the directional constraint)
+(updating a domain based on the directional constraint)
 
 ```
 // arc revision (domain updating)
@@ -314,7 +315,7 @@ Thinking about how to represent this in Idris, I decided on 3 components:
 idea, since we'll be doing a lot of updates on the variables as part of
 arc revision.
 
-{{< spoiler text="View Idris representation" >}}
+{{< spoiler text="Show Idris representation" >}}
 
 ```idris
 record Variable where
@@ -349,9 +350,10 @@ record CSP where
 
 ## The tooling needed
 
-Before even making a start on writing the main functions, we need some tooling.
-Mostly this is for arc revision, but there are a couple of annoying consequences
-implied when doing arc revision, which will also require some custom functions.
+Before even making a start on writing the main functions, we need to implement
+some tooling.  Mostly this is for arc revision, but there are a couple of
+annoying consequences implied when doing arc revision, which will also require
+some custom functions.
 
 ### Some notes on state
 
@@ -364,7 +366,7 @@ thinking about how the algorithm works, but less so for implementing it
 I initially tried having everything return a pair with a boolean and the new
 state. The idea being that the boolean would indicate whether or not the
 revision was successful (and potentially help integrate this into Liam
-O'Connor's [Half Deciders](http://liamoc.net/images/applications.pdf), to have
+O'Connor's [Half-Deciders](http://liamoc.net/images/applications.pdf), to have
 a constraint-solver at the type-level!)
 
 Unfortunately, this proved way too error-prone. I was passing failed states
@@ -413,7 +415,7 @@ fcReviseFutureArcs :  (vars  : List Variable)
 ```
 
 "Iterate, but make it functional" -- The easiest way to do this is often to use
-recursions, so we need a base-case: If we have exhausted the list of variables
+recursion, so we'll need a base-case: If we have exhausted the list of variables
 without creating any problems, we're done:
 
 ```idris
@@ -514,10 +516,10 @@ make sense to check against those here! What matters is the value the variable
 _currently_ holds.
 
 When we're forward-checking, we want to know if our current attempt on a
-variable is consistent with respect to (wrt) some other variable and the arc
-between them. Now, if the other variable, the one we are forward-checking, is
-already assigned, then we don't care about confirming our attempt with values it
-_may_ take in the future, we care about if our attempt is consistent with our
+variable is consistent with respect to some other variable and the arc between
+them. Now, if the other variable, the one we are forward-checking, is already
+assigned, then we don't care about confirming our attempt with values it _may_
+take in the future, we only care about if our attempt is consistent with our
 overall attempt so far! In other words, we only want to check against the
 assigned value!
 
@@ -529,8 +531,8 @@ what the `getDom` function does.
 
 This subtlety took me a lot of `Debug.Trace`-ing to narrow down, since without
 it, the code looks perfectly correct, except the resulting arc revisor ends up
-trying nonsense despite it having established earlier on that there is a value
-assignment which works, and it is checking a subtree of that earlier assignment.
+trying nonsense despite it having established earlier on that there exists a
+value assignment which works for the subtree we're currently exploring.
 
 #### Revising a domain
 
@@ -538,14 +540,14 @@ Out of the frying pan, into the fire. Domain revision (the `?reviseDom` hole)
 also requires a bit of thinking about. Mostly because of imperative pseudocode:
 it has us iterate through the list of value pairings, testing each one until a
 support is found or we've exhausted the possible pairings, in which case the
-value needs to be removed from the domain.
+value needs to be pruned from the domain.
 
-As with the main arc revision, the obvious alternative to iterating is to
-recurse on something. In this case, we are iterating over a domain, which is a
-list of values. That sounds like it should work recursively. However, we also
-need to remember that we're doing this wrt. a current variable and some valid
-tuples from an arc. _And_, we're constructing a new domain, so best keep track
-of that as well!
+As with the main arc revision function, the obvious alternative to iterating is
+to recurse on something. In this case, we are iterating over a domain, which is
+a list of values. That sounds like it should work recursively. However, we also
+need to remember that we're doing this with respect to a current variable and
+some valid tuples from an arc. _And_, we're constructing a new domain, so best
+keep track of that as well!
 
 All in all, this becomes:
 
@@ -566,7 +568,7 @@ reviseDom [] currVar validTups newDom = toList newDom
 
 Otherwise, we need to try the potential value from the domain with all possible
 pairings from the current variable's domain (still remembering that domains are
-fickle, tricksy things). We're in functional-land, so rather than trying a
+fickle, tricksy things). And we're in functional-land, so rather than trying a
 pairing one at a time, we just construct all of them!
 
 ```idris
@@ -621,7 +623,9 @@ update the arc's `from` variable to the one with the new domain.
 ```
 
 (Idris was having trouble inferring the type of the record updates, hence the
-explicit typing in the let-bindings.)
+explicit typing in the `let`-bindings.)
+
+#### Completely revising an arc
 
 Remember,
 [a long time ago](#back-to-arc-revision),
@@ -630,8 +634,8 @@ together; home stretch!
 
 We've now got a function for revising a single arc, which updates its internal
 state, and returns `Nothing` if a domain-wipeout occurred as part of the arc
-revision. In the latter case, we throw away any intermediary computation that
-may have occurred and propagate the `Nothing`/failure indication.
+revision. In the latter case, we need to throw away any intermediary computation
+that may have occurred and propagate the `Nothing`/failure indication.
 
 ```idris
      else case findArc fv currVar of
@@ -658,8 +662,8 @@ use the variable as part of a different constraint!
 ```
 
 Here, `setArcVar` takes the new variable and updates the corresponding `from` or
-`to` field of each arc (depending on which contains the old copy), and leaves
-the arc unaffected if it doesn't use `fv'` at all.
+`to` field of each arc (depending on which contains the old copy), leaving the
+arc unaffected if it doesn't involve `fv'` at all.
 
 #### Recurse!
 
@@ -680,15 +684,15 @@ variables we haven't forward-checked yet:
 As if nested record updates weren't enough of a pain to update, there are also
 these pesky lists of records we're passing around. And, annoyingly, we also
 sometimes need to propagate changes to those. However, they are slightly
-trickier as, e.g. in the case of the list of variables, ordering matters: there
-are various heuristics one can apply to variable selection, but the default is
-to try them _in the order given_. This is one of the reasons why we've been
-using `SnocList`s everywhere.
+trickier since, for example, in the case of the list of variables, ordering
+matters: there are various heuristics one can apply to variable selection, but
+the default is to try them _in the order given_. This is one of the reasons why
+we've been using `SnocList`s everywhere.
 
 To replace variables, and possibly other things, in the general problem, while
 preserving the order they were given in, we need a couple of helper functions.
 The logic is straightforward: recurse through the list; if we've found the
-item(s) to replace, do it; otherwise, keep going down the rest of the list until
+item to replace, do it; otherwise, keep going down the rest of the list until
 it's empty or we find the thing to replace.
 
 ```idris
@@ -711,15 +715,19 @@ orderedUpdates todo (upd :: upds) =
   in orderedUpdates anUpdate upds
 ```
 
-It's possible there are functions which can do this in the standard library, but
-I found it easier to just define them here.
+(It's entirely possible there are functions which can do this in the standard
+library, but I found it easier to just define them.)
 
 
 ## Forward-Checking!
 
-Finally we've arrived at the thing we were talking about! The tooling took _a
-while_ to get through, although I guess that makes sense given that it's doing
-the brunt of the work... Anyway, onwards!
+Finally we've arrived at the thing we were talking about using! The tooling took
+_a while_ to get through, although I guess that makes sense given that it's
+doing the brunt of the work...
+
+Anyway, onwards!
+
+### Actual function declarations
 
 Now that we know the shape of the things we're passing around (lists of
 variables and arcs), we can give the original function declarations some actual
@@ -782,7 +790,7 @@ on.
 ### Branching left
 
 Branching left is the part where we try to assign the value to the variable, and
-only keep going if the forward-checking/arc-revision went well. This is where
+only keep going if the forward-checking/arc revision went well. This is where
 the helper functions from earlier come into play: we need to update the variable
 to its assigned version in both the list of variables and list of arcs.
 
@@ -802,7 +810,7 @@ branchFCLeft vars arcs currVar currVal =
 ```
 
 As you may have noticed, `let`-bindings are absolutely fantastic for this
-implementation: they give us _just enough_ imperativeness to do the small state
+implementation: they give us just enough imperativeness to do the small state
 updates we need as part of each step.
 
 ### Branching right
@@ -810,11 +818,12 @@ updates we need as part of each step.
 Branching right is trying to remove the value from the variable's domain
 (usually because an inconsistency was found), and then checking that everything
 is still okay; that we can continue without that value. Idris provides a very
-useful function which can help us here: `delete` (from `Data.List`) removes an
-element from a list. That's exactly what we need!
+useful function which can help us here: `delete` (from `Data.List`), which
+removes an element from a list. That's exactly what we need!
 
 ```idris
 branchFCRight vars arcs currVar currVal =
+  -- remove the value from the domain
   let smallerVar : Variable := { dom $= delete currVal } currVar
   in case getDom smallerVar of
           [] => -- oops, domain wipeout!
@@ -835,21 +844,32 @@ branchFCRight vars arcs currVar currVal =
 
 ### Termination problems
 
+So now that we've implemented the functions, do we have a constraint solver?
+Let's try to run it!
+
+```
+Dai> :exec solve "4Queens.csp"
+No solutions found :'(
+Dai> :exec solve "8Queens.csp"
+No solutions found :'(
+Dai> :exec solve "langfords2_3.csp"
+No solutions found :'(
+```
+
 That's odd... If we try to run this on a CSP, the solver is slow (which is
-fine), but no problems seem to have a solution (which is not fine). What's
-happening??
+fine), but none of the problems seem to have a solution (which is not fine).
+What is happening??
 
 It turns out, this implementation has one fatal flaw: termination. When
 `forwardCheck` has found a solution, it doesn't call the left- or
 right-branching functions, it just returns the state. Which sounds good; that's
-what we want it to do. Until you realise that this happens during a recursive
+what we want it to do. Until you realise that this happens _during_ a recursive
 descent on the list of variables, meaning: `forwardCheck` returns, having
 happily concluded that everything is assigned, this jumps out of the assignment
-step (branch-left), _and then continues with the deletion step (branch-right)!_
+step (branch-left), _and then continues with the deletion step (branch-right)_!!
 
 So we conclude there is a solution, and then promptly delete the final assigned
-value and keep trying other things. No wonder nothing has a solution in this
-case!
+value and keep trying other things. No wonder nothing has a solution!
 
 This is no fault of the algorithm itself. It just assumes that there is a way to
 stop, completely breaking out of the solving, as soon as the solution is found.
@@ -870,21 +890,23 @@ It's not the cleanest, but it technically works ^^;;
 #### The proper solution
 
 Okay, but having crashing be the correct/expected behaviour when all is well
-isn't really good practice. Instead, we could maybe thread a `done` boolean or
+isn't really good practice. Instead, we could thread a `done` boolean or
 similar, to indicate whether we should keep going? No no, we've been down that
 road before: threading booleans and state makes it much easier to operate on the
-wrong state, it is better to use a `Maybe` if possible.
+wrong state, it is better to use a `Maybe` if possible. But what is redundant
+when we've found a solution?
 
-And, there is one thing we can discard once we've found a solution: the arcs!
-When all the variables have been successfully assigned, i.e. a solution has been
-found, there is no need to keep the arcs around any longer since we're done
-checking against them!
+It turns out, there _is_ something we can discard once a solution has been
+found: the arcs! When all the variables have been successfully assigned, i.e. a
+solution has been found, there is no need to keep the arcs around any longer
+since we're done checking against them!
 
 So:
   * Wherever there is a `List Arc` in the main 3 functions, we need to use a
-      `Maybe (List Arc)`. 
+      `Maybe (List Arc)`. This allows us to "lose" the arcs once a solution has
+      been found.
   * When `forwardCheck` concludes we're done, it needs to drop the arcs from its
-      return-value, both to indicate we're done and to prevent the recursive
+      return value, both to indicate we're done and to prevent the recursive
       calls and calls to the branches from trying more arc revisions.
   * In the left- and right-branching functions, we need to add a case where the
       arcs have disappeared, in which case we just return the variables and
@@ -1019,23 +1041,23 @@ it finds a solution, instead of always emptying the entire search space...
 ## Doing Computer **Science**
 
 Something which many people, myself included, often forget is to put the
-"science" in "Computer Science": we need actual, concrete data! We need some
+"science" in "Computer Science": we need actual, concrete data! We need
 evaluation(s)!
 
-To collect the data, I used a simple script with `/usr/bin/time`. The full
-details (and data) are on
-[the GitHub page](https://github.com/CodingCellist/dai-station),
-in `evaln` directory.
+To collect the data, I used a simple script which called `/usr/bin/time`. (The
+full details, and data, can be found in the
+[the GitHub repo](https://github.com/CodingCellist/dai-station),
+in `evaln` directory.)
 
 ### Initial performance
 
 One observation I made when playing around with the solver, was that there was
-no human-discernible difference in solver time between the n-queens problems. So
-I decided to only test the Langford's instances.
+no discernible difference in solver time between the n-queens problems. So I
+decided to only test the Langford's instances.
 
-Even then, the performance is unaffected until we reach `langfords3_9` (arrange
-a Langford sequence of 9 triples of numbers). At which point the time to solve
-grows by two orders of magnitude! Ô.o
+Even then, the performance seems unaffected until we reach `langfords3_9`
+(arrange a Langford sequence of 9 triples of numbers). At which point the time
+to solve increases by two orders of magnitude! Ô.o
 
 | CSP instance |  Time  |
 | ------------ | -----: |
@@ -1086,26 +1108,27 @@ given that the `2_4`-instance now seems ever so slightly slower...
 
 At this point I got curious and decided to run the `langfords3_10` instance,
 just to see if it would finish in "reasonable" time. After some time, having
-changed away from the window, I discovered that it _had_ finished successfully!
+changed away from the window to do some other work, I discovered that it _had_
+finished successfully!
 
-However, it did take around 5 minutes, meaning any evaluation involving it would
-be slow...
+However, it took around 5 minutes, meaning any evaluation involving it would be
+slow...
 
 
 ## Conclusion
 
 I'm pretty happy with how that turned out. It was a fun exercise in converting
 imperative to functional code, and figuring out how best to represent (and pass
-around and modify) the data. There are numerous places, as you may have noticed,
-where dependent types possibly could have saved me some pain. But to do that you
-need to figure out the correct types, as well as work out the proofs and how to
-best/ergonomically pass these around, which can be a huge challenge in and of
-itself. And I just wanted a working, proof-of-concept constraint solver, so here
-we are ^^
+around and modify) the problem representation. There are numerous places, as you
+may have noticed, where dependent types possibly could have saved me some pain.
+But to do that you need to figure out the correct types, as well as work out the
+proofs and how to best/ergonomically pass these around, which can be a huge
+challenge in and of itself. And I just wanted a working, proof-of-concept
+constraint solver, so here we are ^^
 
 The code is [on GitHub](https://github.com/CodingCellist/dai-station) for any
 and all to browse. If you do something cool with it, please let me know! It's
-always great when others find use-cases for silly code-explorations you did ^^
+always cool when others find use-cases for a silly code-adventure you did ^^
 
 As always, thanks for reading. I hope it was interesting  : )
 
@@ -1123,13 +1146,13 @@ As always, thanks for reading. I hope it was interesting  : )
 
 Constraint solvers can use various heuristics to try to be clever about variable
 and/or value selection. These are, as mentioned, _heuristics_; they're rules of
-thumb which generally work well.
+thumb which tend to work well.
 
 There are two types of heuristics: static and dynamic. Static heuristics are
 ones which are set before starting the solver, and which remain constant
 throughout the solving; e.g. trying each value in ascending order. _Dynamic_
 heuristics, on the other hand, are heuristics which are computed and change as
-the solver progresses.
+the solver makes progress.
 
 A simple heuristic to implement, in the case of Dai Station, is the "Smallest
 Domain First" (SDF) heuristic: when selecting the next variable, select the one
