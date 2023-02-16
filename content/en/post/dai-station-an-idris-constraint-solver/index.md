@@ -314,7 +314,7 @@ Thinking about how to represent this in Idris, I decided on 3 components:
 idea, since we'll be doing a lot of updates on the variables as part of
 arc revision.
 
-{{< spoiler text="View Idris code" >}}
+{{< spoiler text="View Idris representation" >}}
 
 ```idris
 record Variable where
@@ -687,12 +687,32 @@ using `SnocList`s everywhere.
 
 To replace variables, and possibly other things, in the general problem, while
 preserving the order they were given in, we need a couple of helper functions.
-Their logic is straightforward: recurse through the list; if we've found the
-item to replace, do it; otherwise, check the rest of the list. It's possible
-there are functions for this in the standard library, but I found it easier (and
-saner) to just define them here.
+The logic is straightforward: recurse through the list; if we've found the
+item(s) to replace, do it; otherwise, keep going down the rest of the list until
+it's empty or we find the thing to replace.
 
-TODO: orderedReplace, orderedUpdates
+```idris
+orderedReplace : Eq a => List a -> a -> List a
+orderedReplace [] _ = []
+orderedReplace (x :: xs) new =
+  if x == new
+     then new :: xs
+     else x :: orderedReplace xs new
+```
+
+For a list of new elements, we can traverse that list, using the function above
+to perform a single update with each element.
+
+```idris
+orderedUpdates : Eq a => List a -> (upds : List a) -> List a
+orderedUpdates done [] = done
+orderedUpdates todo (upd :: upds) =
+  let anUpdate = orderedReplace todo upd
+  in orderedUpdates anUpdate upds
+```
+
+It's possible there are functions which can do this in the standard library, but
+I found it easier to just define them here.
 
 
 ## Forward-Checking!
