@@ -7,7 +7,7 @@ summary: ""
 authors: [thomas-e-hansen]
 tags: [idris2, functional programming, constraint programming]
 categories: []
-date: 2023-02-08T16:23:56+01:00
+date: 2023-02-16
 lastmod:
 featured: false
 draft: false
