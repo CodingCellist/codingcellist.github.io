@@ -961,12 +961,206 @@ branchFCRight vars (Just arcs) currVar currVal =
 
 Trying the solver on a 4-queens problem now gives us:
 
-TODO
+```
+Dai> :exec solve "4Queens.csp"
+Found a solution!
+[ v0: 1
+, v1: 3
+, v2: 0
+, v3: 2
+]
+```
+
+If we plot that on a 4-by-4 chessboard, we get:
+
+```
+   | 0 | 1 | 2 | 3 |
+---+---+---+---+---+
+ 0 |   | q |   |   |
+---+---+---+---+---+
+ 1 |   |   |   | q |
+---+---+---+---+---+
+ 2 | q |   |   |   |
+---+---+---+---+---+
+ 3 |   |   | q |   |
+---+---+---+---+---+
+```
+
+None of the queens threaten each other, so that's correct!!
+
+Let's try with a slightly harder problem: Langford's Problem for pairs, with 3
+pairs:
+
+```
+Dai> :exec solve "langfords2_3.csp"
+Found a solution!
+[ v0: 2
+, v1: 4
+, v2: 3
+, v3: 6
+, v4: 1
+, v5: 5
+]
+```
+
+If we put duplicate pairs of numbers on the given (1-based!) indices, we get:
+
+```
+3  1  2  1  3  2
+```
+
+Which we can verify to be correct: there is one digit between the 1s, two
+between the 2s, and three between the 3s!
+
+Unsurprisingly, the solver is also significantly faster now that it stops when
+it finds a solution, instead of always emptying the entire search space...
+
+
+## Doing Computer **Science**
+
+Something which many people, myself included, often forget is to put the
+"science" in "Computer Science": we need actual, concrete data! We need some
+evaluation(s)!
+
+To collect the data, I used a simple script with `/usr/bin/time`. The full
+details (and data) are on
+[the GitHub page](https://github.com/CodingCellist/dai-station),
+in `evaln` directory.
+
+### Initial performance
+
+One observation I made when playing around with the solver, was that there was
+no human-discernible difference in solver time between the n-queens problems. So
+I decided to only test the Langford's instances.
+
+Even then, the performance is unaffected until we reach `langfords3_9` (arrange
+a Langford sequence of 9 triples of numbers). At which point the time to solve
+grows by two orders of magnitude! Ô.o
+
+| CSP instance |  Time  |
+| ------------ | -----: |
+| langfords2_3 |  0.90s |
+|              |  0.92s |
+|              |  0.89s |
+| langfords2_4 |  0.91s |
+|              |  0.90s |
+|              |  0.87s |
+| langfords3_9 | 53.30s |
+|              | 53.32s |
+|              | 54.70s |
+
+As a result, I initially stopped `langfords3_10` because it had been running for
+over 2 minutes.
+
+### Remember arc consistency?
+
+There's a small, but important step I had completely forgotten: to avoid
+exploring pointless initial guesses, we should enforce arc consistency before
+even trying to solve!
+
+This makes no difference for n-queens (each queen could, hypothetically, stand
+on any square), but for Langford's it does make a difference. For example, there
+are many fewer candidate positions for the 3s than there are for the 1s.
+
+But again, we're doing computer _science_ here, so let's implement it and see
+what happens!
+
+
+| CSP instance | Time w/o initial arc-consist. | Time w. initial arc-consist. |
+| ------------ | ----------------------------: | ---------------------------: |
+| langfords2_3 |                         0.90s |                        0.87s |
+|              |                         0.92s |                        0.88s |
+|              |                         0.89s |                        0.93s |
+| langfords2_4 |                         0.91s |                        0.95s |
+|              |                         0.90s |                        0.91s |
+|              |                         0.87s |                        0.87s |
+| langfords3_9 |                        53.30s |                       46.29s |
+|              |                        53.32s |                       46.43s |
+|              |                        54.70s |                       46.46s |
+
+The smaller instances are basically unaffected. There seems to be some
+improvements on the `2_3`-instance, but that could also be a fluke of the runs,
+given that the `2_4`-instance now seems ever so slightly slower...
+
+### Retrying `langfords3_10`
+
+At this point I got curious and decided to run the `langfords3_10` instance,
+just to see if it would finish in "reasonable" time. After some time, having
+changed away from the window, I discovered that it _had_ finished successfully!
+
+However, it did take around 5 minutes, meaning any evaluation involving it would
+be slow...
+
+
+## Conclusion
+
+I'm pretty happy with how that turned out. It was a fun exercise in converting
+imperative to functional code, and figuring out how best to represent (and pass
+around and modify) the data. There are numerous places, as you may have noticed,
+where dependent types possibly could have saved me some pain. But to do that you
+need to figure out the correct types, as well as work out the proofs and how to
+best/ergonomically pass these around, which can be a huge challenge in and of
+itself. And I just wanted a working, proof-of-concept constraint solver, so here
+we are ^^
+
+The code is [on GitHub](https://github.com/CodingCellist/dai-station) for any
+and all to browse. If you do something cool with it, please let me know! It's
+always great when others find use-cases for silly code-explorations you did ^^
+
+As always, thanks for reading. I hope it was interesting  : )
 
 
 ## Acknowledgements
 
+* Ian Miguel for his lectures on implementing constraint solvers, which taught
+    me everything I know about the topic.
 * Guillaume Allais (gallais) for the idea of using `Maybe` for the state
     updates, thereby eliminating the possibility of accidentally using a bad
     state when a guess failed.
+
+
+## Extra: A small heuristic
+
+Constraint solvers can use various heuristics to try to be clever about variable
+and/or value selection. These are, as mentioned, _heuristics_; they're rules of
+thumb which generally work well.
+
+There are two types of heuristics: static and dynamic. Static heuristics are
+ones which are set before starting the solver, and which remain constant
+throughout the solving; e.g. trying each value in ascending order. _Dynamic_
+heuristics, on the other hand, are heuristics which are computed and change as
+the solver progresses.
+
+A simple heuristic to implement, in the case of Dai Station, is the "Smallest
+Domain First" (SDF) heuristic: when selecting the next variable, select the one
+with the smallest domain, since we're likely to find a dead-end faster this way.
+And in Idris, it's just a simple `sortBy` call:
+
+```idris
+sdfSort : List Variable -> List Variable
+sdfSort vars =
+  sortBy (\ v1, v2 => compare (length $ getDom v1) (length $ getDom v2)) vars
+```
+
+(I also created a `Heuristic` datatype, so that I could toggle the heuristic by
+passing around a `Maybe Heuristic` to the three main functions.)
+
+### Does it work?
+
+Remembering that we're computer _scientists_, we of course evaluate our new
+heuristic-based search vs our old non-heuristic-based search (this time only
+with `langfords3_9` and `langfords3_10`, since they're the most likely to see a
+noticeably difference in performance):
+
+| CSP instance  |  Time w/o SDF |  Time w. SDF |
+| ------------- | ------------: | -----------: |
+| langfords3_9  |        47.36s |       44.03s |
+|               |        47.61s |       44.07s |
+|               |        47.35s |       44.21s |
+| langfords3_10 |       305.71s |      238.61s |
+|               |       303.91s |      241.25s |
+|               |       304.04s |      243.24s |
+
+Hurray, it's faster! On the smaller problem, it only saves us around 3 seconds,
+but on the bigger one, it saves us a whole minute! That's neat!!
 
