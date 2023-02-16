@@ -717,7 +717,251 @@ I found it easier to just define them here.
 
 ## Forward-Checking!
 
-TODO: FC, FCL, FCR
+Finally we've arrived at the thing we were talking about! The tooling took _a
+while_ to get through, although I guess that makes sense given that it's doing
+the brunt of the work... Anyway, onwards!
+
+Now that we know the shape of the things we're passing around (lists of
+variables and arcs), we can give the original function declarations some actual
+types:
+
+```idris
+forwardCheck :  (vars : List Variable)
+             -> (arcs : List Arc)
+             -> Maybe (List Variable, List Arc)
+```
+
+The left- and right-branching parts operate on a specific variable and value, so
+we need to remember to include that:
+
+```idris
+branchFCLeft :  (vars : List Variable)
+             -> (arcs : List Arc)
+             -> (currVar : Variable)
+             -> (currVal : Nat)
+             -> Maybe (List Variable, List Arc)
+
+branchFCRight :  (vars : List Variable)
+              -> (arcs : List Arc)
+              -> (currVar : Variable)
+              -> (currVal : Nat)
+              -> Maybe (List Variable, List Arc)
+```
+
+We always return a `Maybe`, since we want to discard the state using `Nothing`,
+if it turned out to be inconsistent.
+
+### The starting point
+
+The starting point, `forwardCheck`, stops if we've assigned all the variables (a
+solution has been found), and otherwise selects a variable and value to continue
+with:
+
+```idris
+forwardCheck vars arcs =
+  if all isJust $ map (.assigned) vars
+     then Just (vars, arcs)
+     else let var = selectVar vars
+              val = selectVal var
+          in -- first, branch left
+             case branchFCLeft vars arcs var val of
+                  -- inconsistency found, branch right with
+                  -- the original state
+                  Nothing => branchFCRight vars arcs var val
+
+                  -- if all is well, but no solution was found,
+                  -- try branching right with the new state
+                  Just (vars', arcs') =>
+                    branchFCRight vars' arcs' var val
+```
+
+The `selectVar` and `selectVal` functions just pick the first unassigned
+variable, and the first value, in the given list. There is no cleverness going
+on.
+
+### Branching left
+
+Branching left is the part where we try to assign the value to the variable, and
+only keep going if the forward-checking/arc-revision went well. This is where
+the helper functions from earlier come into play: we need to update the variable
+to its assigned version in both the list of variables and list of arcs.
+
+```idris
+branchFCLeft vars arcs currVar currVal =
+  let assignedVar = assign currVar currVal
+      vars' = orderedReplace vars assignedVar
+      arcs' = map (setArcVar assignedVar) arcs
+  in -- now check that the assignment works with the arcs
+     case fcReviseFutureArcs vars' arcs' assignedVar [<] of
+          Nothing => Nothing    -- nope, didn't work
+          Just (rVars, rArcs) =>    -- hurray! revision success
+            let vars'' = orderedUpdates vars' rVars
+                arcs'' = orderedUpdates arcs' rArcs
+            in -- continue with the new state
+               forwardCheck vars'' arcs''
+```
+
+As you may have noticed, `let`-bindings are absolutely fantastic for this
+implementation: they give us _just enough_ imperativeness to do the small state
+updates we need as part of each step.
+
+### Branching right
+
+Branching right is trying to remove the value from the variable's domain
+(usually because an inconsistency was found), and then checking that everything
+is still okay; that we can continue without that value. Idris provides a very
+useful function which can help us here: `delete` (from `Data.List`) removes an
+element from a list. That's exactly what we need!
+
+```idris
+branchFCRight vars arcs currVar currVal =
+  let smallerVar : Variable := { dom $= delete currVal } currVar
+  in case getDom smallerVar of
+          [] => -- oops, domain wipeout!
+              Nothing
+
+          (_ :: _) =>
+              let vars' = orderedReplace vars smallerVar
+                  arcs' = map (setArcVar smallerVar) arcs
+              in case fcReviseFutureArcs vars' arcs' smallerVar [<] of
+                      Nothing =>  -- inconsistent!
+                                 Nothing
+
+                      Just (rVars, rArcs) =>  -- still good
+                        let vars'' = orderedUpdates vars' rVars
+                            arcs'' = orderedUpdates arcs' rArcs
+                        in forwardCheck vars'' arcs''
+```
+
+### Termination problems
+
+That's odd... If we try to run this on a CSP, the solver is slow (which is
+fine), but no problems seem to have a solution (which is not fine). What's
+happening??
+
+It turns out, this implementation has one fatal flaw: termination. When
+`forwardCheck` has found a solution, it doesn't call the left- or
+right-branching functions, it just returns the state. Which sounds good; that's
+what we want it to do. Until you realise that this happens during a recursive
+descent on the list of variables, meaning: `forwardCheck` returns, having
+happily concluded that everything is assigned, this jumps out of the assignment
+step (branch-left), _and then continues with the deletion step (branch-right)!_
+
+So we conclude there is a solution, and then promptly delete the final assigned
+value and keep trying other things. No wonder nothing has a solution in this
+case!
+
+This is no fault of the algorithm itself. It just assumes that there is a way to
+stop, completely breaking out of the solving, as soon as the solution is found.
+So what can we do about that?...
+
+#### The hacky solution
+
+Well, we _can_ technically display the solution and quit. Simply:
+
+```idris
+forwardCheck vars arcs =
+  if all isJust $ map (.assigned) vars
+     then assert_total $ idris_crash $ "DONE! " ++ show vars
+```
+
+It's not the cleanest, but it technically works ^^;;
+
+#### The proper solution
+
+Okay, but having crashing be the correct/expected behaviour when all is well
+isn't really good practice. Instead, we could maybe thread a `done` boolean or
+similar, to indicate whether we should keep going? No no, we've been down that
+road before: threading booleans and state makes it much easier to operate on the
+wrong state, it is better to use a `Maybe` if possible.
+
+And, there is one thing we can discard once we've found a solution: the arcs!
+When all the variables have been successfully assigned, i.e. a solution has been
+found, there is no need to keep the arcs around any longer since we're done
+checking against them!
+
+So:
+  * Wherever there is a `List Arc` in the main 3 functions, we need to use a
+      `Maybe (List Arc)`. 
+  * When `forwardCheck` concludes we're done, it needs to drop the arcs from its
+      return-value, both to indicate we're done and to prevent the recursive
+      calls and calls to the branches from trying more arc revisions.
+  * In the left- and right-branching functions, we need to add a case where the
+      arcs have disappeared, in which case we just return the variables and
+      `Nothing` for the arcs, since there is nothing we can revise against.
+
+### A minor refactor later...
+
+{{< spoiler text="Show the refactored code" >}}
+
+```idris
+forwardCheck :  (vars : List Variable)
+             -> (arcs : Maybe (List Arc))
+             -> Maybe (List Variable, Maybe (List Arc))
+
+branchFCLeft :  (vars : List Variable)
+             -> (arcs : Maybe (List Arc))
+             -> (currVar : Variable)
+             -> (currVal : Nat)
+             -> Maybe (List Variable, Maybe (List Arc))
+
+branchFCRight :  (vars : List Variable)
+              -> (arcs : Maybe (List Arc))
+              -> (currVar : Variable)
+              -> (currVal : Nat)
+              -> Maybe (List Variable, Maybe (List Arc))
+```
+
+```idris
+-- if we've lost the arcs, we must be done
+forwardCheck vars Nothing = Just (vars, Nothing)
+
+forwardCheck vars (Just arcs) =
+  if all isJust $ map (.assigned) vars
+     then Just (vars, Nothing)  -- remove the arcs when done
+
+     [...]
+
+             -- branch left, remembering to put the arcs in a `Maybe`
+             case branchFCLeft vars (Just arcs) var val of
+                  Nothing =>
+                    -- branch right as usual (no new state)
+                    branchFCRight vars (Just arcs) var val
+
+                  Just (vars', Nothing) =>  -- no arcs to continue with
+                    branchFCRight vars' Nothing var val
+
+                  Just (vars', Just arcs') =>
+                    -- branch right as usual (with new state)
+                    branchFCRight vars' (Just arcs') var val
+```
+
+```idris
+-- if we've lost the arcs, we must be done
+branchFCLeft vars Nothing currVar currVal = Just (vars, Nothing)
+
+-- otherwise, proceed as usual
+branchFCLeft vars (Just arcs) currVar currVal =
+            [...]
+            in -- continue with the new state
+               forwardCheck vars'' (Just arcs'')
+```
+
+```idris
+-- if we've lost the arcs, we must be done
+branchFCRight vars Nothing currVar currVal = Just (vars, Nothing)
+
+-- otherwise, proceed as usual
+branchFCRight vars (Just arcs) currVar currVal =
+                        [...]
+                        in forwardCheck vars'' (Just arcs'')
+```
+
+{{</ spoiler >}}
+
+Trying the solver on a 4-queens problem now gives us:
+
+TODO
 
 
 ## Acknowledgements
