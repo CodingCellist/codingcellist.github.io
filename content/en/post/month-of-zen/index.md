@@ -1,7 +1,7 @@
 ---
 # Documentation: https://wowchemy.com/docs/managing-content/
 
-title: "A Zen month"
+title: "A month of Zen"
 subtitle: ""
 summary: "I finally got around to configuring my tiny Corne-ish Zen r3 keyboard.
           This is a discussion of the advantages, challenges, ease-of-use, etc.
