@@ -61,7 +61,8 @@ TODO: picture of the case and pouches
 
 With the case, the mass to carry is 406 grams. Total! Each side weighs only
 around 138 grams, which is super impressive considering that there is a PCB and
-some solder (TODO: mass of solder?) in there.
+a decent amount of solder in there (every solder-point is a little sphere of
+metal).
 
 And of course, the colour is really pretty. I went for the blue anodised edition
 and it looks super nice, especially when paired with black keycaps.
@@ -96,4 +97,9 @@ TODO
 
 The keyboard comes with a default layout out-of-the-box (ootb), but it is a US
 layout with numbers on one layer, and Bluetooth configuration on a second one.
+This is problematic for two reasons: 1) I type in languages other than English,
+and so need access to things like accents, more letters (e.g. 'ø'), etc. and 2)
+I have no idea where symbols are on a US/ANSI layout. For example, on a Danish
+layout (which is what I'm used to), ':' is typed by pressing `Shift`+`.` and ';'
+is typed by pressing `Shift`+`,`.
 
