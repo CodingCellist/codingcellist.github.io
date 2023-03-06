@@ -115,28 +115,6 @@ Danish layout, ':' is typed by pressing `Shift`+'.' and ';' is typed by pressing
 `Shift`+','. So the first thing to do was to work out some layouts and layers
 which would (hopefully) make sense to me.
 
-<!-- TODO: move to a different blog post, if discuss at all?
-I first encountered thumbkeys via the
-[Dygma Raise](https://dygma.com/products/dygma-raise)
-keyboard and have been a complete convict ever since. Once you get over the
-initial learning bump, using your two strongest fingers for more than just the
-spacebar is fantastic! As such, I wanted to move most functionality to the
-thumb-keys.
-
-It seemed sensible to have the default layer, which is the one the keyboard uses
-when you turn it on, be the QWERTY-layer. To not have to re-learn too many
-things, I tried keeping most functionality roughly where I would expect it to
-be: `Alt` and `Ctrl` are on the left side; and `AltGr` and space are on the
-right (I almost exclusively type space with my right thumb). Next, a bit of
-layer trickery and thumbkey use: the leftmost thumbkey (the hardest to reach for
-me) was assigned to "next layer" and "previous layer" (more on this in a second)
-since that is functionality I will always deliberately be seeking out and so
-I wanted it somewhere Some other parts
-were transferred from my Raise layout: the large left thumb-key was assigned to
-`Shift` and Windows (aka. Super or GUI), and the large right thumb-key was
-assigned to return and right-`Ctrl`.
--->
-
 What I ended up with was a default layer containing the QWERTY keys, along with
 some tap-dances for switching layers and some symbols I wanted more easily
 accessible, and mod-taps for things like `Esc`/`Ctrl`, space/`AltGr`, etc. I
@@ -145,7 +123,7 @@ a layer I often need to access. Which side to place the functionality on was
 chosen based on a combination of where I would expect to find them (muscle
 memory) and my current Dygma Raise layout:
 
-![a visualisation of the QWERTY-layout](/media/zen-qwerty-layer.png)
+![A visualisation of the QWERTY-layer](/media/zen-qwerty-layer.png)
 
 The "function- and number-keys" layer took a bit more work. Not making
 matters easier for myself, I have become used to the i3 tiling window manager,
@@ -155,7 +133,13 @@ experimentation, I settled on a layout with the numbers on the home row (with
 tap-dances for the respective function-keys), the i3 keys on the top row, and
 the symbols I would normally type using `AltGr`+\<number\> on the bottom row:
 
-![a visualisation of the FNum-layout](/media/zen-fnum-layer.png)
+![A visualisation of the FNum-layer](/media/zen-fnum-layer.png)
 
-TODO
+Finally, since the Zen is a wireless Bluetooth keyboard, I needed a way to
+control this. I decided to put the Bluetooth controls along the top row of my
+third layer, in order to also make space for a media-and-navigation-keys hub on
+the lower two rows. The "Clear Bluetooth" button was placed in the bottom left
+to avoid accidental presses:
+
+![A visualisation of the BTNav-layer](/media/zen-btnav-layer.png)
 
