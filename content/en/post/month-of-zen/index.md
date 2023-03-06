@@ -55,47 +55,51 @@ you're on the go a lot!
 
 ## General overview
 
-The first thing I noticed was that this board is _tiny_. I knew it was a
-low-profile 42-key keyboard, but I was still surprised at just how small it is!
-Each side has 3 rows of 6 keys, arranged in a column-staggered layout, as well
-as 3 thumb-keys, which are arranged in a small arc.
+The first thing I noticed was that this keyboard is _tiny_. I knew it was a
+low-profile 42-key compact thingy, but I was still surprised at just how small
+it is! It came in a nice carrying case (superb for taking it with you to work,
+cafés, or whatnot) and even with the case it takes up less space than the case
+for my Bose QC-25s:
 
-TODO: picture with dimensions -TODO!!
+TODO: picture (album?) of the cases -iCloud
 
-The keyboard came in a nice carrying case, which is superb for taking it with
-you to work, cafés, or whatnot, and it takes up less space than the case my Bose
-QC-25s came in. Each half of the keyboard also has its own little protective
-fabric bag, making the product feel extremely premium and thought-through:
+Each half of the keyboard also has its own little protective fabric bag, making
+the product feel extremely premium and thought-through:
 
-TODO: picture of the case and pouches -iCloud
+TODO: picture of the pouches -iCloud
 
-With the case, the mass to carry is 406 grams. Total! Each side weighs only
-around 138 grams, which is super impressive considering that there is a PCB and
-a decent amount of solder in there (every solder-point is a little sphere of
-metal, and metal is dense).
+In terms of the keyboard itself, each side has 3 rows of 6 keys, arranged in a
+column-staggered layout, as well as 3 thumb-keys, which are arranged in a small
+arc. The case is made of machined aluminium, which both feels and looks amazing.
+I went for the blue anodised edition and it looks very nice, especially when
+paired with black keycaps:
 
-And of course, the colour is really pretty. I went for the blue anodised edition
-and it looks super nice, especially when paired with black keycaps.
+TODO: picture of the board -iCloud
 
-TODO: another picture of the board -iCloud
+And just because I was curious, I decided to weigh the board. With the case, the
+mass is 406 grams. Total! Each side weighs only around 138 grams, which is super
+impressive considering that there is a PCB and a decent amount of solder in
+there (every solder-point is a little sphere of metal, and metal is dense).
+
+TODO: picture with scale -TODO!!
 
 
 ## Configuration
 
 As I mentioned at the start, configuration is a huge part of making a keyboard
 this small useable. There are no number keys or function keys, and things like
-space, shift, escape, and enter/return are somewhere on the thumb-keys. This
+space, `Shift`, `Escape`, and enter/return are somewhere on the thumb-keys. This
 means you need to use _layers_.
 
-### Layers
+### Layers?
 
 Layers can seem like a foreign concept at first, but I've found they quickly
-become intuitive: on your current keyboard, you likely have at least 1, maybe 2,
-layers! When you need to type upper-case letters, you hold down the 'Shift' key,
+become intuitive. On your current keyboard, you likely have at least 1, maybe 2,
+layers: when you need to type upper-case letters, you hold down the `Shift` key,
 thereby changing _layers_ to one where the keys on the keyboard now output their
 upper-case versions. And if you have a laptop, chances are that the function
 keys work as either function keys or media keys (volume, brightness, etc.)
-depending on whether you hold down a 'Fn' key or not. This is also a separate
+depending on whether you hold down a `Fn` key or not. This is also a separate
 layer, just one which doesn't affect most of the other keys on the keyboard.
 
 So chances are you already use layers on a daily basis when interacting with a
@@ -147,9 +151,9 @@ The "function- and number-keys" layer took a bit more work. Not making
 matters easier for myself, I have become used to the i3 tiling window manager,
 meaning there is some extra functionality for moving between workspaces which I
 thought it would be really nice to have on dedicated keys. After some
-experimentation, I settled on a layout with the numbers on the home row, the i3
-keys on the top row, and the symbols I would normally type using
-`AltGr`+\<number\> on the bottom row:
+experimentation, I settled on a layout with the numbers on the home row (with
+tap-dances for the respective function-keys), the i3 keys on the top row, and
+the symbols I would normally type using `AltGr`+\<number\> on the bottom row:
 
 ![a visualisation of the FNum-layout](/media/zen-fnum-layer.png)
 
