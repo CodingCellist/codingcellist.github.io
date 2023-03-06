@@ -6,7 +6,7 @@ subtitle: ""
 summary: "I finally got around to configuring my tiny Corne-ish Zen r3 keyboard.
           This is a discussion of the advantages, challenges, ease-of-use, etc.
           of using a 42-key split keyboard. It's definitely portable and very
-          useable, but it's not all great."
+          useable, but there are some caveats."
 authors: [thomas-e-hansen]
 tags: [keyboards, ergonomics, zmk]
 categories: []
@@ -43,7 +43,7 @@ past month or so in order to find out. It's been really fun and interesting!
 
 ## You cannot buy this keyboard
 
-Let's get the important, unfortunate, and boring fact out of the way to begin
+Let's get the boring and unfortunate, but important fact out of the way to begin
 with: you cannot buy this keyboard. It was a group-buy (a sort of crowdfunding),
 which finished months ago, and Darryl, the inventor/maker of the Corne-ish Zen
 boards has stated that he wishes to move on to other things. So unless you find
@@ -107,13 +107,13 @@ computer, you just didn't know this functionality had a name  : )
 
 ### Layout
 
-The keyboard comes with a default layout out-of-the-box (ootb), but it is a US
-layout with numbers on one layer, and Bluetooth configuration on a second one.
-This is slightly problematic because the layout I am used to is Danish, which
-means I have no idea where symbols are on a US/ANSI layout. For example, on a
-Danish layout, ':' is typed by pressing `Shift`+'.' and ';' is typed by pressing
-`Shift`+','. So the first thing to do was to work out some layouts and layers
-which would (hopefully) make sense to me.
+The keyboard comes with some default layouts configured out-of-the-box (ootb),
+but it is a US layout with numbers on one layer, and Bluetooth configuration on
+a second one. This is slightly problematic because the layout I am used to is
+Danish, which means I have no idea where symbols are on a US/ANSI layout. For
+example, on a Danish layout, ':' is typed by pressing `Shift`+'.' and ';' is
+typed by pressing `Shift`+','. So the first thing to do was to work out some
+layouts and layers which would (hopefully) make sense to me.
 
 What I ended up with was a default layer containing the QWERTY keys, along with
 some tap-dances for switching layers and some symbols I wanted more easily
@@ -136,10 +136,25 @@ the symbols I would normally type using `AltGr`+\<number\> on the bottom row:
 ![A visualisation of the FNum-layer](/media/zen-fnum-layer.png)
 
 Finally, since the Zen is a wireless Bluetooth keyboard, I needed a way to
-control this. I decided to put the Bluetooth controls along the top row of my
+control that. I decided to put the Bluetooth controls along the top row of my
 third layer, in order to also make space for a media-and-navigation-keys hub on
 the lower two rows. The "Clear Bluetooth" button was placed in the bottom left
 to avoid accidental presses:
 
 ![A visualisation of the BTNav-layer](/media/zen-btnav-layer.png)
+
+Configuring the Zen's layouts requires modifying the layout file used when
+building its ZMK firmware and then flashing the new firmware to the keyboard
+(Darryl has a
+[video on how to]()).
+It took me a bit of setting up and getting used to, but then it went okay. If
+you are familiar with GitHub, GitHub Actions, and `git`, you'll be fine. If not,
+ZMK _does_ provide an
+[Initial Setup guide](),
+which is pretty decent. _However,_ compared to something like Dygma or Kinesis,
+where the configuration is done via a Graphical User Interface (GUI), it is a
+_much_ higher barrier to entry. But hey, at least ZMK _can_ be configured and
+_does_ work.
+
+## Using the Zen
 
