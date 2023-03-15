@@ -15,6 +15,42 @@ lastmod:
 featured: false
 draft: false
 
+# Album image descriptions
+# Annoyingly, this doesn't support the `alt_text` field, so I'm using captions
+# instead
+gallery_item:
+  - album: zen-case
+    image: front.jpg
+    caption: "An image of the Zen's carrying case lying flat next to a Bose
+              case. The Zen's case is about 4 cm shorter."
+  - album: zen-case
+    image: side.jpg
+    caption: "An image of the Zen's carrying case lying on its side next to a
+              Bose case. The Zen's case is about 4 cm shorter."
+
+  - album: zen-measured
+    image: ruler-left.jpg
+    caption: "An image of the right half of the Zen with a ruler lying to the
+              left of it. There are green lines added to the image to help show
+              the height being around 9.5cm."
+  - album: zen-measured
+    image: ruler-right.jpg
+    caption: "An image of the right half of the Zen with a ruler lying to the
+              right of it. There are green lines added to the image to help show
+              the max height being around 9.5cm and the min height being around
+              5.7cm."
+  - album: zen-measured
+    image: ruler-top.jpg
+    caption: "An image of the right half of the Zen with a ruler lying above it.
+              There are green lines added to the image to help show the length
+              being around 13.7cm."
+  - album: zen-measured
+    image: ruler-under.jpg
+    caption: "An image of the right half of the Zen with a ruler lying
+              physically underneath it. Although the rounded edges and shadows
+              make it difficult to see, the board seems to have a length of
+              around 13.7cm."
+
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
 # Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
@@ -40,12 +76,13 @@ does that work? How do you manage without? And is it actually practical to use
 such a small keyboard for everyday work? I've been using mine everyday for the
 past month or so in order to find out. It's been really fun and interesting!
 
+{{< toc >}}
 
 ## You cannot buy this keyboard
 
-Let's get the boring and unfortunate, but important fact out of the way to begin
-with: you cannot buy this keyboard. It was a group-buy (a sort of crowdfunding),
-which finished months ago, and Darryl, the inventor/maker of the Corne-ish Zen
+Let's get the boring and unfortunate, but important disclaimer out of the way:
+you cannot buy this keyboard. It was a group-buy (a sort of crowdfunding), which
+finished almost a year ago, and Darryl, the inventor/maker of the Corne-ish Zen
 boards has stated that he wishes to move on to other things. So unless you find
 one on the second-hand market, you unfortunately cannot buy this keyboard.
 
@@ -61,27 +98,33 @@ it is! It came in a nice carrying case (superb for taking it with you to work,
 cafés, or whatnot) and even with the case it takes up less space than the case
 for my Bose QC-25s:
 
-TODO: picture (album?) of the cases -iCloud
+{{< gallery album="zen-case" >}}
+<br/>
 
 Each half of the keyboard also has its own little protective fabric bag, making
 the product feel extremely premium and thought-through:
 
-TODO: picture of the pouches -iCloud
+![An image of two fabric pouches on a table. The pouches have a stylized "Corne-Ish Zen" printed on them.](/media/zen-pouch-horizontal.jpg)
 
 In terms of the keyboard itself, each side has 3 rows of 6 keys, arranged in a
-column-staggered layout, as well as 3 thumb-keys, which are arranged in a small
-arc. The case is made of machined aluminium, which both feels and looks amazing.
-I went for the blue anodised edition and it looks very nice, especially when
-paired with black keycaps:
+column-staggered layout, along with 3 thumb-keys, which are arranged in a small
+arc. There is a little e-ink display for showing the battery level, Bluetooth
+connection, and current layer. And the case is made of machined aluminium, which
+both feels and looks amazing! I went for the blue anodised edition and it looks
+very nice, especially when paired with black keycaps:
 
-TODO: picture of the board -iCloud
+![An image of the two halves of the Zen keyboard. Each half is a mirror of the other.](/media/zen-deployed.jpg)
+
+Roughly measured, the Zen's height, length, and width is around 9.5cm, 13.7cm,
+and 1.9cm (1.4cm without keycaps) respectively.
+
+{{< gallery album="zen-measured" >}}
+<br/>
 
 And just because I was curious, I decided to weigh the board. With the case, the
 mass is 406 grams. Total! Each side weighs only around 138 grams, which is super
 impressive considering that there is a PCB and a decent amount of solder in
 there (every solder-point is a little sphere of metal, and metal is dense).
-
-TODO: picture with scale -TODO!!
 
 
 ## Configuration
