@@ -146,11 +146,11 @@ to avoid accidental presses:
 Configuring the Zen's layouts requires modifying the layout file used when
 building its ZMK firmware and then flashing the new firmware to the keyboard
 (Darryl has a
-[video on how to]()).
+[video on how to](https://www.youtube.com/watch?v=ksDHHajTKoQ?t=725)).
 It took me a bit of setting up and getting used to, but then it went okay. If
 you are familiar with GitHub, GitHub Actions, and `git`, you'll be fine. If not,
 ZMK _does_ provide an
-[Initial Setup guide](),
+[Initial Setup guide](https://zmk.dev/docs/user-setup),
 which is pretty decent. _However,_ compared to something like Dygma or Kinesis,
 where the configuration is done via a Graphical User Interface (GUI), it is a
 _much_ higher barrier to entry. But hey, at least ZMK _can_ be configured and
