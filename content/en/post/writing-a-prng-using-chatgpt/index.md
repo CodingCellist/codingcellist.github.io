@@ -10,7 +10,7 @@ summary: "What do you do if you need a pseudorandom number generator but don't
 authors: [thomas-e-hansen]
 tags: [chapgpt, idris2, randomness]
 categories: []
-date: 2023-03-15
+date: 2023-03-16
 lastmod:
 featured: false
 draft: false
