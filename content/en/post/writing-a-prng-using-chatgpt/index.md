@@ -75,7 +75,7 @@ it. It turned out _pretty good:_
 > function to generate a random value from that generator:
 
 Sensible first response, but it has the problem with using `IO`. Let's try being
-more specific.
+more specific:
 
 > [TH] Ah but this requires using IO. I am trying to write a pure library, where
 > all the functions will be implemented from scratch. Is this something you can
@@ -326,7 +326,7 @@ Fine, but I'd like to be more copy-pasteable:
 
 Now that's nice! I'm not super comfortable with the phrase about taking full
 responsibility for the implementation and any errors though. This code should
-_definitely_ not be used for anything serious ^^;;
+_definitely_ not be used for anything serious!...
 
 > [TH] Could you please add a sentence to the disclaimer explaining that this
 > library may not be robust and so shouldn't be used for serious cryptographic
@@ -360,17 +360,17 @@ statistically more likely when generating the next word).
 >
 > ```idris
 > module Random
-
+>
 > import Data.Bits
 > import Data.Word
-
+>
 > -- Define the state of the generator
 > data PRNGState = MkPRNGState Bits32
-
+>
 > -- Define the compression function
 > compress : Bits32 -> Bits32 -> Bits32
 > compress state input = (state `shl` 1) `xor` input
-
+>
 > -- Define the random function
 > random : PRNGState -> (Bits32, PRNGState)
 > random (MkPRNGState state) =
@@ -441,17 +441,17 @@ those. That should probably be cited:
 Now here's where I got over-excited and forgot what I was dealing with: that
 link is plausible and so I happily put it in the code. I have since reverted
 that commit because the link doesn't actually point anywhere. The user and repo
-are real, but the path to the file is wrong. The correct link is
+are real, but the path to the file is wrong. The correct link is:
 
 [https://github.com/MersenneTwister-Lab/TinyMT/blob/master/tinymt/tinymt32.h](https://github.com/MersenneTwister-Lab/TinyMT/blob/master/tinymt/tinymt32.h)
 
-However, this is still completely wrong, because the file _doesn't contain the
+However, this is still wrong, because it turns out the file _doesn't contain the
 constants_. So the reference is made up, insofar as it doesn't contain what
 ChatGPT claims it does, and where the magic constants actually are taken from is
 anyone's guess...
 
-Remember how I said `shl` doesn't exist? Why refactor manually when you can ask
-ChatGPT to do so?
+Anyway, remember how I said `shl` doesn't exist? Why refactor manually when you
+can ask ChatGPT to do so?
 
 > [TH] And another minor fix: In Idris the function is actually shiftL not shl.
 > Could you please fix this?
@@ -488,7 +488,7 @@ ChatGPT to do so?
 
 Here it hasn't actually "learnt" anything, it has just taken my correction as
 the ground truth. Which is fine for corrections in programs, but it does assume
-the correction you give is actually correct.
+the correction you've given ChatGPT is actually correct.
 
 At this stage, I was enthusing with a friend about the generated results. I was
 thoroughly impressed that it could write Idris (subject to some corrections, but
@@ -580,16 +580,17 @@ fact that I am not a cryptography expert:
 >
 > Let me know if you need any further assistance!
 
-That isn't quite what I asked: it has specified that _ChatGPT_ is not a
-cryptography expert, not that I, Thomas, am not. And for some reason it seems to
-have lost the ability to use markdown formatting, 'DISCLAIMER' should be a
-heading. But it still works, I just need to rework it a tiny bit.
+That wasn't quite what I asked: it had specified that _ChatGPT_ wasn't a
+cryptography expert, not that I, Thomas, was not. And for some reason it seems
+to have lost the ability to use markdown formatting: 'DISCLAIMER' should be a
+heading. But it still works, I just need to reword it a tiny bit.
 
 I tried to get it to improve my working version of the code, but it struggled
 with names, `let`-bindings, and `where`-blocks. It mostly ran in circles or
-changed the code in addition to renaming variables. Not super interesting.
+changed the code when it was meant to only be renaming variables. It's not super
+interesting to look at...
 
-{{< spoiler text="But if you're interested, expand this to see the text." >}}
+{{< spoiler text="But if you're interested, expand this to see the exchange." >}}
 
 > [TH] Here is the completed code. Could you please extract the constants to
 > variables with appropriate types and commens?
@@ -778,9 +779,9 @@ It would be really nice if this could be total though.
 > generates a random number and then recursively calls itself with the remaining
 > number of random numbers to generate, decrementing the `Nat` argument by one.
 
-Isn't that cool?? It not only understood the pattern-matching, it even included
-the `_` wildcard for the first case, and used a readable `let`-binding for the
-recursive one!
+Isn't that cool?? It not only understood the pattern-matching on `Nat`s and how
+it affects the number, it even included the `_` wildcard for the first case, and
+used a readable `let`-binding for the recursive one!
 
 Going mad with power, I decided to try to teach it linearity. Unfortunately that
 didn't work:
@@ -1010,6 +1011,12 @@ since I do not have the knowledge to confirm its correctness and/or robustness,
 but it saved me a lot of time and was a lot more fun than writing the code by
 hand.
 
+For the syntax errors, a really interesting question is what would happen if
+someone hooked ChatGPT up to the type-checker so that it had access to the
+typing information and error messages as part of its output-generation? However,
+that sounds very much like a research project on its own, and I don't need more
+of those... If anyone has a go at it though, please let me know what happens!
+
 Finally, it costs nothing to be polite. ChatGPT was extremely helpful and
 patient after all:
 
@@ -1018,7 +1025,8 @@ patient after all:
 > [ChatGPT] You're very welcome! It was my pleasure to help. If you have any
 > more questions in the future, don't hesitate to ask.
 
-Thanks for reading, I hope it was interesting!  : )
+And that concludes this little adventure. Thanks for reading, I hope it was
+interesting!  : )
 
 
 {{< spoiler text="Expand for screenshots of the conversation. The text in this post is a transcript." >}}
