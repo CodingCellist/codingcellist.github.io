@@ -110,8 +110,8 @@ In terms of the keyboard itself, each side has 3 rows of 6 keys, arranged in a
 column-staggered layout, along with 3 thumb-keys, which are arranged in a small
 arc. There is a little e-ink display for showing the battery level, Bluetooth
 connection, and current layer. And the case is made of machined aluminium, which
-both feels and looks amazing! I went for the blue anodised edition and it looks
-very nice, especially when paired with black keycaps:
+both looks and feels premium! Mine is a blue anodised version and I think it
+looks _pretty good_, especially when paired with black keycaps:
 
 ![An image of the two halves of the Zen keyboard. Each half is a mirror of the other.](/media/zen-deployed.jpg)
 
@@ -121,10 +121,10 @@ and 1.9cm (1.4cm without keycaps) respectively.
 {{< gallery album="zen-measured" >}}
 <br/>
 
-And just because I was curious, I decided to weigh the board. With the case, the
-mass is 406 grams. Total! Each side weighs only around 138 grams, which is super
-impressive considering that there is a PCB and a decent amount of solder in
-there (every solder-point is a little sphere of metal, and metal is dense).
+And just because I was curious, I decided to weigh the board. **With the
+carrying case,** the mass is 406 grams. Total! Each side weighs only around 138
+grams, which is super impressive considering the aluminium casing and that there
+is an entire PCB with solder and switches in there!
 
 
 ## Configuration
@@ -150,54 +150,59 @@ computer, you just didn't know this functionality had a name  : )
 
 ### Layout
 
-The keyboard comes with some default layouts configured out-of-the-box (ootb),
-but it is a US layout with numbers on one layer, and Bluetooth configuration on
-a second one. This is slightly problematic because the layout I am used to is
-Danish, which means I have no idea where symbols are on a US/ANSI layout. For
-example, on a Danish layout, ':' is typed by pressing `Shift`+'.' and ';' is
-typed by pressing `Shift`+','. So the first thing to do was to work out some
-layouts and layers which would (hopefully) make sense to me.
+The keyboard comes preconfigured with a layout and layers out-of-the-box (ootb),
+but the configuration is a default layer containing a US layout, numbers on a
+second layer, and Bluetooth configuration on the final one. This is slightly
+problematic because the layout I am used to is Danish, which means I have no
+idea where symbols are on a US/ANSI layout. For example, on a Danish layout, ':'
+is typed by pressing `Shift` + '.' and ';' is typed by pressing `Shift` + ','.
+So the first thing to do was to work out some layouts and layers which would
+(hopefully) make sense to me.
 
-What I ended up with was a default layer containing the QWERTY keys, along with
-some tap-dances for switching layers and some symbols I wanted more easily
-accessible, and mod-taps for things like `Esc`/`Ctrl`, space/`AltGr`, etc. I
-also created a layer-tap for backspace and my function+number layer, since it is
-a layer I often need to access. Which side to place the functionality on was
-chosen based on a combination of where I would expect to find them (muscle
-memory) and my current Dygma Raise layout:
+After some experimentation, I ended up with 3 layers:
+
+1. A default layer containing the QWERTY keys, along with some tap-dances for
+   switching layers and some symbols I wanted more easily accessible, and
+   mod-taps for things like `Esc`/`Ctrl`, space/`AltGr`, etc. I also created a
+   layer-tap for backspace and my function+number layer, since it is a layer I
+   often need to access. Which side to place the functionality on was chosen
+   based on a combination of where I would expect to find them (muscle memory)
+   and my current Dygma Raise layout:
 
 ![A visualisation of the QWERTY-layer](/media/zen-qwerty-layer.png)
 
-The "function- and number-keys" layer took a bit more work. Not making
-matters easier for myself, I have become used to the i3 tiling window manager,
-meaning there is some extra functionality for moving between workspaces which I
-thought it would be really nice to have on dedicated keys. After some
-experimentation, I settled on a layout with the numbers on the home row (with
-tap-dances for the respective function-keys), the i3 keys on the top row, and
-the symbols I would normally type using `AltGr`+\<number\> on the bottom row:
+2. A "function- and number-keys" layer, which took a bit more work. Not making
+   matters easy for myself, I have become used to the i3 tiling window manager,
+   meaning there is some extra functionality for moving between workspaces which
+   I thought it would be really nice to have on dedicated keys.  I ended up with
+   the numbers on the home row (with tap-dances for the respective
+   function-keys), the i3 keys on the top row, and the symbols I would normally
+   type using `AltGr`+\<number\> on the bottom row:
 
 ![A visualisation of the FNum-layer](/media/zen-fnum-layer.png)
 
-Finally, since the Zen is a wireless Bluetooth keyboard, I needed a way to
-control that. I decided to put the Bluetooth controls along the top row of my
-third layer, in order to also make space for a media-and-navigation-keys hub on
-the lower two rows. The "Clear Bluetooth" button was placed in the bottom left
-to avoid accidental presses:
+3. A Bluetooth and navigation layer. The Zen is a wireless Bluetooth keyboard,
+   and I hadn't put arrow keys and friends anywhere yet. The Bluetooth controls
+   ended up along the top row of my third layer, in order to make space for the
+   media-and-navigation-keys hub on the lower two rows. The "Clear Bluetooth"
+   button was placed in the bottom left to avoid accidental presses:
 
 ![A visualisation of the BTNav-layer](/media/zen-btnav-layer.png)
+
+### Applying the layout
 
 Configuring the Zen's layouts requires modifying the layout file used when
 building its ZMK firmware and then flashing the new firmware to the keyboard
 (Darryl has a
 [video on how to](https://www.youtube.com/watch?v=ksDHHajTKoQ?t=725)).
 It took me a bit of setting up and getting used to, but then it went okay. If
-you are familiar with GitHub, GitHub Actions, and `git`, you'll be fine. If not,
-ZMK _does_ provide an
-[Initial Setup guide](https://zmk.dev/docs/user-setup),
+you are familiar with GitHub, GitHub Actions, and `git`, you'll likely be fine.
+If not, ZMK _does_ provide an
+[Initial Setup Guide](https://zmk.dev/docs/user-setup),
 which is pretty decent. _However,_ compared to something like Dygma or Kinesis,
 where the configuration is done via a Graphical User Interface (GUI), it is a
-_much_ higher barrier to entry. But hey, at least ZMK _can_ be configured and
-_does_ work.
+_much_ higher barrier to entry. Anyway. With the keyboard configured, how is it
+actually to use?
 
 ## Using the Zen
 
