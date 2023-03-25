@@ -29,14 +29,14 @@ projects: []
 ---
 
 Glove80 is an ergonomic split contoured keyboard designed and produced by
-[MoErgo](https://moergo.com). I backed the Kickstarter just over a year ago and
-got the parcels yesterday afternoon! I haven't yet had a chance to look at them,
-so without further ado, let's see how it is!
+[MoErgo](https://moergo.com).
+I backed the Kickstarter just over a year ago and got the parcels yesterday
+afternoon! I haven't yet had a chance to look at them, so without further ado,
+let's see how it is!
 
 The box is not very tall at only 6.8 cm! That's promising for portability, which
 is one of their selling points. Also, having seen some prototype pictures, it is
 really cool to see the box in person!
-
 
 Opening up the middle "sub-box" there are some keycaps in reusable containers
 (packed _tight_ -- they almost jump out when opened). In these we get:
@@ -45,22 +45,20 @@ Opening up the middle "sub-box" there are some keycaps in reusable containers
 
   * Danish/Nordic specific keycaps, as well as German and British specifics.
       This is great for those of us who don't type on a US/ANSI layout!
-
-  * However, there seems to be missing a: `2 " @` key, `4 ¤ $` key, and `3 # £`
-      key (this one isn't a big deal, since the default 3 is `3 #`, which is
-      close enough for me).
-      ![a picture of many keycaps laid out on a box, none of them match the previously mentioned keys](TODO)
-    - I'm mostly miffed about the `2 " @`, since both '"' and '@' are commonly
-        used characters, and it's different compared to US/ANSI `2 @`...
+      ![a picture of 32 keycaps including 'Æ', 'Ö', 'Å', 'AltGr', and various other locale-specific keys](TODO)
 
 Anyway, on to unpacking the actual keyboard? Not quite yet, because it turns out
 there are hidden compartments inside each half sub-box! Here we find:
+  * Apple-specific keycaps.
+      ![a picture of a zip-lock bag with 'Option' and 'Command' keycaps](TODO)
   * A USB-A to USB-C cable.
   * Threads, bolts, and mini-wrench for tenting by increasing the leg lengths.
   * What are presumably tenting spacers, some extra rubber feet, and a keycap
     puller.
+      ![a picture of the items mentioned above](TODO)
   * And a USB-A to split USB-C cable, for attaching the two halves to the same
       USB-A port on your PC.
+      ![a picture of the USB-A to split USB-C cable](TODO)
 
 And now the main thing, the keyboard! The first words that spring to mind are
 "compact" and "elegant". I think the keyboard looks amazing in white, looking
@@ -68,6 +66,8 @@ neat and refined with sharp edges nicely contrasting the smooth look of the
 keywell and palm rest. I recently visited the Vitra Design Museum, and in my
 opinion the Glove80 looks like something that could fit right in amongst the
 other stuff there.
+
+![a picture showing the two halves of the Glove80 next to each other](TODO)
 
 I travel a lot, usually taking my keyboard with me, including carrying it to and
 from work in my backpack, so portability is very important for me. How much does
