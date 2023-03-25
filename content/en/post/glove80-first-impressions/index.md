@@ -43,6 +43,17 @@ projects: []
     puller; USB A-to-2×C
 - Keyboard:
   * Compact and elegant.
+  * Portability is very important for me.
+    - 278g per side
+    - to help contextualise that, Zen is 138g per side, a pair of Bose QC25s is
+        450g, and the left and right halves of an ISO Dygma Raise is roughly
+        600g and 700g respectively! No wonder my shoulders hated me back when I
+        was lugging that around...
+    - When comparing with the Zen, it is worth remembering that the Glove80 has
+        almost twice as many keys as the Zen per side (40 vs 21), so having the
+        keyboard's mass be almost exactly twice seems fair enough (impressive
+        even, since the Glove is made of plastic, whereas the Zen has an
+        aluminium top-plate.
   * Decently tented without adjustment. This was mentioned in the FAQ or Discord
       at some point, but again, seeing it in person is different.
   * Hand size: ~17cm from base of palm to tip of middle finger, 13.5cm from base
