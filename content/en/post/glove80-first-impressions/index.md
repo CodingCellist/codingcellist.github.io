@@ -7,7 +7,7 @@ summary: ""
 authors: [thomas-e-hansen]
 tags: [ergonomics, keyboards, glove80, review]
 categories: []
-date: 2023-03-25
+date: 2023-03-26
 lastmod:
 featured: false
 draft: false
@@ -30,8 +30,8 @@ projects: []
 
 Glove80 is an ergonomic split contoured keyboard designed and produced by
 [MoErgo](https://moergo.com).
-I backed the Kickstarter just over a year ago and got the parcels yesterday
-afternoon! I haven't yet had a chance to look at them, so without further ado,
+I backed the Kickstarter just over a year ago and got the parcels Friday
+afternoon. I haven't yet had a chance to look at them, so without further ado,
 let's see how it is!
 
 The box is not very tall at only 6.8 cm! That's promising for portability, which
@@ -74,7 +74,7 @@ from work in my backpack, so portability is very important for me. How much does
 it weigh? 278g per side, 556 grams total. That's highly respectable for a
 keyboard that size! For a bit of context, the Corne-ish Zen weighs 138g per
 side, a pair of Bose QC25s weigh 450g (case included), and the left and right
-halves of an ISO Dygma Raise is roughly 600g and 700g respectively! (No wonder
+halves of an ISO Dygma Raise is roughly 600g and 700g respectively. (No wonder
 my shoulders hated me back when I was lugging that around...)
 
 When comparing to the Zen, it is worth remembering that the Glove80 has almost
