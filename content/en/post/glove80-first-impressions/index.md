@@ -12,6 +12,40 @@ lastmod:
 featured: false
 draft: false
 
+# Album image descriptions
+# Annoyingly, this doesn't support the `alt_text` field, so I'm using captions
+# instead
+gallery_item:
+  - album: glove80-box
+    image: 01-box-height.png
+    caption: "A photo of the cardboard box with a measuring tape showing a height of 6.5cm."
+  - album: glove80-box
+    image: 02-box-open.png
+    caption: "A photo of the carboard box opened. There are 3 compartments, 2
+              large ones, one for each half of the keyboard, and a smaller
+              compartment at the top for the extra keycaps."
+
+  - album: glove80-zen-bose-dygma-scales
+    image: 01-glove80-weight-l.png
+    caption: "A photo of the left half of the Glove80 on top of a scale showing
+              278 grams."
+  - album: glove80-zen-bose-dygma-scales
+    image: 02-glove80-weight-r.png
+    caption: "A photo of the right half of the Glove80 on top of a scale showing
+              278 grams."
+  - album: glove80-zen-bose-dygma-scales
+    image: 03-zen-weight-l.png
+    caption: "A photo of the left half of the Corne-ish Zen on top of a scale
+              showing 128 grams."
+  - album: glove80-zen-bose-dygma-scales
+    image: 04-raise-weight-l.png
+    caption: "A photo of the left half of an ISO-layout Dygma Raise on top of a
+              scale showing 602 grams."
+  - album: glove80-zen-bose-dygma-scales
+    image: 05-raise-weight-r.png
+    caption: "A photo of the right half of an ISO-layout Dygma Raise on top of a
+              scale showing 697 grams."
+
 # Featured image
 # To use, add an image named `featured.jpg/png` to your page's folder.
 # Focal points: Smart, Center, TopLeft, Top, TopRight, Left, Right, BottomLeft, Bottom, BottomRight.
@@ -38,27 +72,29 @@ The box is not very tall at only 6.8 cm! That's promising for portability, which
 is one of their selling points. Also, having seen some prototype pictures, it is
 really cool to see the box in person!
 
+{{< gallery album="glove80-box" >}}
+
 Opening up the middle "sub-box" there are some keycaps in reusable containers
 (packed _tight_ -- they almost jump out when opened). In these we get:
   * Some fun faces (great choice of typeface ^^)
-      ![a picture of 2 keycaps with 'Ö' and 'Ü' on them](TODO)
+      ![a picture of 2 keycaps with 'Ö' and 'Ü' on them, looking like a surprised and smiling face respectively](/glove80-first-impressions/silly-keycap-faces.png)
 
   * Danish/Nordic specific keycaps, as well as German and British specifics.
       This is great for those of us who don't type on a US/ANSI layout!
-      ![a picture of 32 keycaps including 'Æ', 'Ö', 'Å', 'AltGr', and various other locale-specific keys](TODO)
+      ![a picture of 32 keycaps including 'Æ', 'Ö', 'Å', 'AltGr', and various other locale-specific keys](/glove80-first-impressions/nordic-de-gb-keycaps.png)
 
 Anyway, on to unpacking the actual keyboard? Not quite yet, because it turns out
 there are hidden compartments inside each half sub-box! Here we find:
   * Apple-specific keycaps.
-      ![a picture of a zip-lock bag with 'Option' and 'Command' keycaps](TODO)
+      ![a picture of a zip-lock bag with 'Option' and 'Command' keycaps](/glove80-first-impressions/apple-keycaps.png)
   * A USB-A to USB-C cable.
   * Threads, bolts, and mini-wrench for tenting by increasing the leg lengths.
   * What are presumably tenting spacers, some extra rubber feet, and a keycap
     puller.
-      ![a picture of the items mentioned above](TODO)
+      ![a picture of a white USB-A-to-C cable; a zip-lock bag with threads, bolts, and a mini-wrench; and a zip-lock bag with white cylinders with a screw-thread inside them, rubber feet on a sticker sheet, and a keycap puller](/glove80-first-impressions/goodies.png)
   * And a USB-A to split USB-C cable, for attaching the two halves to the same
       USB-A port on your PC.
-      ![a picture of the USB-A to split USB-C cable](TODO)
+      ![a picture of a braided cable with 1 USB-A to 2 split USB-C connectors](/glove80-first-impressions/split-cable.png)
 
 And now the main thing, the keyboard! The first words that spring to mind are
 "compact" and "elegant". I think the keyboard looks amazing in white, looking
@@ -67,7 +103,7 @@ keywell and palm rest. I recently visited the Vitra Design Museum, and in my
 opinion the Glove80 looks like something that could fit right in amongst the
 other stuff there.
 
-![a picture showing the two halves of the Glove80 next to each other](TODO)
+![a picture showing the two halves of the Glove80 next to each other](/glove80-first-impressions/both-halves.png)
 
 I travel a lot, usually taking my keyboard with me, including carrying it to and
 from work in my backpack, so portability is very important for me. How much does
@@ -77,6 +113,8 @@ side, a pair of Bose QC25s weigh 450g (case included), and the left and right
 halves of an ISO Dygma Raise is roughly 600g and 700g respectively. (No wonder
 my shoulders hated me back when I was lugging that around...)
 
+{{< gallery album="glove80-zen-bose-dygma-scales" >}}
+
 When comparing to the Zen, it is worth remembering that the Glove80 has almost
 twice as many keys as the Zen per side (40 vs 21), so having the keyboard's mass
 be nearly exactly twice seems fair enough (impressive even, since the Zen has an
@@ -85,6 +123,8 @@ aluminium top-plate, which presumably adds mass).
 Looking at the keyboard itself, it seems decently tented as part of the design;
 probably about 5° or so. This was mentioned in the FAQ or Discord at some point,
 since tenting improves ergonomics, but again, seeing it in person is different.
+
+![a picture of the left half taken from the front, showing that the keys slightly tilt to the left](/glove80-first-impressions/slight-tilt.png)
 
 Before "trying on" the keyboard, I first wanted to measure my hand size. This
 should hopefully help you, the reader, translate my observations to your own
@@ -128,6 +168,8 @@ also not not that ^^;;
 It was probably necessary to be able to fit the PCB for the index-finger column
 though; a necessary, and again, minor, evil.
 
+![a picture of the right half of the keyboard, showing a pointy corner protruding next to the closest thumbkey](/glove80-first-impressions/thumb-corner.png)
+
 In terms of physical properties, the keyboard feels very solid, with neither the
 palm rest nor main body deforming when trying to twist them. The keyboard is
 stable, even when "hammering" the keys as might happen when you need to step
@@ -141,8 +183,9 @@ They needed loosening with a screwdriver, presumably to keep things firmly in
 place during shipping, but after that they were easy to unscrew. The thumb
 screws are captive (and spring-loaded?) which is great since it means I don't
 have to worry about them suddenly disappearing into the ether. As is to be
-expected, the keyboard is a bit lighter without palm rests, but I think I'll be
-using mine with; it's the most comfortable configuration, in my opinion.
+expected, the keyboard is a bit lighter without palm rests, each side weighs
+around 229 grams without them. I think I'll be using mine with; it's the most
+comfortable configuration, in my opinion.
 
 
 ## Closing thoughts
