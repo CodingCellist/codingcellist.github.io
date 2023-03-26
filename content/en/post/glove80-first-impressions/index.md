@@ -73,6 +73,7 @@ is one of their selling points. Also, having seen some prototype pictures, it is
 really cool to see the box in person!
 
 {{< gallery album="glove80-box" >}}
+<br/>
 
 Opening up the middle "sub-box" there are some keycaps in reusable containers
 (packed _tight_ -- they almost jump out when opened). In these we get:
@@ -114,6 +115,7 @@ halves of an ISO Dygma Raise is roughly 600g and 700g respectively. (No wonder
 my shoulders hated me back when I was lugging that around...)
 
 {{< gallery album="glove80-zen-bose-dygma-scales" >}}
+<br/>
 
 When comparing to the Zen, it is worth remembering that the Glove80 has almost
 twice as many keys as the Zen per side (40 vs 21), so having the keyboard's mass
