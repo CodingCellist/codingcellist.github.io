@@ -223,7 +223,26 @@ LOG compile.casetree:5: simpleCase: Clauses:
 
 Sure, one used `a,b` and the other `x,y`, and there was some different numbering
 of the machine-generated names, but other than that the clauses were exactly the
-same. On one hand, this was good, because it meant `TTImp` was fine (I knew that
+same. I tried following what happened to the `clauses` returned by the
+`addErrorCase`, but this only confirmed that the runtime trees were the same:
+
+```idris
+Runtime tree for Issue2950.case block in mod:
+  case {arg:2} : Prelude.Basics.Bool of
+    Prelude.Basics.False => (prim__mod_Int {arg:1}[1] {arg:0}[0])
+    _ =>
+      (Builtin.idris_crash [__] "Unhandled input for Issue2950.case block in mod at Issue2950:9:1--9:52")
+```
+
+```idris
+Runtime tree for Prelude.Num.case block in mod:
+  case {arg:2} : Prelude.Basics.Bool of
+    Prelude.Basics.False => (prim__mod_Int {arg:1}[1] {arg:0}[0])
+    _ =>
+      (Builtin.idris_crash [__] "Unhandled input for Prelude.Num.case block in mod at Prelude.Num:132:3--134:40")
+```
+
+On one hand, this was good, because it meant `TTImp` was fine (I knew that
 the custom `mod` version gave the expected error message). On the other, this
 was annoying because it meant the next step was to try to debug the compiler to
 figure out how the completely fine `TTImp` got turned into not-completely-fine
