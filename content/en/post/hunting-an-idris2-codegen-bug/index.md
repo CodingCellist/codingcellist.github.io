@@ -54,8 +54,8 @@ and
 suggested ways to get more readable compiled code out (by compiling to NodeJS)
 and to potentially get a stack trace (by using Racket Scheme instead of Chez).
 With that, I was able to narrow down the problem to the built-in `mod` function.
-The `mod` function is part of the Idris2 prelude's `Integral` interface, and for
-all the definitions in the prelude is implemented along the following lines:
+The `mod` function is part of the Idris2 prelude's `Integral` interface, and is
+generally implemented along the following lines:
 
 ```idris
 Integral Int where
@@ -68,7 +68,7 @@ Integral Int where
          False => prim__mod_int x y
 ```
 
-This is, as you may have noticed, neither `total` nor `covering`. So what
+This, as you may have noticed, is neither `total` nor `covering`. So what
 happens with that? My first thought was to "fix" this by filling in the missing
 `True` case and adding a descriptive crash message in those cases. However,
 dunham figured out that the issue was actually more serious than that. He
@@ -110,11 +110,11 @@ call was wrong:
 
 That final line evaluating `Builtin-idris_crash 'erased`, followed by an error
 string, should just be the evaluation of `Builtin-idris_crash` _applied to_ that
-same error string. An extra `'erased` was getting in there somehow.
+very error string. An extra `'erased` was getting in there somehow.
 
 The first thing I did was to check whether this applied to just the Scheme
-backends, or every backend. Unfortunately, I could reproduce the erroneous code
-generation on both the NodeJS and the Reference-counting C (RefC) backends,
+backends, or every backend. Unfortunately, I _could_ reproduce the erroneous
+code generation on both the NodeJS and the Reference-counting C (RefC) backends,
 meaning the problem was universal.
 
 {{< spoiler text="Show NodeJS code" >}}
@@ -172,7 +172,17 @@ or just `compile` yielded anything. But I had the expected error string: it
 started with "Unhandled input". So armed with ripgrep and the Idris2 source, I
 tried searching for that string.
 
-This led me to `TTImp.ProcessDef.mkRunTime`, specifically lines 804-806:
+This led me to `TTImp.ProcessDef`. Ah. Going down a `TTImp` hole is rarely fun.
+`TTImp` is an abbreviation for "Type Theory with Implicits" and is the
+underlying representation of Idris2 code. As far as I understand, this is
+roughly the "assembly" of Idris -- all Idris code gets turned into `TTImp`,
+which is relatively simple while being powerful enough to express everything you
+need to reason about a complete Idris program. So yeah, digging through that
+stuff is seldom fun, but sometimes you just have to.
+
+The error message itself was part of a larger structure of local definitions (a
+massive `where`-block) and function calls, which quickly traced back to a
+function called `mkRunTime`, specifically lines 804-806:
 
 ```idris
            let clauses = case cov of
@@ -180,30 +190,23 @@ This led me to `TTImp.ProcessDef.mkRunTime`, specifically lines 804-806:
                               _ => clauses_init
 ```
 
-Going down a `TTImp` hole is rarely fun. `TTImp` is an abbreviation for "Type
-Theory with Implicits" and is the underlying representation of Idris2 code. As
-far as I understand, this is roughly the "assembly" of Idris -- all Idris code gets turned into
-`TTImp`, which is relatively simple while being powerful enough to express
-everything you need to reason about a complete Idris program. So yeah, digging
-through that stuff is seldom fun, but sometimes you just gotta.
-
-Coming back to the code I had found, it turned out the `addErrorCase` function
-was defined locally (in a `where`-block) to `mkRunTime`. Its function was to
-traverse the list of existing `case` clauses until it reached the final one,
-and then append a `MkCrash` clause. However, as you can see from the code
-above, there were no log messages being emitted when this was happening. Adding
-log messages involved dealing with `Core` (what the Idris compiler uses for
-state), which is always a bit delicate: there is _a lot_ going on, lots of
-datatypes in scope, lots of compiler and/or functional programming specific
-language in use, and lots of functions which manipulate these things in various
-ways, but I managed to add a new log topic: `compile.casetree.missing`.
+The `addErrorCase` function (one of the local definitions) traversed the list of
+existing `case` clauses until it reached the final one, and then append a
+`MkCrash` clause. However, as you can see from the code above, there were no log
+messages being emitted when this was happening. Adding some logging involved
+dealing with `Core` (what the Idris compiler uses for state), which is always a
+bit delicate: there is _a lot_ going on, lots of datatypes in scope, lots of
+compiler and/or functional programming specific language in use, and lots of
+functions which manipulate these things in various ways, but I managed to add a
+new log topic: `compile.casetree.missing`.
 
 This initially seemed to do nothing, until I realised that I needed to put the
 `%logging` pragmas around the interface implementation itself and then recompile
 Idris2 to see the effects. Otherwise, the compiler happily skipped over the
-already-compiled prelude and just compiled the file that was using it. Getting
-output only led to more confusion though. The log outputs of the file with a
-custom `mod` function and the prelude were the same!
+already-compiled prelude and just compiled the file that was using it.
+
+Getting output only led to more confusion though. The log outputs of the file
+with a custom `mod` function and the prelude were the same!
 
 ```idris
 LOG compile.casetree.missing:5: Adding uncovered error for [[a, b]: ($resolved2578 [__]@b[1] [__]@a[0] $resolved2456) = ($resolved55 a[0] b[1])]
@@ -223,7 +226,7 @@ LOG compile.casetree:5: simpleCase: Clauses:
 
 Sure, one used `a,b` and the other `x,y`, and there was some different numbering
 of the machine-generated names, but other than that the clauses were exactly the
-same. I tried following what happened to the `clauses` returned by the
+same! I tried following what happened to the `clauses` returned by the
 `addErrorCase`, but this only confirmed that the runtime trees were the same:
 
 ```idris
@@ -244,9 +247,10 @@ Runtime tree for Prelude.Num.case block in mod:
 
 On one hand, this was good, because it meant `TTImp` was fine (I knew that
 the custom `mod` version gave the expected error message). On the other, this
-was annoying because it meant the next step was to try to debug the compiler to
-figure out how the completely fine `TTImp` got turned into not-completely-fine
-Scheme (or JavaScript or C).
+was annoying because it meant the next step was to try to dig through the
+compiler to figure out how the completely fine `TTImp` got turned into
+not-completely-fine Scheme (or JavaScript or C).
+
 
 ### Digging through the compiler
 
