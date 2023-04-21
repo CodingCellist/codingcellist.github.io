@@ -6,7 +6,7 @@ subtitle: ""
 summary: "I accidentally discovered a bug in the Idris2 codegen. Let's explore
           how to narrow it down, and hopefully fix it."
 authors: [thomas-e-hansen]
-tags: [fp, idris2, debug]
+tags: [idris2, debug, functional programming]
 categories: []
 date: 2023-04-21
 lastmod:
