@@ -275,7 +275,7 @@ However, after removing the manually defined crashes to try to find the reason
 for the bug, he forgot to remove the `import Builtin` statement. Which fixed the
 issue. We spent a bit of time puzzling over whether we'd simply been using an
 old Idris build, or if there were some stale `.ttc` files, or something before
-dunham realised this. But now it all made sense!
+dunham realised this. But seeing the `import Builtin` change, it all made sense!
 
 
 ## The source of the problem
@@ -285,16 +285,81 @@ and throws an error if it isn't. That's kind of a core functionality part of a
 compiler. However, when handling the TTImp `case` stuff, we construct function
 calls directly, meaning we bypass all the checks and just go "in this case,
 generate a function call of name `idris_crash` with the following argument(s)"!
-However, since `Builtin` is never imported in `Prelude.Num`, we generate a
-compiled clause which doesn't actually have `idris_crash` in scope, leading to
-incorrect code generation.
+Since `Builtin` is never imported in `Prelude.Num`, we generate a compiled thing
+which doesn't actually have `idris_crash` in scope, leading to incorrect code
+generation (presumably due to some further compiler passes or inlining or
+erasure steps).
 
 "How did this not get caught earlier?" you might ask. It turns out that all the
 other modules in `Prelude` which need to crash _do_ import `Builtin`. So this
 was a case of an easily missable, subtle error, which only appeared if you
-happened to call the built-in `mod` or `div` with 0. Which most people take care
-to avoid. That's how the bug had flown under the radar for so long.
+happened to call the built-in `mod` or `div` with 0, which most people take care
+to avoid.
 
-TODO: describe solution ideation (checking, crash message, which error to
-      throw), as well as z-snail's better idea (prim__crash)
+Also, the issue _had_ been caught earlier! In January this year (2023), issue
+[#2865](https://github.com/idris-lang/Idris2/issues/2865)
+was opened by
+[andorp](https://github.com/andorp).
+It described the issue with `mod`, as well as the weird error message involving
+"erased". So a bit of searching on GitHub after narrowing down the problematic
+function would've saved us a lot of trouble. At least I got a "fun" trip out of
+it instead... ^^;;
+
+
+
+## Fixing things
+
+With the problem identified, the first idea was to add a check. We do have the
+context in scope during `mkRunTime`, so the idea was that whenever we need to
+compile an incomplete `case` block, we could just check whether `idris_crash`
+from the namespace `Builtin` is in scope, and complain (with a descriptive error
+message) if it isn't.
+
+However, prompted by
+[z_snail](https://github.com/Z-snails),
+a much better solution ended up being to use `prim__crash` directly. This, as
+the name suggests, is a lower-level primitive function which helps because it A)
+seems more appropriate to use in this situation where we're handling
+semi-compiled Idris; and B) doesn't need `Builtin` -- it just gets compiled to
+`blodwen-error-quit`, which is defined in the `support` files required to get
+Idris going in the first place. TL;DR: it is the better and safer option!  : )
+
+This was implemented by dunham, along with a test case to make sure the bug
+won't accidentally get reintroduced, in Idris2 pull request
+[#2952](https://github.com/idris-lang/Idris2/pull/2952).
+And with that, the problem was fixed!!
+
+
+## Conclusion
+
+These bugs are always a good excuse to learn more about the internal workings of
+Idris2. Although I did not find the solution myself and instead went down a
+rabbit hole of compiler calls, I gained some useful knowledge along the way,
+e.g. where the case-tree stuff lives, and how we handle it. Not only is this
+great for me personally, but it also allows me to "draw in" more of the
+[Map of the Source Code](https://github.com/idris-lang/Idris2/wiki/Map-of-the-Source-Code),
+which is an immensely useful resource for future bug hunts! And thanks to dunham
+and z-snail finding the root problem and a solution, I now have a better
+intuition for what might cause weird bugs, if one should come up again. All
+around a day well-spent  : )
+
+I hope this was insightful and that you learned something. Thanks for reading! : )
+
+
+## Acknowledgements
+
+* Stefan Höck
+    ([stefan-hoeck](https://github.com/stefan-hoeck)) for helping me get more
+    readable code-gen output and teaching me how to easily inspect different
+    compiled outputs.
+* Steve Dunham
+    ([dunham](https://github.com/dunham)) for helping me find the cause of the
+    bug and for implementing the fix.
+* Zoe Stafford
+    ([Z-snails](https://github.com/Z-snails)/z_snail) for the reminder that
+    `prim__crash` was a thing.
+* Andor Penzes
+    ([andorp](https://github.com/andorp)) for originally discovering the bug.
+    I should've searched the issue tracker once I narrowed down the problem,
+    sorry ^^;;
 
