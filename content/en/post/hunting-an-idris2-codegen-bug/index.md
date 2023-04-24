@@ -254,3 +254,47 @@ not-completely-fine Scheme (or JavaScript or C).
 
 ### Digging through the compiler
 
+Initially, I tried looking in `src/Compiler/Scheme/Common.idr`. However, when
+that didn't bring up anything, my next attempt was to find the source and
+handling of `Clauses` datatypes. Unfortunately `rg MkClause src/Compiler` came
+up blank. What about searching for `Erased` instead? Surely there must be a type
+for erased? Well yes, but there is more than one, depending on which code-gen
+backend, type of term, and intermediate representation one is referring to. Next
+up was trying to find places handling a `Crash`, but these all seemed sensible.
+
+Okay, well what about the `clauses` variable that the TTImp processing was
+creating? Where did it get passed to? A function name `getPMDef` which, after
+more `rg`-ing, led me to `src/Core/Case/CaseBuilder.idr`. That's a promising
+name! So, open that, find the `getPMDef` definition, and try to underst-
+
+While I was doing this, I was also chatting with dunham on the Idris discord,
+and he accidentally discovered the problem while trying to implement a fix. The
+idea was the same as the one I had: manually define each and every crash/`True`
+case in `Prelude.Num`. In order to do this, dunham had to import `Builtin`.
+However, after removing the manually defined crashes to try to find the reason
+for the bug, he forgot to remove the `import Builtin` statement. Which fixed the
+issue. We spent a bit of time puzzling over whether we'd simply been using an
+old Idris build, or if there were some stale `.ttc` files, or something before
+dunham realised this. But now it all made sense!
+
+
+## The source of the problem
+
+Normally, when you use a function, the Idris compiler checks if it is in scope
+and throws an error if it isn't. That's kind of a core functionality part of a
+compiler. However, when handling the TTImp `case` stuff, we construct function
+calls directly, meaning we bypass all the checks and just go "in this case,
+generate a function call of name `idris_crash` with the following argument(s)"!
+However, since `Builtin` is never imported in `Prelude.Num`, we generate a
+compiled clause which doesn't actually have `idris_crash` in scope, leading to
+incorrect code generation.
+
+"How did this not get caught earlier?" you might ask. It turns out that all the
+other modules in `Prelude` which need to crash _do_ import `Builtin`. So this
+was a case of an easily missable, subtle error, which only appeared if you
+happened to call the built-in `mod` or `div` with 0. Which most people take care
+to avoid. That's how the bug had flown under the radar for so long.
+
+TODO: describe solution ideation (checking, crash message, which error to
+      throw), as well as z-snail's better idea (prim__crash)
+
