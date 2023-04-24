@@ -8,7 +8,7 @@ summary: "I accidentally discovered a bug in the Idris2 codegen. Let's explore
 authors: [thomas-e-hansen]
 tags: [idris2, debug, functional programming]
 categories: []
-date: 2023-04-21
+date: 2023-04-24
 lastmod:
 featured: false
 draft: false
