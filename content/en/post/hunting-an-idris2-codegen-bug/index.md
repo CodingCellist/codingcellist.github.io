@@ -31,20 +31,20 @@ projects: []
 
 ## Background
 
-I had working on an annoyingly difficult Ph.D.-related project recently, and
-when it finally _did_ work, Idris itself crashed. And spectacularly so! I got an
-error message which I'd never seen before:
+I had been working on an annoyingly difficult Ph.D.-related project recently,
+and when it finally _did_ work, Idris itself crashed. And spectacularly so! I
+got an error message which I'd never seen before:
 
 ```
 Exception in string-append: erased is not a string
 ```
 
-This isn't an `INTERNAL ERROR`, which typically happen when there is an
+This wasn't an `INTERNAL ERROR`, which typically show up when there is an
 `idris_crash` call somewhere, so it had to be something to do with the compiled
 Idris code. And it had to be something serious, because `erased` values are (as
 the name suggests) not meant to be there; they're never meant to be used at
 runtime! So something was up with the Idris compiler. That's scary, because
-there is _a lot_ that makes Idris2 tick, and like all compiled code, it's really
+there is _a lot_ that makes Idris2 tick and, like all compiled code, it's really
 mostly meant to be machine-generated and executed, not read by humans...
 
 After asking for help on the Idris discord, both
@@ -165,12 +165,12 @@ switch(extractInt(var_6)){
 
 ## Hunting down the bug
 
-Idris comes with logging functionality for exactly this kind of scenario. So the
-first thing I tried to help me narrow down what was wrong was to add some
-`%logging` around the affected code. Unfortunately, neither `compile.casetree`
-or just `compile` yielded anything. But I had the expected error string: it
-started with "Unhandled input". So armed with ripgrep and the Idris2 source, I
-tried searching for that string.
+Idris comes with logging functionality for exactly this kind of scenario. So to
+help me narrow down what was wrong, I tried adding some `%logging` around the
+affected code. Unfortunately, neither the `compile.casetree` or just the
+`compile` log topics yielded anything. Fortunately, I had the expected error
+string: it started with "Unhandled input". So armed with ripgrep and the Idris2
+source tree, I tried searching for that string.
 
 This led me to `TTImp.ProcessDef`. Ah. Going down a `TTImp` hole is rarely fun.
 `TTImp` is an abbreviation for "Type Theory with Implicits" and is the
@@ -190,15 +190,15 @@ function called `mkRunTime`, specifically lines 804-806:
                               _ => clauses_init
 ```
 
-The `addErrorCase` function (one of the local definitions) traversed the list of
+The `addErrorCase` function, one of the local definitions, traversed the list of
 existing `case` clauses until it reached the final one, and then append a
 `MkCrash` clause. However, as you can see from the code above, there were no log
 messages being emitted when this was happening. Adding some logging involved
-dealing with `Core` (what the Idris compiler uses for state), which is always a
-bit delicate: there is _a lot_ going on, lots of datatypes in scope, lots of
-compiler and/or functional programming specific language in use, and lots of
-functions which manipulate these things in various ways, but I managed to add a
-new log topic: `compile.casetree.missing`.
+dealing with `Core` (the type the Idris compiler uses for state), which is
+always a bit delicate: there is _a lot_ going on, lots of datatypes in scope,
+lots of compiler and/or functional programming specific language in use, and
+lots of functions which manipulate these things in various ways, but I managed
+to add a new log topic: `compile.casetree.missing`.
 
 This initially seemed to do nothing, until I realised that I needed to put the
 `%logging` pragmas around the interface implementation itself and then recompile
@@ -245,7 +245,7 @@ Runtime tree for Prelude.Num.case block in mod:
       (Builtin.idris_crash [__] "Unhandled input for Prelude.Num.case block in mod at Prelude.Num:132:3--134:40")
 ```
 
-On one hand, this was good, because it meant `TTImp` was fine (I knew that
+On one hand, this was good, because it meant the `TTImp` was fine (I knew that
 the custom `mod` version gave the expected error message). On the other, this
 was annoying because it meant the next step was to try to dig through the
 compiler to figure out how the completely fine `TTImp` got turned into
@@ -259,23 +259,26 @@ that didn't bring up anything, my next attempt was to find the source and
 handling of `Clauses` datatypes. Unfortunately `rg MkClause src/Compiler` came
 up blank. What about searching for `Erased` instead? Surely there must be a type
 for erased? Well yes, but there is more than one, depending on which code-gen
-backend, type of term, and intermediate representation one is referring to. Next
-up was trying to find places handling a `Crash`, but these all seemed sensible.
+backend, type of term, and intermediate representation one is referring to. So
+that was slightly too wide a net. Following that, I tried to find places
+handling a `Crash`, which was more manageable, except all the functions seemed
+sensible and not broken.
 
 Okay, well what about the `clauses` variable that the TTImp processing was
-creating? Where did it get passed to? A function name `getPMDef` which, after
-more `rg`-ing, led me to `src/Core/Case/CaseBuilder.idr`. That's a promising
-name! So, open that, find the `getPMDef` definition, and try to underst-
+creating? Where did it get passed to? A function called `getPMDef`. After more
+`rg`-ing, it led me to `src/Core/Case/CaseBuilder.idr`. That's a promising name!
+So, open that, find the `getPMDef` definition, and try to underst-
 
 While I was doing this, I was also chatting with dunham on the Idris discord,
-and he accidentally discovered the problem while trying to implement a fix. The
-idea was the same as the one I had: manually define each and every crash/`True`
-case in `Prelude.Num`. In order to do this, dunham had to import `Builtin`.
-However, after removing the manually defined crashes to try to find the reason
-for the bug, he forgot to remove the `import Builtin` statement. Which fixed the
-issue. We spent a bit of time puzzling over whether we'd simply been using an
-old Idris build, or if there were some stale `.ttc` files, or something before
-dunham realised this. But seeing the `import Builtin` change, it all made sense!
+and he accidentally discovered the problem while trying to implement a fix. His
+initial idea was the same as the one I had: manually define each and every
+`True` crash case in `Prelude.Num`. In order to do this, dunham had to import
+`Builtin`. However, after removing the manually defined crashes to try to find
+the reason for the bug, he forgot to remove the `import Builtin` statement.
+Which fixed the issue. We spent a bit of time puzzling over whether we'd simply
+been using an old Idris build, or if there were some stale `.ttc` files or
+something, before dunham realised this. But seeing the `import Builtin` change,
+it all made sense!
 
 
 ## The source of the problem
@@ -285,44 +288,45 @@ and throws an error if it isn't. That's kind of a core functionality part of a
 compiler. However, when handling the TTImp `case` stuff, we construct function
 calls directly, meaning we bypass all the checks and just go "in this case,
 generate a function call of name `idris_crash` with the following argument(s)"!
-Since `Builtin` is never imported in `Prelude.Num`, we generate a compiled thing
-which doesn't actually have `idris_crash` in scope, leading to incorrect code
-generation (presumably due to some further compiler passes or inlining or
-erasure steps).
+Since `Builtin` was never imported in `Prelude.Num`, we were generating a
+compiled thing which didn't actually have `idris_crash` in scope, leading to
+incorrect code generation (presumably due to some further compiler passes or
+inlining or erasure steps).
 
 "How did this not get caught earlier?" you might ask. It turns out that all the
 other modules in `Prelude` which need to crash _do_ import `Builtin`. So this
 was a case of an easily missable, subtle error, which only appeared if you
-happened to call the built-in `mod` or `div` with 0, which most people take care
-to avoid.
+happened to call the built-in `mod` or `div` with 0, which most people who use
+them take care to avoid.
 
-Also, the issue _had_ been caught earlier! In January this year (2023), issue
+Also, it turned out the issue _had_ been caught earlier! In January this year
+(2023), issue
 [#2865](https://github.com/idris-lang/Idris2/issues/2865)
 was opened by
 [andorp](https://github.com/andorp).
 It described the issue with `mod`, as well as the weird error message involving
 "erased". So a bit of searching on GitHub after narrowing down the problematic
-function would've saved us a lot of trouble. At least I got a "fun" trip out of
-it instead... ^^;;
+function would've saved us a lot of trouble. Well at least I got a fun dive into
+the source code out of it...
 
 
 
 ## Fixing things
 
 With the problem identified, the first idea was to add a check. We do have the
-context in scope during `mkRunTime`, so the idea was that whenever we need to
-compile an incomplete `case` block, we could just check whether `idris_crash`
-from the namespace `Builtin` is in scope, and complain (with a descriptive error
-message) if it isn't.
+context in scope during `mkRunTime`, so the idea was to just check whether
+`idris_crash` from the namespace `Builtin` was in scope whenever we needed to
+compile an incomplete `case` block, and complain (with a descriptive error
+message) if it wasn't.
 
 However, prompted by
 [z_snail](https://github.com/Z-snails),
 a much better solution ended up being to use `prim__crash` directly. This, as
-the name suggests, is a lower-level primitive function which helps because it A)
-seems more appropriate to use in this situation where we're handling
+the name suggests, is a lower-level primitive function, which is helpful because
+it A) seems more appropriate to use in this situation where we're handling
 semi-compiled Idris; and B) doesn't need `Builtin` -- it just gets compiled to
 `blodwen-error-quit`, which is defined in the `support` files required to get
-Idris going in the first place. TL;DR: it is the better and safer option!  : )
+Idris going in the first place. TL;DR: it was a better and safer option.
 
 This was implemented by dunham, along with a test case to make sure the bug
 won't accidentally get reintroduced, in Idris2 pull request
@@ -339,9 +343,9 @@ e.g. where the case-tree stuff lives, and how we handle it. Not only is this
 great for me personally, but it also allows me to "draw in" more of the
 [Map of the Source Code](https://github.com/idris-lang/Idris2/wiki/Map-of-the-Source-Code),
 which is an immensely useful resource for future bug hunts! And thanks to dunham
-and z-snail finding the root problem and a solution, I now have a better
+and z_snail finding the root problem and a solution, I now have a better
 intuition for what might cause weird bugs, if one should come up again. All
-around a day well-spent  : )
+around a day well spent  : )
 
 I hope this was insightful and that you learned something. Thanks for reading! : )
 
