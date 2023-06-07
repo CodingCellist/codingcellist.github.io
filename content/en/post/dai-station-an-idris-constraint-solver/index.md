@@ -3,7 +3,11 @@
 
 title: "Dai Station: an Idris Constraint Solver"
 subtitle: ""
-summary: ""
+summary: "As part of my Ph.D. exploration on how we know the types we're using
+          model what we think they do, I decided to try to implement a
+          constraint solver in Idris (technically Idris2, but Idris1 is
+          deprecated at this point, so I use 'Idris' and 'Idris2'
+          interchangeably)."
 authors: [thomas-e-hansen]
 tags: [idris2, functional programming, constraint programming]
 categories: []
