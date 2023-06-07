@@ -34,12 +34,11 @@ The book explores what society and civilisation and everything would look like
 in a world like that. Which is an interesting setting! But also intense.
 
 What I really like about The Fifth Season is that it builds a world, and then
-fully commits to it. From characters to society to what housing looks like to
-lore and history to slang, it all behaves and interacts in a way that makes
-sense in-universe, making the world feel incredibly alive and easy to immerse
-yourself into.
+fully commits to it. From characters to society, architecture, lore, history,
+and slang, it all behaves and interacts in a way that makes sense in-universe,
+making the world feel incredibly alive and easy to immerse yourself into.
 
-There are what are essentially earthbenders from "Avatar the Last Airbender";
+There are what are essentially earthbenders from "Avatar: the Last Airbender";
 people who can control the plate tectonics, earthquakes, and, with enough
 training, volcanoes. These are monitored and controlled by the government
 because they can be used both as weapons but also for, for example, keeping your
@@ -79,12 +78,12 @@ that the world is truly ancient, full of long-gone civilisations and history,
 and this book is only telling a tiny section of the world's existence. The book
 also uses one of my favourite world-building tools: local dialect! Common words,
 sayings, and swears all make sense in-universe, and it creates some fantastic
-immersion.  For example, the word "rust" is used analogously to swears like
-"shit" or "fuck" in our world; "rust it all" or "stupid, rusting \<person\>!"
+immersion. For example, the word "rust" is used analogously to serious swears in
+our world: "rust it all" or "stupid, rusting \<person\>!"
 
 If you've read "The Edge Chronicles", I think you'll enjoy The Fifth Season
 because it does some similar things in terms of lore, world, and interactions.
 It is not a light-hearted read (in case you were still wondering), particularly
 at the start, but it is incredibly captivating and interesting, and I am getting
-the next book in the series as soon as I can. Strongly recommend!
+the next book in the series as soon as I can.
 
