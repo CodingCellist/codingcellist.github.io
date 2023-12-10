@@ -8,7 +8,7 @@ authors: [thomas-e-hansen]
 tags: [misc, info-vis, ideation]
 categories: []
 date: 2023-11-12
-lastmod: 2023-12-03
+lastmod: 2023-12-10
 featured: false
 draft: false
 
