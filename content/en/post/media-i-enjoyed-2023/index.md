@@ -35,7 +35,37 @@ with silly limitations like ~24 hours in a day and the need for sleep, this will
 do. I hope they're interesting and that you maybe even find something you want
 to pick up yourself. Happy Holidays!  : )
 
+
 ## Music
+
+In general, I've continued to explore the amazing, slightly melancholic and
+bittersweet world of post-rock. It strikes a special chord with me, though I
+can't quite explain why. Sad yet comforting; maybe you know the feeling, maybe
+not. Anyway, here's ~~wonderwall~~ some album recommendations:
+
+### **Triumph and Disaster (We Lost The Sea)**
+### **My Little, Safe Space (Six Days of Rest)**
+### **ÁTTA (Sigur Rós)**
+
+### Drif (Heilung)
+
+Heilung is a fun and somewhat esoteric band. I was introduced to their music via
+the video game "Hellblade: Senua's Sacrifice" --- a Viking-/Old-Norse-inspired,
+story driven hack 'n' slash --- and have since found myself enjoying the music a
+lot more than I expected. "Drif" is their most recent album, and although the
+poetry readings are somewhat weird (but there's only one of them), it brings a
+different, more evolved sound to previous albums like "Lifa". If you're
+interested in trying something new; something which plausibly sounds like it
+could have been coming from the haar-covered shores before a raid, or
+sang/chanted at some old Germanic ritual (Heilung themselves calls their style
+"amplified history"); but without the neo-n*zi associations which unfortunately
+also tend to come with that, then give Heilung a try. (Heilung, as far as I can
+tell, have been very good at removing fans which do not follow the first line of
+the 'Opening Ceremony': "Remember that we all are brothers".)
+
+I'd recommend starting with "Lifa" or maybe the 2 first tracks on "Drif". 
+
+### 
 
 
 ## Video Games
