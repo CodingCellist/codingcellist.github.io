@@ -29,11 +29,11 @@ projects: []
 ---
 
 Another year has passed, and I've enjoyed lots of different varieties and kinds
-of media throughout it. In a perfect world, I would want to write a full entry
-on each of the things mentioned here, but in this annoyingly imperfect world
-with silly limitations like ~24 hours in a day and the need for sleep, this will
-do. I hope they're interesting and that you maybe even find something you want
-to pick up yourself. Happy Holidays!  : )
+of media throughout it. In a perfect world, I would want to write a full blog
+post on each of the things mentioned here, but in this annoyingly imperfect
+world with silly limitations like ~24 hours in a day and the need for sleep,
+this will do. I hope they're interesting and that you maybe even find something
+you want to pick up yourself. Happy Holidays!  : )
 
 
 ## Music
@@ -43,9 +43,28 @@ bittersweet world of post-rock. It strikes a special chord with me, though I
 can't quite explain why. Sad yet comforting; maybe you know the feeling, maybe
 not. Anyway, here's ~~wonderwall~~ some album recommendations:
 
-### **Triumph and Disaster (We Lost The Sea)**
-### **My Little, Safe Space (Six Days of Rest)**
-### **ÁTTA (Sigur Rós)**
+### Triumph and Disaster (We Lost The Sea)
+
+
+### Solkyri
+
+Opened for WLTS. Never heard of them, but I'll check them out in the future if I
+have the chance.
+
+2 albums of theirs so far:
+
+"Are You My Brother?" - older and more fleeting or maybe just classic post-rock
+(if that makes sense); one track with vocals, which some post-rock fans will
+like and some won't; generally nice.
+
+"Mount Pleasant"
+"Pendock and Progress" is a solid track
+
+
+### My Little, Safe Space (Six Days of Rest)
+
+
+### ÁTTA (Sigur Rós)
 
 ### Drif (Heilung)
 
@@ -65,10 +84,35 @@ the 'Opening Ceremony': "Remember that we all are brothers".)
 
 I'd recommend starting with "Lifa" or maybe the 2 first tracks on "Drif". 
 
-### 
-
 
 ## Video Games
+
+TODO: All of the below
+
+### Sayonara Wild Hearts
+
+So. Much. Raw. Fun.
+
+Riddles are a bit too hard imo.
+
+Over 10 hours in a game that's effectively a 1-hour interactive album. It's
+good ^^
+
+### Celeste
+
+Not technically from this year, but I returned to it this year and not only did
+a full run, but earned 100% of its achievements.
+So challenging. So damn fun. (I did Chapter 9 again, just because it flows so
+well and blends story, music, and gameplay _exquisitely_!). 100 hours almost...
+
+### Hades
+
+Wanted to like this. I've enjoyed previous Supergiant games. Found final boss
+somewhat arbitrary in difficulty (but maybe I just need to git gud).
+
+### Deep Rock Galactic
+
+**Rock and Stone!**
 
 
 ## Books
@@ -112,4 +156,62 @@ food), an interesting world to explore along with thoughts on AI, mortality, and
 
 At this point, I will pick up anything she publishes without hesitation, and
 they're my go-to books for a nice afternoon in on a rainy day  : )
+
+### The House of Sorrowing Stars (Beth Cartwright)
+
+Personally found it disappointing. Lots of good ideas, but not quite put
+together into a satisfying story.
+
+### Monstress (Marjorie Liu and Sana Takeda)
+
+Okay, this one I've technically been following for 7 years, but I picked up
+"Volume 8: Inferno" last month and it just continues to be excellent. The art is
+gorgeous, with clear inspiration from the Jugenstil/Art Nouveau movement, mixed
+with a healthy amount of Steam Punk, but that wouldn't matter too much if the
+story wasn't good. If you hadn't guessed, it thankfully is. We've got political
+plots, intrigue, and mystique, spread between a religious cult, immortal
+demi-gods from an unknown world, talking cats with multiple tails (and
+warrior-poets!), humans, and "arcanics", which are children of the humans and
+the demi-gods. But no faction is perfect either, there are internal conflicts,
+corruption, all that good stuff that makes for really nice and deep storytelling
+about a world in a post-war, delicate state.
+
+It also has one of the aspects I respect enormously in a story, especially one
+set in a plotting, post-war, grim world: it doesn't shy away from hurting its
+cast or characters. Battles are fought, sieges are laid, sabotages are
+conducted, and never is it "And the heroes made it because they're the heroes."
+or "And the cute ones were unscathed because war never affects the innocent."
+The fights are fair and realistic, with every dirty trick you would expect from
+highly powerful, definitely-not-quite-at-war factions applied, and if the main
+character would lose a limb, they do. Characters which were introduced but run
+into an infernal monster? They get killed by said monster. And I respect that.
+
+It also deals very nicely, in my opinion, with the mental state of its
+characters and how that changes based on the events that they encounter. I'm
+looking forward to see where the story gets taken now that it seems it's
+potentially reached the endgame.
+
+### The Infinity Particle (Wendy Xu)
+
+On a completely different note to Monstress, "The Infinity Particle" is a strong
+recommend to anyone who's familiar with the Becky Chambers novels and want
+_more_. It's a sweet, but short, story set in a near-ish future on Mars. About a
+tech intern, a human-like sentient robot, and narcissism (okay, that part is not
+sweet, but it is key to the story). There are many interesting little thoughts
+about what a world with conscious AI would be like, mutual respect in
+relationships both platonic and non, as well as power structures. I think it
+might be aimed at more of a young-adult audience, but it scratched that "cosy
+space sci-fi" itch for me  ^^
+
+### The Three-Body Problem and The Dark Forest (Cixin Liu)
+
+TODO: I have mixed feelings about these. But they're generally good I think.
+
+
+### Others
+
+I enjoyed these, and miraculously even had time to write a bit more about it.
+
+* [N.K. Jemisin's "Broken Earth Trilogy"](/TODO)
+* [The Starless Sea by Erin Morgenstern](/TODO)
 
