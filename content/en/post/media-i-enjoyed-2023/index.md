@@ -7,7 +7,7 @@ summary: ""
 authors: [thomas-e-hansen]
 tags: [misc, end-of-year, review]
 categories: []
-date: 2023-12-23
+date: 2023-12-25
 lastmod:
 featured: false
 draft: false
@@ -32,39 +32,41 @@ Another year has passed, and I've enjoyed lots of different varieties and kinds
 of media throughout it. In a perfect world, I would want to write a full blog
 post on each of the things mentioned here, but in this annoyingly imperfect
 world with silly limitations like ~24 hours in a day and the need for sleep,
-this will do. I hope they're interesting and that you maybe even find something
-you want to pick up yourself. Happy Holidays!  : )
+this will do. I hope you enjoy this little collection of things, and maybe even
+find something you want to pick up yourself. Happy Holidays!  : )
+
+{{< toc >}}
 
 
 ## Music
 
 In general, I've continued to explore the amazing, slightly melancholic and
 bittersweet world of post-rock. It strikes a special chord with me, though I
-can't quite explain why. Sad yet comforting; maybe you know the feeling, maybe
-not. Anyway, here's ~~wonderwall~~ some album recommendations:
-
-### Triumph and Disaster (We Lost The Sea)
-
+can't quite explain why. Sad yet comforting; maybe you know the feeling, or
+maybe I'm just talking nonsense. Anyway, here's ~~wonderwall~~ some album/band
+recommendations:
 
 ### Solkyri
 
-Opened for WLTS. Never heard of them, but I'll check them out in the future if I
-have the chance.
+Solkyri was a band I had never heard of, but they opened for We Lost The Sea on
+tour this year. Opening bands can be hit or miss, in my experience, but Solkyri
+were really solid and I'll be trying to catch them live in the future when I
+have the opportunity to.
 
-2 albums of theirs so far:
+I've acquired 2 of their albums so far:
 
-"Are You My Brother?" - older and more fleeting or maybe just classic post-rock
-(if that makes sense); one track with vocals, which some post-rock fans will
-like and some won't; generally nice.
-
-"Mount Pleasant"
-"Pendock and Progress" is a solid track
-
-
-### My Little, Safe Space (Six Days of Rest)
-
-
-### ÁTTA (Sigur Rós)
+* "Mount Pleasant", which is their most recent album and hence also the one they
+    played more tracks from at the concert. "Pendock and Progress" was their
+    opening track, and is great. Bit more of a guitar solo feel than most
+    post-rock tracks, and the album in general feels a bit more grunge/alt-rock
+    (maybe? I'm not super good with genres), but it is a really nice album and
+    one that I keep coming back to several months after the concert happened.
+* "Are You My Brother?" is an older (2013) album of theirs. It is more
+    classic/soft post-rock, which I personally really like. I find myself
+    reaching for it whenever I want something nice, uplifting, and relaxing,
+    whilst still being post-rock (so not too relaxing, I guess ^^). There is one
+    track with vocals, which some post-rock fans will like and some won't; I
+    quite like it, and the album in general.
 
 ### Drif (Heilung)
 
@@ -83,6 +85,60 @@ tell, have been very good at removing fans which do not follow the first line of
 the 'Opening Ceremony': "Remember that we all are brothers".)
 
 I'd recommend starting with "Lifa" or maybe the 2 first tracks on "Drif". 
+
+### My Little, Safe Space (Six Days of Rest)
+
+### ÁTTA (Sigur Rós)
+
+### Triumph & Disaster (We Lost The Sea)
+
+We Lost The Sea were my first introduction to post-rock (the YouTube channel
+"WorldHasPostRock" included "A Gallant Gentlemen" as part of one of their
+collections) and I don't think I've loved a genre that fast in a long time. So
+they hold a special place in my heart.
+
+Now. Where "Departure Songs" was an album inspired by the perseverance and
+enduring curiosity of humanity in spite of extreme risk and tragic accidents,
+making the album highly cathartic and comforting in its own bittersweet
+post-rock way, "Triumph & Disaster" is not exactly that. The opening paragraph
+of the album description reads:
+
+> Triumph & Disaster is a post-apocalyptic view on the collapse of the world
+> told like a children’s story and illustrated through the eyes of a mother and
+> her son as they spend one last day on Earth. The music is the narrative for
+> the destruction and tragedy. The words tell the story of love, loss and
+> letting go. 
+
+Now if that immediately brought your mood down, yeah it tends to have that
+effect (sorry!). Triumph & Disaster is an intense album, to say the least, both
+thematically and musically. The very first notes on the album are harsh, almost
+air-siren-like (but make it metal), and they slowly fade in and out of the music
+for _seven minutes_ of the first track (which is 15 minutes long; I love this
+genre ^^). On one hand, it's somewhat jarring. But on the other, as ever with
+WLTS, boy does it ever nicely set the tone for the rest of the album's
+"journey".
+
+That's not to say that there aren't nice tracks on the album, far from it! The
+remaining half of the first track is softer (although the opening harshness does
+make a comeback towards the end of the track), and this is a common theme
+throughout the album. There are some soft tracks in the middle of it, but most
+of the tracks blend post-rock and that more metal-y harshness; the album tells a
+tragic, haunting narrative, and the music reflects that. It's actually really
+cool.
+
+I love this album, I genuinely do, but the intensity of its story, how the music
+tells it, and the at times overwhelming soundscape means it is not something I
+listen to lightly, in the background. And I often need to just sit for a bit
+after listening to it. It's a tragic story, but it's just so well done...
+
+Reading back over that. If I've somehow convinced you to listen to this because
+it is actually fantastic music, rather than you just going "I'm good. Do you
+need a hug?", then yay!  ^^
+
+Also, be sure to listen to the combination of the album's poem/story and the
+track "Dust", on YouTube: "Triumph & Disaster - Are we really too late?" This
+combination is not included on the album (I don't know why, it is genuinely a
+shame), but it is once again really well done and sets the tone for the album.
 
 
 ## Video Games
@@ -161,6 +217,7 @@ they're my go-to books for a nice afternoon in on a rainy day  : )
 
 Personally found it disappointing. Lots of good ideas, but not quite put
 together into a satisfying story.
+Instalove is not my thing and felt misplaced? awkward?
 
 ### Monstress (Marjorie Liu and Sana Takeda)
 
