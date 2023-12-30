@@ -7,7 +7,7 @@ summary: ""
 authors: [thomas-e-hansen]
 tags: [misc, end-of-year, review]
 categories: []
-date: 2023-12-25
+date: 2023-12-30
 lastmod:
 featured: false
 draft: false
@@ -34,6 +34,10 @@ post on each of the things mentioned here, but in this annoyingly imperfect
 world with silly limitations like ~24 hours in a day and the need for sleep,
 this will do. I hope you enjoy this little collection of things, and maybe even
 find something you want to pick up yourself. Happy Holidays!  : )
+
+(Note: this is not meant to be read in one go, it is meant to be jumped around
+in. Hopefully the Table of Contents can help you go to whichever topic or
+specific instance strikes your fancy.)
 
 {{< toc >}}
 
@@ -67,7 +71,7 @@ I've acquired 2 of their albums so far:
     reaching for it whenever I want something nice, uplifting, and relaxing,
     whilst still being post-rock (so not too relaxing, I guess ^^). There is one
     track with vocals, which some post-rock fans will like and some won't; I
-    quite like it, and the album in general.
+    quite like both that track, and the album in general.
 
 ### Drif (Heilung)
 
@@ -89,6 +93,14 @@ I'd recommend starting with "Lifa" or maybe the 2 first tracks on "Drif".
 
 ### My Little, Safe Space (Six Days of Rest)
 
+This premiered on the WorldHasPostRock channel about a month ago. Then December
+hit, and as a result I've not had much time to listen to it beyond that. The
+first impressions I've gotten from the couple of listens I've given it though,
+is that it's a quite calm album, perfect for evening listening or when you need
+to ground yourself a bit. There _is_ a slightly more restless section (a bit
+like sitting trying to calm down in a little, safe space ; )), but I don't mind
+that; it adds depth to the album.
+
 ### ÁTTA (Sigur Rós)
 
 ÁTTA, 8 in Icelandic, is the latest album by post-rock legends Sigur Rós. It is
@@ -97,7 +109,7 @@ albums, which have used a lot of distortion. If you're familiar with Sigur Rós,
 ÁTTA is a bit like () but with a more generally uplifting sound and more piano.
 The fourth track, "Klettur", builds up these absolutely fantastic small tensions
 using dissonance, and then the chorus resolves them all with a beautiful harmony
-that just washes over you. It's phenomenal!
+that just washes over you; it's phenomenal!
 
 ÁTTA can be listened to both in the background and in a more focused session,
 and in both cases, I've found, leaves you feeling refreshed and at least a bit
@@ -165,9 +177,9 @@ playback thanks to actually being a complete Linux "laptop" in disguise, and
 with a dock, wireless mouse+keyboard, and an external DVD/BluRay drive, it even
 works as a media PC. Sure, you're not going to play competitive Counter Strike
 or DotA2 on it, but for everything else, it's fantastic and runs any game I've
-thrown at it surprisingly well (and definitely at playable quality).
+thrown at it surprisingly well.
 
-And here are some games I played on it:
+And here are some games I played on it and enjoyed:
 
 ### Sayonara Wild Hearts
 
@@ -198,48 +210,53 @@ opening/menu track "Sayonara Wild Heart" by Daniel Olsén, and if you like the
 beat, if you find that track fun, if you get hyped, then go pick up the game
 right now and come back once you've stopped grinning from playing it ^^
 
-The whole game _pulses_ with energy to the beat, the music is simply fun,
-and the gameplay mechanics and scenarios constantly surprise you in the best of
-ways. You drift through space, skate along a breaking-up motorway, fly through
-meteors, and I'll stop there because I'll spoil too many things and it needs to
-be experienced. It is a rhythm game at its core, but not a difficult one, and
-the game constantly introduces new mechanics and then takes them away before
-they become boring, which gives it a great drive. Sayonara Wild Hearts was the
-first time in forever that I found myself grinning from ear to ear within
-minutes. And that lasted throughout the game.
+The whole game _pulses_ with energy to the beat, the music is simply fun, no
+other way to describe it, and the gameplay mechanics and scenarios constantly
+surprise you in the best of ways. You drift through space, skate along a
+breaking-up motorway, fly through meteors; and I'll stop there because I'll
+spoil too many things which are best when freshly experienced. It is a rhythm
+game at its core, but not a difficult one, and the game constantly introduces
+new mechanics and then takes them away before they become boring, giving it a
+great drive.  Sayonara Wild Hearts was the first time in forever that I found
+myself grinning from ear to ear within minutes. And that lasted throughout the
+game.
 
 I have over 20 hours in this game which is effectively a 1-hour-ish interactive
 album. And although I love the music, the vast majority of those hours are
-because the gameplay is just nice and such fun to revisit!
+because the gameplay is such fun to revisit!
 
 ### The Past Within
 
-For anyone familiar with the Rusty Lake game studio and their unnerving puzzle
-games, "The Past Within" is yet another wonderful instalment in the series. It
-requires 2 players on separate devices (with 2 separate copies of the game),
-making it ideal for playing whilst hanging out with a partner or puzzle-liking
-friend. You return to your father's old cabin by the lake to explore his lab and
-solve the puzzles to potentially bring him back (whatever that may mean). One
-player is in the past of the setting and another in the present, and you must
-communicate what you see on your screen to solve the puzzles; very simple, yet
-fun and collaborative. A game takes probably 30 minutes to 1 hour, depending on
-your communication skills and puzzle-solving-ability, and since there are
-multiple puzzles and sides to the story, it is also replayable. Well worth the
-£7 or so that it is on Steam.
+For anyone familiar with the Rusty Lake game studio and their unnerving, noir
+puzzle games, "The Past Within" is yet another wonderful instalment in the
+series. It requires 2 players on separate devices (with 2 separate copies of the
+game), making it ideal for playing whilst hanging out with a partner or
+puzzle-liking friend. You return to your father's old cabin by the lake to
+explore his lab and solve the puzzles to potentially bring him back, whatever
+that may mean. One player is in the past of the setting and another in the
+present, and you must communicate what you see on your screen to solve the
+puzzles; very simple, fun and collaborative. A game takes probably 30 minutes to
+1 hour, depending on your communication skills and puzzle-solving-ability, and
+since there are multiple puzzles and sides to the story, it is also replayable.
+Well worth the £7 or so that it is on Steam.
 
 ### Signalis
 
 Signalis was another game that I received on recommendation of the Architect of
 Games YouTube channel. And I should have read the tags: it's a Lovecraftian
-horror game; not "something fun" to start one random evening... ^^;;
+survival horror game, not "something fun" to start one random evening... ^^;;
 
 Oh well. The game itself is interesting, although the story requires some
-thought, familiarity with works like "The King in Yellow" and other
-eldritch/weird horror stories, and interpretation/analysis. You play as Elster,
-an LSTR unit, searching for her missing companion after their ship crashed on a
-remote planet with an underground mining operation. However, (surprise surprise)
-the mine seems abandoned, and as you travel further down you begin to encounter
-its former workers, different types of units, which have turned into monsters.
+familiarity with works like "The King in Yellow" and other eldritch/weird horror
+stories, and thought and interpretation/analysis. You play as Elster, an "LSTR
+unit", searching for her missing companion after their ship crashed on a remote
+planet with an underground mining operation. However, (surprise surprise) the
+mine seems abandoned, and as you travel further down you begin to encounter its
+former workers, which are different types of units, who have turned into
+monsters.
+
+> Great holes secretly are digged where earth's pores ought to suffice, and
+> things have learnt to walk that ought to crawl.
 
 You do not have much health, and the game only lets you carry 6 items in your
 inventory at any time (there are synchronised storage crates in safe-rooms, for
@@ -254,36 +271,40 @@ type of game and don't mind the horror aspects, Signalis is probably for you.
 Celeste is an extremely highly acclaimed puzzle-platformer. It was released in
 2018, but I returned to it this year to play through it with more dedication
 than I had previously. Not only did I end up doing a full run, but I managed to
-get obsessed enough to earn 100% of its achievements.
+get obsessed enough to hunt 100% of its achievements.
 
-The game is probably as close to perfect games can get, no other way to put it.
-The soundtrack, story, level design, and characters are woven together so
-nicely, complementing each other in different ways and by different amounts
-depending on the stage in the game, that the flow of the game is unlike anything
-else I've experienced. The game is about the main character, Madeline, trying to
-climb Celeste mountain, mainly just to prove that she can. But it quickly
-becomes clear that the mountain is more than it lets on, as the game takes the
-player through an extremely well-written story exploring anxiety, mental health,
-depression, tenacity, pressure, and dealing with one's inner demons. And it
-manages to do this without any of it feeling forced or corny; it seems very
-honest.
+The game is probably as close to perfect as games can get, genuinely. The
+soundtrack, story, level design, and characters are woven together so nicely,
+complementing each other in different ways and by different amounts depending on
+the stage in the game, that the flow of the game is unlike anything else I've
+experienced.
 
-Celeste is very challenging, but exemplary in accessibility settings: the game
+Celeste is about the main character, Madeline, trying to climb Celeste mountain,
+mainly just to prove that she can. But it quickly becomes clear that the
+mountain is more than it lets on, as the game takes the player through an
+extremely well-written story exploring anxiety, mental health, depression,
+tenacity, pressure, and dealing with one's inner demons. And it manages to do
+this without any of it feeling forced or corny; it all feels very honest.
+
+The game is very challenging, but exemplary in accessibility settings: the game
 speed, stamina, number of dashes, etc. can all be configured in case the default
-difficulty is simply too high. You still earn all the achievements, and you can
-always turn it back up if you find it being too easy or want to try the default
-after you've practised with different settings. Each level is also very fair;
-nothing requires pixel-perfect timing or anything like that. This also leads to
-some frustration, as every death means you know pretty much exactly what you did
+difficulty is too much. And there is no judgement here: you can still earn all
+the achievements, complete the story, and do the optional challenges. Celeste is
+meant to be a hard game, but "challenging" means drastically different things
+for different people; why exclude some? You can always leave it off or turn it
+back up if you find it being too easy or want to try the defaults after you've
+gotten used to your personal settings. Each level is also very fair; nothing
+requires pixel-perfect timing or anything like that. This also leads to some
+frustration, as every death means you know pretty much exactly what you did
 wrong. But that makes it so much more fun and satisfying when you finally get a
-room done.
+room done  : )
 
 There's plenty of bonus, more challenging, content once the base story has been
 completed. And finally, there is the free Chapter 9 DLC: "Farewell". It is the
 final challenge for fans of the game, and even though it took me almost as long
-to beat that single chapter as it did the rest of the game and bonus content, I
-played it through a second time, just because it flows _so well_ and blends
-story, music, and gameplay exquisitely!
+to beat that single chapter as it did the rest of the game and bonus content
+combined, I played it through a second time, just because it flows _so well_ and
+blends story, music, and gameplay exquisitely!
 
 ### Hades
 
@@ -303,19 +324,60 @@ rogue-likes, Hades might very well be for you.
 
 ### Alba: A Wildlife Adventure
 
-TODO: green notebook
+"Alba" is a stylised, cute, and peaceful video game about the girl Alba spending
+her summer holiday with her grandparents on a Mediterranean island. You go
+around exploring the local wildlife, as well as talk to the locals about things
+like the mayor's plan to build a mega-hotel on the island (which is really
+nicely portrayed as a nuanced issue, not purely evil). The game is incredibly
+immersive with a lot of attention to tiny details that aren't immediately
+obvious, because your brain just accepts them as "how the world works", that's
+how seamlessly they're implemented.
+
+The buildings are unquestionably Mediterranean in architecture, with slightly
+boxy houses in town and  houses with tiled roofs and white walls surrounding
+them in the residential area just on the outskirts of town. There is a constant
+background noise of cicadas as well, which anyone who has been to the
+Mediterranean in the summer will recognise. And all of that, combined with the
+deep blue sky, bright sun in the day, and warm tint in the evenings, really make
+you believe you're on a small Mediterranean island.
+
+The crowning jewel of Alba, in my opinion, is its sound design: the people
+behind that _clearly_ studied a lot of birds. The wood pigeons coo from up in
+trees or gutters, the distant cries of swifts descend from high in the sky,
+great tits chirp, oystercatchers have their distinctive cry; you can essentially
+find any bird if you happen to hear its call. The game conveys directional audio
+really well, even on headphones or TV speakers, and since there's no obvious
+cut-off distance, you are able to locate even distant bird calls.
+
+Also, the animations are spot-on: swifts glide and very occasionally flap their
+wings; swallows swoop; pigeons hop; seagulls glide and hop; smaller birds do
+that silly little hop when they can't quite be bothered flying. And the main
+character, Alba, who is a little girl (probably 8 or so) doesn't simply walk,
+she skips and runs. At random! Like a kid would! It's really well done. (I know
+I might sound overly enthusiastic here, but I do genuinely find it amazing how
+much attention to detail there is in this game.) There are also some brutally
+honest yes/no answers you get to give, in exactly the way a young child would.
+
+At the end of the story, the game lets you explore freely, so there is no
+pressure to complete the wildlife journal before you complete the story.  So
+yeah, if you're looking for a cute little game to take you away on a relaxing
+exploration of wildlife in the Mediterranean, Alba is an excellent "sit back and
+relax"-game that is also fun to play. 
 
 ### Furi
 
 Furi is an extremely challenging boss-rush game. It is probably the hardest game
-I have played. You play as a mysterious character locked up in a high-security
-space prison, and you have to escape by fighting each section's "Guardian".
-There is a story, which is revealed throughout the fights, and the ending when
-you finally break free is really well done. It _is_ very difficult though, and
-more in a "raw difficulty" kind of way than, for example, Celeste or Hollow
-Knight, both of which are tough but fair. An exercise in frustration at times,
-but a fun one (if you're into those kinds of games ^^) with a really good
-soundtrack.
+I have played in many years. You play as a mysterious character locked up in a
+high-security space prison, and you have to escape by fighting each section's
+"Guardian". You have a sword (melee attack), a laser gun (ranged attack), a
+dash/dodge, and a parry; nothing more, nothing less. And each boss requires you
+to use these in different ways, adapting to that fighter's attack style and
+patterns. There is a story, which is revealed throughout the fights, and the
+ending when you finally break free is really well done. _It is very difficult
+though,_ and more in a "raw difficulty" kind of way than, for example, Celeste or
+Hollow Knight, both of which are tough but fair. An exercise in frustration at
+times, but a fun one (if you're into those kinds of games ^^) with a really good
+soundtrack and story.
 
 (The camera angles in-between fights are completely wack however, and the game
 not automatically readjusting your input-direction-transformation when the
@@ -390,7 +452,7 @@ It's not a space opera; nobody is The Chosen One, destined to save the universe
 (tm). That might put some people off, and that's fair. But I personally found it
 incredibly refreshing, and all the more enjoyable, to read and experience the
 story of humans and aliens, and their interactions, that still felt relatable
-and humane. The plot, conflicts, relationships, interactions, etc.  weren't
+and humane. The plot, conflicts, relationships, interactions, etc. weren't
 grandiose; and yet they were. (Much in the same way as life, I guess.)
 
 Anyway. I have since picked up each of the "Wayfarer" novels (of which "The Long
