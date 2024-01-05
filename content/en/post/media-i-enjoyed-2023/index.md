@@ -7,7 +7,7 @@ summary: ""
 authors: [thomas-e-hansen]
 tags: [misc, end-of-year, review]
 categories: []
-date: 2023-12-30
+date: 2024-01-05
 lastmod:
 featured: false
 draft: false
@@ -31,9 +31,9 @@ projects: []
 Another year has passed, and I've enjoyed lots of different varieties and kinds
 of media throughout it. In a perfect world, I would want to write a full blog
 post on each of the things mentioned here, but in this annoyingly imperfect
-world with silly limitations like ~24 hours in a day and the need for sleep,
-this will do. I hope you enjoy this little collection of things, and maybe even
-find something you want to pick up yourself. Happy Holidays!  : )
+world with silly limitations like 24 hours in a day and the need for sleep, this
+will do. I hope you enjoy this little collection of things, and maybe even find
+something you want to pick up yourself. Happy New Year!  : )
 
 (Note: this is not meant to be read in one go, it is meant to be jumped around
 in. Hopefully the Table of Contents can help you go to whichever topic or
@@ -44,7 +44,7 @@ specific instance strikes your fancy.)
 
 ## Music
 
-In general, I've continued to explore the amazing, slightly melancholic and
+Overall, I've continued to explore the amazing, slightly melancholic and
 bittersweet world of post-rock. It strikes a special chord with me, though I
 can't quite explain why. Sad yet comforting; maybe you know the feeling, or
 maybe I'm just talking nonsense. Anyway, here's ~~wonderwall~~ some album/band
@@ -77,27 +77,28 @@ I've acquired 2 of their albums so far:
 
 Heilung is a fun and somewhat esoteric band. I was introduced to their music via
 the video game "Hellblade: Senua's Sacrifice" --- a Viking-/Old-Norse-inspired,
-story driven hack-n-slash --- and have since found myself enjoying the music a
+story-driven hack-n-slash --- and have since found myself enjoying the music a
 lot more than I expected. "Drif" is their most recent album, and although the
-poetry readings are somewhat weird (but there's only one of them), it brings a
-different, more evolved sound to previous albums like "Lifa". If you're
+poetry readings are somewhat weird (but there's only one or two of them), it
+brings a different, more evolved sound to previous albums like "Lifa". If you're
 interested in trying something new; something which plausibly sounds like it
 could have been coming from the haar-covered shores before a raid, or
 sang/chanted at some old Germanic ritual (Heilung themselves calls their style
-"amplified history"); without the neo-n*zi associations which unfortunately also
-tend to come with that; then give Heilung a try. (Heilung, as far as I can tell,
-have been very good at removing fans which do not follow the first line of their
-Opening Ceremony: "Remember that we all are brothers".)
+"amplified history") --- without the neo-n*zi associations which unfortunately
+also tend to come with that style of things --- then give Heilung a try.
+(Heilung, as far as I can tell, have been very good at removing fans which do
+not follow the first line of their Opening Ceremony: "Remember that we all are
+brothers".)
 
 I'd recommend starting with "Lifa" or maybe the 2 first tracks on "Drif". 
 
 ### My Little, Safe Space (Six Days of Rest)
 
-This premiered on the WorldHasPostRock channel about a month ago. Then December
-hit, and as a result I've not had much time to listen to it beyond that. The
-first impressions I've gotten from the couple of listens I've given it though,
-is that it's a quite calm album, perfect for evening listening or when you need
-to ground yourself a bit. There _is_ a slightly more restless section (a bit
+This premiered on the WorldHasPostRock YouTube channel about a month ago. Then
+December hit, and as a result I've not had much time to listen to it beyond
+that. The first impressions I've gotten from the couple of listens I've given it
+though, is that it's a quite calm album, perfect for evening listening or when
+you need to ground yourself. There _is_ a slightly more restless section (a bit
 like sitting trying to calm down in a little, safe space ; )), but I don't mind
 that; it adds depth to the album.
 
@@ -117,10 +118,10 @@ happier.
 
 ### Triumph & Disaster (We Lost The Sea)
 
-We Lost The Sea were my first introduction to post-rock (the YouTube channel
-"WorldHasPostRock" included "A Gallant Gentlemen" as part of one of their
-collections) and I don't think I've loved a genre that fast in a long time. So
-they hold a special place in my heart.
+We Lost The Sea (WLTS) were my first introduction to post-rock (the YouTube
+channel "WorldHasPostRock" included "A Gallant Gentlemen" as part of one of
+their collections) and I don't think I've loved a genre that fast in a long
+time.
 
 Now. Where "Departure Songs" was an album inspired by the perseverance and
 enduring curiosity of humanity in spite of extreme risk and tragic accidents,
@@ -156,8 +157,8 @@ tells it, and the at times overwhelming soundscape means it is not something I
 listen to lightly, in the background. And I often need to just sit for a bit
 after listening to it. It's a tragic story, but it's just so well done...
 
-Reading back over that, if I've somehow convinced you to listen to this, because
-it is actually fantastic music, rather than you just going "I'm good. Do you
+Reading back over that, if I've somehow convinced you to listen to this (because
+it is actually fantastic music) rather than you just going "I'm good. Do you
 need a hug?", then yay!  ^^;;
 
 Also, be sure to listen to the combination of the album's poem/story and the
@@ -166,20 +167,50 @@ combination is not included on the album (I don't know why, it is such a good
 way to go through the album's accompanying text), but it is once again really
 well done and sets the tone for the album.
 
+### Miscellaneous
+
+Other than the post-rock albums, I have (re-)discovered some old bands and
+albums from various genres:
+
+* **Some Nights (Fun.)** --- I'd only ever heard the singles, but the entire
+    album is great; parts of it remind me a bit of Queen.
+* **Black Holes and Revelations (Muse)** --- I'd heard of, but never listened
+    to, Muse. I'm not entirely sure how I first encountered some of the tracks
+    on this album, but I have now bought it and am thoroughly enjoying it.
+    There's a good mix of rock, synths, rhythm, and slow songs.
+* **Take-off Your Pants and Jacket (Blink-182)** --- A long-lost classic. I was a
+    huge Avril Lavigne fan growing up, so I have a soft spot for pop-punk. Being
+    older, it is obviously "some young men with attitude", but the music is
+    still good and fun.
+* **Metallica [The Black Album] (Metallica)** --- I got into Metallica via the
+    phenomenal cello-covers by Apocalyptica. Finally decided to listen to some
+    of the originals, and ended up liking the songs, including the ones I hadn't
+    heard, so much that I bought the album.
+* **Extreme Power Metal** (Dragonforce) --- I decided to revisit Dragonforce,
+    which I hadn't listened to since the "Inhuman Rampage" and "Guitar Hero III"
+    days (2007; aaaah!), and was pleasantly surprised. Their songs are still
+    undeniably power metal: mainly fast guitars, drums, and solos, but I found
+    the songs on "Extreme Power Metal" to be more distinguishable from each
+    other than the ones on "Inhuman Rampage" were. Always nice to see a band has
+    evolved and refined its sound, and this album is now my go-to whenever I
+    need a ridiculous burst of energy (although listening to it while already
+    stressed/anxious is not good, it turns out). I did not see a cover of "My
+    Heart Will Go On" coming, but I'm here for it  ^^
+
 
 ## Video Games
 
 Acquiring a Steam Deck around New Year's 2022-2023 has been a game changer (heh)
 in terms of me actually relaxing and playing video games, rather than using my
 laptop, which is also my work device, and ending up stressed and not knowing
-what to play. The Deck is easy to take out and take with you, it does media
-playback thanks to actually being a complete Linux "laptop" in disguise, and
-with a dock, wireless mouse+keyboard, and an external DVD/BluRay drive, it even
-works as a media PC. Sure, you're not going to play competitive Counter Strike
-or DotA2 on it, but for everything else, it's fantastic and runs any game I've
-thrown at it surprisingly well.
+what to play. The Deck is easy to take out and take with you; it does media
+playback thanks to actually being a complete Linux "laptop" in disguise; and
+with a dock, wireless mouse and keyboard, and an external DVD/BluRay drive, it
+even works as a media PC. Sure, you're not going to play competitive Counter
+Strike or DotA2 on it, but for everything else, it's fantastic and runs any game
+I've thrown at it surprisingly well.
 
-And here are some games I played on it and enjoyed:
+And here are some games I enjoyed playing on it:
 
 ### Sayonara Wild Hearts
 
@@ -194,14 +225,14 @@ contrasting ones (for example flashing bright orange on top of a generally
 purple scene), to an extent that might make some non-epilepsy-sensitive people
 dazed. And there are sadly no settings or mods which change this. I'm genuinely
 sad about this, because it has both great gameplay and music, and I wish more
-people could experience it...
+people could experience the game...
 
 </details>
 
 "Sayonara Wild Hearts" I found via an Architect of Games recommendation video.
 I picked it up not knowing what to expect, other than other people liking it and
 it being an indie game (which usually is indicative of a
-fun/fresh/interesting/good/all-of-the-above game). And did it ever deliver!
+fun/fresh/interesting/good/all-of-the-above game). And wow did it ever deliver!
 Sayonara Wild Hearts can only be described as so. much. _raw. **fun!**_
 
 The game is an interactive album with a neon-purple and -pink
@@ -231,14 +262,16 @@ For anyone familiar with the Rusty Lake game studio and their unnerving, noir
 puzzle games, "The Past Within" is yet another wonderful instalment in the
 series. It requires 2 players on separate devices (with 2 separate copies of the
 game), making it ideal for playing whilst hanging out with a partner or
-puzzle-liking friend. You return to your father's old cabin by the lake to
-explore his lab and solve the puzzles to potentially bring him back, whatever
-that may mean. One player is in the past of the setting and another in the
-present, and you must communicate what you see on your screen to solve the
-puzzles; very simple, fun and collaborative. A game takes probably 30 minutes to
-1 hour, depending on your communication skills and puzzle-solving-ability, and
-since there are multiple puzzles and sides to the story, it is also replayable.
-Well worth the £7 or so that it is on Steam.
+puzzle-liking friend.
+
+You return to your father's old cabin by the lake to explore his lab and solve
+the puzzles to potentially bring him back, whatever that may mean. One player is
+in the past of the setting and another in the present, and you must communicate
+what you see on your screen to solve the puzzles; very simple, fun, and
+collaborative. A game takes probably 30 minutes to 1 hour, depending on your
+communication skills and puzzle-solving-ability, and since there are multiple
+puzzles and sides to the story, it is also replayable.  Well worth the £7 or so
+that it is on Steam.
 
 ### Signalis
 
@@ -260,24 +293,25 @@ monsters.
 
 You do not have much health, and the game only lets you carry 6 items in your
 inventory at any time (there are synchronised storage crates in safe-rooms, for
-storing extra items and swapping loadouts), making it a fun challenge balancing
-healing items, weapons, ammunition, and the strategies you want to employ when
-traversing the mining complex. The sound design is fabulously unnerving (there
-are tunable radios), and the plot equally so. If you're looking for a different
-type of game and don't mind the horror aspects, Signalis is probably for you.
+storing extra items and swapping loadouts), making it an interesting challenge
+balancing healing items, weapons, ammunition, and the strategies you want to
+employ when traversing the mining complex. The sound design is fabulously
+unnerving (there are tunable radios), and the plot equally so. If you're looking
+for a different type of game and don't mind the horror aspects, Signalis is
+probably for you.
 
 ### Celeste
 
-Celeste is an extremely highly acclaimed puzzle-platformer. It was released in
+Celeste is an incredibly highly acclaimed puzzle-platformer. It was released in
 2018, but I returned to it this year to play through it with more dedication
-than I had previously. Not only did I end up doing a full run, but I managed to
-get obsessed enough to hunt 100% of its achievements.
+than I had previously. Not only did I end up completing the game, but I managed
+to get obsessed enough to hunt 100% of its achievements.
 
 The game is probably as close to perfect as games can get, genuinely. The
 soundtrack, story, level design, and characters are woven together so nicely,
 complementing each other in different ways and by different amounts depending on
-the stage in the game, that the flow of the game is unlike anything else I've
-experienced.
+the stage in each chapter (level), that the flow of the game is unlike anything
+else I've experienced.
 
 Celeste is about the main character, Madeline, trying to climb Celeste mountain,
 mainly just to prove that she can. But it quickly becomes clear that the
@@ -287,17 +321,19 @@ tenacity, pressure, and dealing with one's inner demons. And it manages to do
 this without any of it feeling forced or corny; it all feels very honest.
 
 The game is very challenging, but exemplary in accessibility settings: the game
-speed, stamina, number of dashes, etc. can all be configured in case the default
-difficulty is too much. And there is no judgement here: you can still earn all
-the achievements, complete the story, and do the optional challenges. Celeste is
-meant to be a hard game, but "challenging" means drastically different things
-for different people; why exclude some? You can always leave it off or turn it
-back up if you find it being too easy or want to try the defaults after you've
-gotten used to your personal settings. Each level is also very fair; nothing
-requires pixel-perfect timing or anything like that. This also leads to some
-frustration, as every death means you know pretty much exactly what you did
-wrong. But that makes it so much more fun and satisfying when you finally get a
-room done  : )
+speed, player stamina, number of dashes, etc. can all be configured in case the
+default difficulty is too high. And there is no judgement here: you can still
+earn all the achievements, complete the story, and do the optional challenges as
+you would with the default difficulty. Celeste is meant to be a hard game, but
+"challenging" means drastically different things for different people; why
+exclude some? You can always leave it off or turn it back up if you find it
+being too easy or want to try the defaults after you've gotten used to your
+personal settings.
+
+Each level is also very fair. Nothing requires pixel-perfect timing or anything
+like that. This can lead to some frustration, as every death means you know
+pretty much exactly what you did wrong. But that makes it so much more fun and
+satisfying when you finally get a room done  : )
 
 There's plenty of bonus, more challenging, content once the base story has been
 completed. And finally, there is the free Chapter 9 DLC: "Farewell". It is the
@@ -311,7 +347,7 @@ blends story, music, and gameplay exquisitely!
 I really wanted to like "Hades"; I've played previous Supergiant games and
 thoroughly enjoyed their stories and gameplay. However, I found Hades' final
 boss, and the way to reach it, somewhat arbitrary in difficulty (maybe I just
-need to "git gud"). And while I am interested in what the story is and how the
+need to "git gud"). And while I _am_ interested in what the story is and how the
 relationships between the characters develop, I am not interested enough
 compared to the overall difficulty that I want to clear the game at least 6
 times --- once with each weapon --- along with extra clears to get the random
@@ -330,24 +366,24 @@ around exploring the local wildlife, as well as talk to the locals about things
 like the mayor's plan to build a mega-hotel on the island (which is really
 nicely portrayed as a nuanced issue, not purely evil). The game is incredibly
 immersive with a lot of attention to tiny details that aren't immediately
-obvious, because your brain just accepts them as "how the world works", that's
+obvious, because your brain just accepts them as "how the world works"; that's
 how seamlessly they're implemented.
 
 The buildings are unquestionably Mediterranean in architecture, with slightly
 boxy houses in town and  houses with tiled roofs and white walls surrounding
 them in the residential area just on the outskirts of town. There is a constant
-background noise of cicadas as well, which anyone who has been to the
-Mediterranean in the summer will recognise. And all of that, combined with the
-deep blue sky, bright sun in the day, and warm tint in the evenings, really make
-you believe you're on a small Mediterranean island.
+background noise of grasshoppers and cicadas as well, which anyone who has been
+to the Mediterranean in the summer will recognise. And all of that, combined
+with the deep blue sky, bright sun in the day, and warm tint in the evenings,
+really make you believe you're on a small Mediterranean island.
 
 The crowning jewel of Alba, in my opinion, is its sound design: the people
 behind that _clearly_ studied a lot of birds. The wood pigeons coo from up in
 trees or gutters, the distant cries of swifts descend from high in the sky,
 great tits chirp, oystercatchers have their distinctive cry; you can essentially
-find any bird if you happen to hear its call. The game conveys directional audio
-really well, even on headphones or TV speakers, and since there's no obvious
-cut-off distance, you are able to locate even distant bird calls.
+locate any bird if you happen to hear its call. The game conveys directional
+audio really well, even on headphones or TV speakers, and since there's no
+obvious cut-off distance, you are able to pin-point even distant bird calls.
 
 Also, the animations are spot-on: swifts glide and very occasionally flap their
 wings; swallows swoop; pigeons hop; seagulls glide and hop; smaller birds do
@@ -389,13 +425,12 @@ behaviour during fights is sensible and almost static.)
 
 ### Control
 
-I enjoyed "Control", a paranatural, definitely-not-SCP-inspired game about the
-main character "Jessie" searching for her brother, who was taken by the
-mysterious "Federal Bureau of Control". There are powers like hovering and
-telekinesis to play with, combine with your gun-fu to get to enemies, and to use
-to explore previously unreachable areas of the map. However, I found that the
-novelty of the powers wore off fairly quickly, although the fights were pretty
-well-paced.
+I enjoyed "Control", a paranatural, SCP-inspired game about the main character
+Jessie searching for her brother, who was taken by the mysterious "Federal
+Bureau of Control". There are powers like hovering and telekinesis to play with,
+combine with your gun-fu to get to enemies, and to use to explore previously
+unreachable areas of the map. However, I found that the novelty of the powers
+wore off fairly quickly, although the fights were pretty well-paced.
 
 The game is playable on a Steam Deck, and I didn't mind the playthrough I got
 out of it, nor the game's look on the Steam Deck. But there are so many
@@ -409,22 +444,23 @@ Deep Rock Galactic (DRG) is another game I didn't start in 2023, but still
 warrants mentioning. "Danger, Darkness, Dwarves" is the description, and it
 pretty much does what it says on the tin. You play as a dwarf on a space mining
 rig, sent down in a crude "drop pod" to serve your corporate overlord's mining
-interest, regardless of risk to your own life and limb. However, what makes this
-game such a gem is how much it leans in to this otherwise depressing setting:
-You're grumpy mining dwarves! In space! Every line is voiced exactly as I
-imagine a grumpy dwarf on a mining rig would sound, including the management guy
-who radios you your mission objectives and alerts you when a swarm of bugs is on
-your way. Everything is themed around fantasy dwarf stereotypes, but make it
-space mining, and it makes for great entertainment; the beers at the corporate
-bar is what give you your buffs before each mission, for example! It's great! ^^
+interests, regardless of risk to your own life and limb. However, what makes
+this game such a gem is how much it leans in to this otherwise depressing
+setting: You're grumpy mining dwarves! _In space!_ Every line is voiced exactly
+as I imagine a grumpy dwarf on a mining rig would sound, including the
+management person who begrudgingly radios you your mission objectives and alerts
+you when a swarm of bugs is on your way. Everything is themed around "fantasy
+dwarf stereotypes, but make it space mining", and it makes for great
+entertainment; the beers at the corporate bar is what give you your buffs before
+each mission, for example! It's great! ^^
 
 DRG can be played solo, although thanks to a very well-implemented ping system
-(and the community being friendly in general) I have joined random missions and
-had strangers join my missions, and had a blast each time. There is also voice
-chat, if you like that. By default the team size is 4, one for each class (or a
-different sub-arrangement if you wish), although I hear that can be adjusted
-with mods (which I assume then have to be installed for all players who want to
-join).
+(and the community being friendly in general) I have both joined random missions
+and had strangers join my missions, and had a blast each time. There is also
+voice chat, if you like that. By default the team size is 4, one for each class
+(or a different sub-arrangement if you wish), although I hear that can be
+adjusted with mods (which I assume then have to be installed for all players who
+want to join).
 
 **Rock and Stone!**
 
@@ -445,90 +481,144 @@ somehow every species is humanoid."); plot, scheming, secrets; glimpses of
 technological and scientific explosions that were so cool and interesting, yet
 didn't seem completely magic (for lack of a better term) or illogical. There's
 also small sprinkles of anthropology throughout the books, and it makes for
-highly entertaining musings on what "normal" is, in an intergalactic commons
-context.
+highly entertaining musings on what "normal" is in a Galactic Commons context.
 
-It's not a space opera; nobody is The Chosen One, destined to save the universe
+It's not a space opera; nobody is The Chosen One, destined to save The Universe
 (tm). That might put some people off, and that's fair. But I personally found it
 incredibly refreshing, and all the more enjoyable, to read and experience the
-story of humans and aliens, and their interactions, that still felt relatable
+story of humans and aliens, and their interactions, which still felt relatable
 and humane. The plot, conflicts, relationships, interactions, etc. weren't
-grandiose; and yet they were. (Much in the same way as life, I guess.)
+grandiose, and yet they were. (Much in the same way as life, I guess.)
 
 Anyway. I have since picked up each of the "Wayfarer" novels (of which "The Long
 Way [...]" is the first), and although they are (mostly) independent and with
-different casts, they are all a wonderfully... cosy-whilst-thrilling, I think
-I'll call it. And each one brings something fresh, a new idea / a new
-plot-point, meaning I never felt like the stories were boring or "simply"
-expanding on existing story for the sake of it.
+different casts, they are all wonderfully... cosy-whilst-thrilling, I think I'll
+call it. Each one brings something fresh, a new idea / a new plot-point, meaning
+I never felt like the stories were boring or simply expanding on existing story
+for the sake of it.
 
 Chambers' novella "Monk and Robot"-series are her more recent books, set in a
-more solarpunk kind of world. But there are fun new religions (like one whose
-symbol is a bear eating honey, and the religion is focused on comfort and good
-food), an interesting world to explore along with thoughts on AI, mortality, and
-(indirectly) the meaning of life. Delightfully Zen.
+more solarpunk-esque world. But as always, the world-building is phenomenal:
+there are fun new religions (like one whose symbol is a bear eating honey, and
+the religion is focused on comfort and good food), an interesting world to
+explore along with thoughts on AI, mortality, and (indirectly) the meaning of
+life. Delightfully Zen.
 
-At this point, I will pick up anything she publishes without hesitation, and
-they're my go-to books for a nice afternoon in on a rainy day  : )
+At this point, I will pick up anything Becky Chambers publishes without
+hesitation, and they're my go-to books for a nice afternoon in on a rainy day  :
+)
 
 ### The House of Sorrowing Stars (Beth Cartwright)
 
-Personally found it disappointing. Lots of good ideas, but not quite put
-together into a satisfying story.
-Instalove is not my thing and felt misplaced? awkward?
+There are a lot of good ideas in "The House of Sorrowing Stars", the core one
+being an old house on a lake where people go to resolve their grief via special
+flowers that only bloom when the grief has been processed. Each person's grief
+is unique, leading to individual stories that must be told and processed in
+their own way, and an individual amount of time spent by the person visiting the
+house. It is a good setting. However, I personally found the book as a whole
+somewhat disappointing.
+
+The main character flees home, and this is never touched upon again, even though
+she brings with her her father's craft (making marchpane) and her father
+supports her decision to leave. One of the residents regrets not supporting his
+son's passion, a similar situation to the starting position of the heroine, but
+again, we never get to see how he eventually resolves this as part of processing
+his grief. (In general, I would've liked to see more exploration of the idea of
+how the house and flowers work.) The romance is also a bit iffy: the main
+character wants to be independent and more than just "a pretty thing", yet she
+gets shoe-horned into an insta-love with one of the permanent residents of the
+house, without any rapport being built up or loosely established, to heal and
+"fix" him, finding his violent outbursts of rage adoringly protective (or
+something like that). Something is juts off about it; it felt misplaced and
+awkward.
+
+But such is any media consumption. As part of finding the good pieces, you
+inevitably encounter duds or ones which seemed promising but disappoint.
 
 ### Monstress (Marjorie Liu and Sana Takeda)
 
 Okay, this one I've technically been following for 7 years, but I picked up
-"Volume 8: Inferno" last month and it just continues to be excellent. The art is
-gorgeous, with clear inspiration from the Jugenstil/Art Nouveau movement, mixed
-with a healthy amount of Steam Punk, but that wouldn't matter too much if the
-story wasn't good. If you hadn't guessed, it thankfully is. We've got political
-plots, intrigue, and mystique, spread between a religious cult, immortal
-demi-gods from an unknown world, talking cats with multiple tails (and
-warrior-poets!), humans, and "arcanics", which are children of the humans and
-the demi-gods. But no faction is perfect either, there are internal conflicts,
-corruption, all that good stuff that makes for really nice and deep storytelling
-about a world in a post-war, delicate state.
+"Volume 8: Inferno" in November 2023 and it continues to be excellent. The art
+is gorgeous, with clear inspiration from the Jugenstil/Art Nouveau and Art Déco
+movements, mixed with a healthy amount of Steam Punk. Now, that wouldn't matter
+too much if the story wasn't good. If you hadn't guessed, it thankfully is  ^^
+
+It's got political plots, intrigue, and mystique; factions include a religious
+cult, immortal demi-gods from an unknown world, talking cats with multiple tails
+(and warrior-poets!), humans, and "arcanics", which are hybrid children of the
+humans and the demi-gods. But no faction is perfect. There are internal
+conflicts, corruption, all that good stuff that makes for really nice,
+realistic, and deep storytelling about a world in a post-war, delicate state.
+Everyone has a personal goal, and these don't just align out of convenience for
+the story; it is much more interesting to explore the characters as they try to
+reconcile differences. 
 
 It also has one of the aspects I respect enormously in a story, especially one
-set in a plotting, post-war, grim world: it doesn't shy away from hurting its
-cast or characters. Battles are fought, sieges are laid, sabotages are
-conducted, and never is it "And the heroes made it because they're the heroes."
-or "And the cute ones were unscathed because war never affects the innocent."
+set in a scheming, recently-post-war world: it doesn't shy away from hurting its
+cast or main characters. Battles are fought, sieges are laid, sabotages are
+conducted, and it is never "And the heroes made it because they're the heroes."
 The fights are fair and realistic, with every dirty trick you would expect from
-highly powerful, definitely-not-quite-at-war factions applied, and if the main
-character would lose a limb, they do. Characters which were introduced but run
-into an infernal monster? They get killed by said monster. And I respect that.
+highly powerful, definitely-not-at-war factions applied. If a character would
+lose a limb, they do. Characters which were introduced but run into an infernal
+monster? They don't miraculously make it out, they die. And I respect that.
 
-It also deals very nicely, in my opinion, with the mental state of its
-characters and how that changes based on the events that they encounter. I'm
-looking forward to see where the story gets taken now that it seems it's
-potentially reached the endgame.
+Tying into this, Monstress also nicely includes and handles the mental state of
+its characters and how their psyche changes based on the events that they
+encounter, the PTSD they (inevitably) develop from the turmoil they go through,
+the choices they must make, and the events that affect them even though they
+were outwith their control.
+
+I'm looking forward to see where the story gets taken now that it seems it is
+(sadly) reaching its endgame.
 
 ### The Infinity Particle (Wendy Xu)
 
 On a completely different note to Monstress, "The Infinity Particle" is a strong
 recommend to anyone who's familiar with the Becky Chambers novels and want
-_more_. It's a sweet, but short, story set in a near-ish future on Mars. About a
+_more_. It's a sweet, but short, story set in a near-ish future on Mars, about a
 tech intern, a human-like sentient robot, and narcissism (okay, that part is not
 sweet, but it is key to the story). There are many interesting little thoughts
 about what a world with conscious AI would be like, mutual respect in
 relationships both platonic and non, as well as power structures. I think it
 might be aimed at more of a young-adult audience, but it scratched that "cosy
-space sci-fi" itch for me  ^^
+space sci-fi" itch for me  : )
 
 ### The Three-Body Problem and The Dark Forest (Cixin Liu)
 
-TODO: I have mixed feelings about these. But they're generally good (I think).
+I have mixed feelings about these. They are good sci-fi novels (I think), and
+they introduce interesting ideas about what First Contact might be like, discuss
+human nature, etc. However, they also take a while to get going; for both books,
+I've thought "When is anything going to happen" up until around page 100, but
+then they really kick off! This might just be a difference in story-telling,
+compared to all the British, Nordic, and USA-based sci-fi I have consumed up
+until now, but, for example, in "The Dark Forest", when I was on the third page
+of intricately describing an ant crawling over the inscription on a statue,
+which it could never hope to understand, but still the shapes and corners and
+curves said something about the world and the meaning of everything (and this
+was done for at least 2-3 symbols on the statue), I really was tempted to skip
+ahead to wherever the metaphor ended; a metaphor is fine, but I definitely got
+it by the second time it was repeated, and the amount of detail used in each
+repetition, I personally found, dragged it out unnecessarily.
+
+Again, once they get going, they're really good. And maybe all it is, is a
+difference in story-telling approaches. But I do wish they gripped you a bit
+more at the start of the book, promised you something, rather than setting the
+scene for over 100 pages.
 
 
 ### Others
 
-I enjoyed these, and miraculously even had time to write a bit more about it.
+More books I enjoyed, and miraculously even had time to write full posts about:
 
 * [N.K. Jemisin's "Broken Earth Trilogy"](/en/post/go-read-the-broken-earth-trilogy),
     of which the first book is
     [The Fifth Season](/en/post/fifth-season).
 * ["The Starless Sea" by Erin Morgenstern](/en/post/the-starless-sea)
+
+
+-----
+
+
+And that's all of that. Thank you for reading along, I hope 2024 is a good year
+for you!  <3
 
