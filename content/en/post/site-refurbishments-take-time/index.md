@@ -53,7 +53,8 @@ And finally, some other people's gardens that I really like the look of (in
 addition to the 2 I just referenced):
 
 * [Nikita Voloboev's Knowledge Wiki](https://wiki.nikiv.dev/)
-* [Quartz](https://quartz.jzhao.xyz/)
+* [Mike Walton's forest of ideas](https://mwalton.me/)
+* [Quartz](https://quartz.jzhao.xyz/), which was used to build the site above.
 * [manunamz's WikiBonsai project](https://github.com/wikibonsai/wikibonsai)
   - I seriously considered migrating my site to this, I love the little "tree"
       network visualisation of different tags. But in the end, I sort of want to
@@ -69,7 +70,7 @@ in the category "shoot")
 * :beans: **seed** --- Seeds are things which I intend to write, but haven't
     gotten beyond the prototyping/bullet-point/ideation stage. I'll try my best
     to have these on the website, so that people can see what I'm up to and
-    thinking about; usually, until now, they have lived in a little green
+    thinking about; usually, until now, they lived in a little green
     Leuchturm-notebook. Annoyingly, there is no seed emoji, so beans will have
     to do.
 * :seedling: **sprout** --- Sprouts are the start of something bigger, like a
@@ -82,6 +83,11 @@ in the category "shoot")
     just decide that they're actually fine, and nothing needs adjusting. I'm not
     quite happy with the name "shoot", so that may change if I find a better
     term.
+* :evergreen_tree: **evergreen** --- These are the finished and polished
+    posts, essays, tutorials, what have you. Although the name "evergreen"
+    suggests that they never need adjusting, that's will vary depending on the
+    post (for example, my Arch Linux install guide definitely needs tending by
+    now; oops), and so I might still change these from time to time.
 * :potted_plant: **succulent** --- There is no succulent emoji! A travesty!
     Anyway. Succulents are little tips and tricks which are not quite big enough
     to warrant their own post. Quite often I stumble upon little command-line
@@ -89,11 +95,6 @@ in the category "shoot")
     will be little potted ~~succulents~~ plants. (I may very well rectify this
     grave injustice and create my own little cute succulent emoji to make the
     world right ^^)
-* :evergreen_tree: **evergreen** --- These are the finished and polished
-    posts, essays, tutorials, what have you. Although the name "evergreen"
-    suggests that they never need adjusting, that's will vary depending on the
-    post (for example, my Arch Linux install guide definitely needs tending by
-    now; oops), and so I might still change these from time to time.
 
-< something which rounds off >
+< fix beans, add something which rounds off >
 
