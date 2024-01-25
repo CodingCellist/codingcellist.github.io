@@ -48,6 +48,7 @@ Welcome to the slow-motion train wreck! Enjoy!
     good!
 * And then I can start writing.
 * Speaking of: we put together a rough plan for what chapters there will be
-  - TODO: Photo of this
   - "Hey, I think we're actually gonna make it!"
+
+![Photo of a notebook page reading "Thesis layout", with a list of chapters](/phd-writeup/00-thesis-layout.jpg)
 
