@@ -40,5 +40,7 @@ url_video: ""
 #   Otherwise, set `slides = ""`.
 slides: ""
 ---
-{{< gist-embed CodingCellist 05556e0cb6cde146fc3f70b578b73da3 gist93766799>}}
+<!-- FIXME
+gist-embed CodingCellist 05556e0cb6cde146fc3f70b578b73da3 gist93766799
+-->
 

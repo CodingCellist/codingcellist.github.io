@@ -1,21 +1,23 @@
 # SITE SETUP
-# Guide: https://wowchemy.com/docs/getting-started/
-# Documentation: https://wowchemy.com/docs/
+# Guide: https://docs.hugoblox.com/tutorial/
+# Documentation: https://docs.hugoblox.com/
 # This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
+
 
 # Appearance
 
 appearance:
-  # theme chosen
-  # https://wowchemy.com/docs/customization/#color-themes
+  # The settings below seem to still work but have gotten obliterated from the
+  # docs and replaced by "Just DIY with custom CSS 4head"  -_-
   theme_day: coffee
   theme_night: coffee
-  # https://wowchemy.com/docs/getting-started/customization/#fonts
   font: minimal
   # XS | S | M | L | XL
   font_size: L
 
+
 # Site header
+
 header:
   navbar:
     enable: true
@@ -26,28 +28,36 @@ header:
     show_search: true
     highlight_active_link: true
 
-# Localization
+
+# Site Footer
+
+footer:
+  # LICENSE: This website is licensed under CC-BY-SA
+  copyright:
+    notice: '© 2021-{year} Thomas E. Hansen. This work is licensed under {license}'
+    license:
+      enable: true
+      allow_derivatives: true
+      share_alike: true
+      allow_commercial: true
+
+
+# Localisation
+
 locale:
-  # date and time format
-  # (https://wowchemy.com/docs/getting-started/customization/#datetime-options)
   # NOTE: **must** refer to Monday the 2nd of January 2006
   date_format: 'Mon, 2 Jan 2006'
   # NOTE: **must** refer to 15:04 or 3:04 PM
   time_format: '15:04'
   address_format: en-gb
 
+
 # Site features
+
 features:
   syntax_highlighter:
-    enable: true
-  extra_languages:
-    - c
-    - bash
-    - haskell
-    - idris
-    - java
-    - markdown
-    - scheme
+    theme_light: github-light
+    theme_dark: dracula
 
   # LaTeX math rendering?
   math:
@@ -56,14 +66,11 @@ features:
   privacy_pack:
     enable: false
 
-    #edit_page:
-    #  repo_url: ''
-    #  content_dir: ''
-    #  repo_branch: main
-    #  editable:
-    #    page: false
-    #    post: false
-    #    book: false
+  # TODO: ? Unsure what this does
+  ## repository:
+  ##   url: 'https://github.com/<username>/<repository>'
+  ##   content_dir: content
+  ##   branch: main
 
   avatar:
     # gravatar.com?
@@ -72,84 +79,36 @@ features:
 
   comment:
     provider: ''  # blank to disable
-  #  commentable:
-  #    post: false
-  #    book: false
-  #    project: false
-  #    publication: false
-  #    event: false
-  ##  disqus:
-  ##    shortname: ''
-  ##    show_count: true
-  ##  commento:
-  ##    url: ''
+    ## disqus:
+    ##   shortname: ''
+    ##   show_count: true
+    ## commento:
+    ##   url: ''
+    ## giscus:    # TODO: This might be interesting, but honestly, do I want it?
+    ##   repo: ''
+    ##   repo_id: ''
+    ##   category: ''
+    ##   category_id: ''
+    # TODO: If I _do_ decide to enable commenting, see:
+    #       * https://docs.hugoblox.com/reference/page-features/#how-to-configure-a-page-collection
+    #       * https://docs.hugoblox.com/reference/comments/#choose-where-users-can-comment
+    #       * https://gohugo.io/content-management/front-matter/#cascade
 
   search:
     provider: # blank to disable
-  ##  algolia:
 
-  ##map:
-  ##  provider: ''  # blank to disable
+  map:
+    provider: ''  # blank to disable
   ##  api_key: ''
   ##  zoom: 15
-  ##
 
-show_related:
-  book: true
-  page: false
-  post: false
-  project: true
-  publication: true
-  event: false
-
-reading_time: false
-
-section_pager: false
-
-docs_section_pager: true
-
-footer:
-  # LICENSE: This website is licensed under CC-BY-SA
-  copyright:
-    notice: 'This work is licensed under {license}'
-    license:
-      enable: true
-      allow_derivatives: true
-      share_alike: true
-      allow_commercial: true
-
-abstract_length: 135
-plugins_js: []
-
-publications:
-  date_format: January 2006
-  # apa or mla
-  citation_style: apa
-
-projects:
-  post_view: 2
-  publication_view: 2
-  talk_view: 2
-
-breadcrumb:
-  page_types:
-    book: true
-
-##    api_key: ''
-##    index_name: ''
-##    show_logo: false
-
-##marketing:
-##  google_analytics: ''
-##  google_tag_manager: ''
-##  google_site_verification: ''
-##  baidu_site_verification: ''
-##  baidu_tongji: ''
 
 extensions:
   cms:
     branch: main
     local_backend: false
+  # https://jpswalsh.github.io/academicons/
+  # (for the SciHub raven!)
   academicons:
-    enable: false
+    enable: true
 
