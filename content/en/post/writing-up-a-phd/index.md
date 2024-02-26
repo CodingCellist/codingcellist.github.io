@@ -114,3 +114,16 @@ that a solution could be implemented.
 * Need to write a talk for SPLS in March. February is surprisingly short
     suddenly.
 
+## 2024-02-26
+
+* Not much thesis writing going on bc. I foolishly agreed to give a talk at a
+    seminar on the 6th of March
+  - Which is coming along much faster than I expected!
+* Otoh, I have discovered some really neat ways Idris2 can help with what I'm
+    doing, which is cool
+  - `failing` can take a (sub)string of an error message to match, catching when
+      you fail bc. of a typo or mismatched arg.s rather than the error you were
+      trying to demo.
+* Also discovered a misconfiguration in a test I'd written, showing that my
+    PhD's approach helps me write my PhD showcase itself  ^^
+
