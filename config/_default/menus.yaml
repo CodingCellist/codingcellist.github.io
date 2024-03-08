@@ -7,24 +7,35 @@ main:
   - name: Home
     url: '#about'
     weight: 10
+
   - name: Recent posts
     url: '#posts'
     weight: 20
+
   - name: Experience
     url: '#experience'
     weight: 30
+
 #  - name: Projects
 #    url: '#projects'
 #    weight: 40
-  - name: Accomplishments
-    url: '#accomplishments'
-    weight: 50
+
+##  - name: Accomplishments
+##    url: '#accomplishments'
+##    weight: 50
+
   - name: Blog
     url: 'blog'
     weight: 50
+
   - name: Coursework
     url: 'coursework-archive'
     weight: 90
+
+  - name: PhD progress
+    url: '/en/post/writing-up-a-phd/'
+    weight: 100
+
 
 #  - name: Publications
 #    url: '#featured'
