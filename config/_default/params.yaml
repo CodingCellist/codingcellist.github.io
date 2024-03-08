@@ -9,9 +9,12 @@
 appearance:
   # The settings below seem to still work but have gotten obliterated from the
   # docs and replaced by "Just DIY with custom CSS 4head"  -_-
+
   theme_day: coffee
-  theme_night: coffee
+  theme_night: dark
+
   font: minimal
+
   # XS | S | M | L | XL
   font_size: L
 
