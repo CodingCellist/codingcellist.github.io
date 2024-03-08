@@ -45,13 +45,13 @@ cascade:
     reading_time: false
     commentable: false
     show_related: true
-    # TODO: experiment with this
+    # whether to show a path-like thing at the top
     show_breadcrumb: false
     share: false
-    # TODO: experiment with this
+    # whether to show the menu-/nav-bar at the top of each blog page
     header:
       navbar:
-        enable: false
+        enable: true
 
 
 ############################
