@@ -257,7 +257,7 @@ doesn't handle revoked subkeys (see
 [this](https://github.community/t/gpg-pgp-subkey-rotation-revocation-and-verified-commits/183845)
 for some discussion on the topic). If you need to, I believe you can verify them
 locally by downloading
-[my old public key](/files/2020-08-09_pubkey.asc).
+[my old public key](/uploads/2020-08-09_pubkey.asc).
 
 ### Summary of lessons learnt
 

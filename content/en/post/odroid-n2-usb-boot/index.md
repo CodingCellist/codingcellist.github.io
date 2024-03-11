@@ -65,7 +65,7 @@ shell greeted me! The image was not aligned with the display (probably due to
 the TV in my flat being much newer than the Odroid N2), but still, it was better
 than no output at all!
 
-![A picture of a screen with the leftmost 3 letters of every line of text missing due to misalignment.](/media/odroid-cropped-text.jpg)
+![A picture of a screen with the leftmost 3 letters of every line of text missing due to misalignment.](odroid-cropped-text.jpg)
 
 As with most command-line interfaces, the first useful thing to do was to try
 the `help` command. In this case, there wasn't much that suggested being able to
@@ -102,7 +102,7 @@ somewhat hindered by the left side of the output being cut off by the display
 misalignment. But, there was some `[...]/dev/sda/[...]` stuff in the output.
 Could that be it?
 
-![A picture of a screen with misaligned lines of text; one of the legible parts reads "mapper/pb-sda1 on /usr/var/petitboot/mnt/dev/sda1 type ext4 (ro,relatime)".](/media/odroid-usb-already-mounted.jpg)
+![A picture of a screen with misaligned lines of text; one of the legible parts reads "mapper/pb-sda1 on /usr/var/petitboot/mnt/dev/sda1 type ext4 (ro,relatime)".](odroid-usb-already-mounted.jpg)
 
 Yes! Deriving the missing parts via tab-completion and then running `ls` on the
 path gave me a root file-system with `/boot` and all the other goodness I

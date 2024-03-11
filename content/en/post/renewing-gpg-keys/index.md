@@ -188,7 +188,7 @@ With the changes made, we now need to notify the world of them. If you're using
 a keyserver, resubmit/resend it the public key(s). If you've got an ASCII-armor
 file somewhere (e.g. your personal website), remember to also export and
 reupload your public key(s) there (mine are
-[here](/files/pubkey.asc)).
+[here](/uploads/pubkey.asc)).
 I think, if you're using keys for GitHub and similar services, you also need to
 resubmit them there (it makes sense intuitively, as far as I can tell), so
 remember to do that as well.

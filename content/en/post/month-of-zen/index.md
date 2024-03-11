@@ -104,7 +104,7 @@ for my Bose QC-25s:
 Each half of the keyboard also has its own little protective fabric bag, making
 the product feel extremely premium and thought-through:
 
-![An image of two fabric pouches on a table. The pouches have a stylized "Corne-Ish Zen" printed on them.](/media/zen-pouch-horizontal.jpg)
+![An image of two fabric pouches on a table. The pouches have a stylized "Corne-Ish Zen" printed on them.](zen-pouch-horizontal.jpg)
 
 In terms of the keyboard itself, each side has 3 rows of 6 keys, arranged in a
 columnar layout, along with 3 thumbkeys, which are arranged in a small arc.
@@ -113,7 +113,7 @@ connection, and current layer. And the case is made of machined aluminium, which
 both looks and feels premium! Mine is a blue anodised version and I think it
 looks _pretty good_, especially when paired with black keycaps:
 
-![An image of the two halves of the Zen keyboard. Each half is a mirror of the other.](/media/zen-deployed.jpg)
+![An image of the two halves of the Zen keyboard. Each half is a mirror of the other.](zen-deployed.jpg)
 
 Roughly measured, the Zen's height, length, and width is around 9.5cm, 13.7cm,
 and 1.9cm (1.4cm without keycaps) respectively.
@@ -169,7 +169,7 @@ After some experimentation, I ended up with 3 layers:
    based on a combination of where I would expect to find them (muscle memory)
    and my current Dygma Raise layout:
 
-![A visualisation of the QWERTY-layer](/media/zen-qwerty-layer.png)
+![A visualisation of the QWERTY-layer](zen-qwerty-layer.png)
 
 2. A "function and number-keys" layer, which took a bit more work. Not making
    matters easy for myself, I have become used to the i3 tiling window manager,
@@ -179,7 +179,7 @@ After some experimentation, I ended up with 3 layers:
    function keys), the i3 keys on the top row, and the symbols I would normally
    type using `AltGr`+\<number\> on the bottom row:
 
-![A visualisation of the FNum-layer](/media/zen-fnum-layer.png)
+![A visualisation of the FNum-layer](zen-fnum-layer.png)
 
 3. A Bluetooth and navigation layer. The Zen is a wireless Bluetooth keyboard,
    and I hadn't put arrow keys and friends anywhere yet. The Bluetooth controls
@@ -187,7 +187,7 @@ After some experimentation, I ended up with 3 layers:
    media-and-navigation-keys hub on the lower two rows. The "Clear Bluetooth"
    button was placed in the bottom left to avoid accidental presses:
 
-![A visualisation of the BTNav-layer](/media/zen-btnav-layer.png)
+![A visualisation of the BTNav-layer](zen-btnav-layer.png)
 
 ### Applying the layout
 
