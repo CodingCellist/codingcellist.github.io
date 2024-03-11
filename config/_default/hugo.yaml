@@ -12,7 +12,7 @@
 title: Thomas Ekström Hansen
 
 # root of the website, should contain a trailing slash
-baseurl: 'https://codingcellist.github.io/'
+baseURL: 'https://codingcellist.github.io/'
 
 
 ############################
