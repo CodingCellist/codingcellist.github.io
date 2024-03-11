@@ -42,7 +42,7 @@ this to various people, both friends and family, hopefully I can write something
 at least semi-coherent which provides a nice explanation.
 
 By the way, this post is also a Literate Idris file, which means you can load
-[the markdown it's based on](/files/DecEqIntro.md)
+[the markdown it's based on](/uploads/DecEqIntro.md)
 at the REPL and try using the functions it defines!
 
 

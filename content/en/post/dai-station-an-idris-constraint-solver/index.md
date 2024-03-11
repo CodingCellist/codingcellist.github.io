@@ -100,7 +100,7 @@ After much consideration, I decided to go for "Dai Station", the station manager
 in Ivor the Engine. He deals with scheduling and regulations as part of his
 dayjob; sounds exactly like a constraint solver! ^^
 
-![A still of Dai Station: a moustachioed man wearing a conductors uniform and hat, holding a regulations book](/media/ivortheengine-fandom-wiki-dai-station.jpg "Dai Station (Image from [Fandom wiki](https://static.wikia.nocookie.net/ivortheengine/images/a/a7/D1-1-.gif/revision/latest?cb=20081114013036), CC-BY-SA)")
+![A still of Dai Station: a moustachioed man wearing a conductors uniform and hat, holding a regulations book](ivortheengine-fandom-wiki-dai-station.jpg "Dai Station (Image from [Fandom wiki](https://static.wikia.nocookie.net/ivortheengine/images/a/a7/D1-1-.gif/revision/latest?cb=20081114013036), CC-BY-SA)")
 
 With the hardest bit out of the way, time to write a constraint solver!
 

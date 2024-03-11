@@ -20,9 +20,9 @@ main:
 #    url: '#projects'
 #    weight: 40
 
-  - name: Accomplishments
-    url: '#accomplishments'
-    weight: 50
+##  - name: Accomplishments
+##    url: '#accomplishments'
+##    weight: 50
 
   - name: Blog
     url: 'blog'
@@ -31,6 +31,11 @@ main:
   - name: Coursework
     url: 'coursework-archive'
     weight: 90
+
+  - name: PhD progress
+    url: '/en/post/writing-up-a-phd/'
+    weight: 100
+
 
 #  - name: Publications
 #    url: '#featured'
@@ -41,3 +46,4 @@ main:
 #  - name: CV
 #    url: uploads/resume.pdf
 #    weight: 70
+

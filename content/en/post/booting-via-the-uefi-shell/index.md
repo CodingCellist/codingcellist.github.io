@@ -35,7 +35,7 @@ When it rains it poors, it seems. Roughly a day after
 [my GPG smartcard broke](en/post/recovering-from-a-broken-smartcard/), my
 laptop decided to start breaking, and quite spectacularly at that:
 
-![Black laptop screen, except for some random coloured lines. Like cat-ing /dev/random](/media/laptop-crash.jpg)
+![Black laptop screen, except for some random coloured lines. Like cat-ing /dev/random](laptop-crash.jpg)
 
 This would happen randomly, within about 1-5 minutes of turning the machine on,
 so it was very much not usable. Unfortunately, it also was (and still is) the
@@ -59,7 +59,7 @@ laptops/ultrabooks go, the X1E1 is pretty user-replaceable: The RAM isn't
 soldered to the motherboard, nor are the SSDs, the WIFI-card, or the battery.
 And, it turns out, nor are the USB-A ports! They slide! :D
 
-![Two USB-A ports on a motherboard, each in a bracket. One bracket has been slid back, pulling the port further in than normal](/media/x1e1-usb-hw.jpg)
+![Two USB-A ports on a motherboard, each in a bracket. One bracket has been slid back, pulling the port further in than normal](x1e1-usb-hw.jpg)
 
 This is what allows to fit the motherboard in there in the first place. Without
 the sliding USB-A ports, it would be too wide, and the edges too rigid, to fit
@@ -71,7 +71,7 @@ I'll always be amazed at how small the dies of CPUs+GPUs actually are. I think
 it's amazing how small we've managed to make these incredibly complex and
 powerful machines ^^
 
-![The GPU and CPU dies on the motherboard; about 1 by 1 cm and 1 by 3 cm respectively](/media/x1e1-cpu-gpu.jpg)
+![The GPU and CPU dies on the motherboard; about 1 by 1 cm and 1 by 3 cm respectively](x1e1-cpu-gpu.jpg)
 
 (That's the old motherboard by the way, the new one did not come with residual
 thermal paste.)

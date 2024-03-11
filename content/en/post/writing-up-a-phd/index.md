@@ -8,7 +8,7 @@ authors: [thomas-e-hansen]
 tags: [misc, phd, academia]
 categories: [seed]
 date: 2024-01-16
-lastmod: 2024-01-16
+lastmod: 2024-03-08
 featured: false
 draft: false
 
@@ -39,6 +39,7 @@ understanding.
 
 Welcome to the slow-motion train wreck! Enjoy!
 
+
 ## 2024-01-15
 
 * Supervisor meeting with details for what next
@@ -51,6 +52,7 @@ Welcome to the slow-motion train wreck! Enjoy!
   - "Hey, I think we're actually gonna make it!"
 
 ![Photo of a notebook page reading "Thesis layout", with a list of chapters](/phd-writeup/00-thesis-layout.jpg)
+
 
 ## 2024-02-21
 
@@ -114,6 +116,7 @@ that a solution could be implemented.
 * Need to write a talk for SPLS in March. February is surprisingly short
     suddenly.
 
+
 ## 2024-02-26
 
 * Not much thesis writing going on bc. I foolishly agreed to give a talk at a
@@ -126,4 +129,32 @@ that a solution could be implemented.
       trying to demo.
 * Also discovered a misconfiguration in a test I'd written, showing that my
     PhD's approach helps me write my PhD showcase itself  ^^
+
+
+## 2024-03-08
+
+Managed to give my talk at the seminar earlier this week, which was really good.
+I ended up working on the slides until 8 minutes before the seminar was
+starting, because I suddenly also had to update the website and schedule, but it
+all worked out.
+
+It is always interesting to see what people are working on, and there were a
+great many number of interesting talks. Simon Gay gave a talk on train tracks
+and dependent types which, as anything involving trains does now, made me go
+"Oooh! Can we do fun Factorio-like things with this?". It was also really nice
+and validating to have people come up to me during the coffee break and mention
+that they were doing similar things in industry, but worse, due to the lack of
+dependent types. Or that they had some ideas for how I could generalise it. One
+person came up to me in the pub after the seminar and said that it was the best
+introduction to dependent types they'd seen and that they were really interested
+now, so that was really awesome to hear. All the more reason to give these talks
+I guess  : )
+
+Now it is time to get back to writing. On the bright side, the talk from the
+seminar should definitely be portable into a part of my thesis. On the less
+bright side, I need to actually write out the content from it, I can't just
+speak it.
+
+Oh and I want to get some info-vis-like progress meter going for my word count.
+So that's what I'm procrastinating with right now  ^^
 

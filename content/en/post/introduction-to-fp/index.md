@@ -128,7 +128,7 @@ functional programming has to be complicated pure maths! It is perfectly
 possible to do FP without doing a course on CT as well, or learning various
 different type-theories (another useful mathematical thing that FP is based on).
 
-![Meme: STOP DOING TYPE THEORY! BYTES IN MEMORY WERE NOT MEANT TO BE GIVEN A MEANING](/media/stop-doing-type-theory.png "https://nitter.net/jcreed/status/1367899760301137930")
+![Meme: STOP DOING TYPE THEORY! BYTES IN MEMORY WERE NOT MEANT TO BE GIVEN A MEANING](stop-doing-type-theory.png "https://nitter.net/jcreed/status/1367899760301137930")
 
 
 ### What is a function? A miserable little pile of instructions!

@@ -57,7 +57,8 @@ social:
   link: "mailto:thomas-e-hansen@teh6.eu"
 - icon: user-lock
   icon_pack: fas
-  link: ../files/pubkey.asc
+# we need `..` here bc otherwise it defaults to `/en/uploads`
+  link: ../uploads/pubkey.asc
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -75,7 +76,7 @@ email: ""
 ---
 
 I am currently doing a PhD in Computer Science on
-[something along the lines of combining Type Theory and Formal Methods](../files/phd-proposal.pdf)
+[something along the lines of combining Type Theory and Formal Methods](../uploads/phd-proposal.pdf)
 (although this may change over the course of the project), supervised by
 [Dr Edwin Brady](https://www.type-driven.org.uk/edwinb/). I enjoy writing code,
 collaborating on projects, and helping people write or fix code.

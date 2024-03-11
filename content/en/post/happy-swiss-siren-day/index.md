@@ -40,12 +40,12 @@ At about 13:30, an ear-piercing screech cuts through the air.
 -----
 
 A year ago, when I was also visiting Switzerland, I was sitting in my SO's flat
-when the same thing happened. Except, because the flat is quite well-insulated (and the
-windows were closed due to it being February), the same screech was a lot more
-quiet... My first thought was "Huh, that sounds almost like air-raid sirens. But
-I must be wrong; why would something like that be going off?" Only for me to
-open the window and discover that, yes, those were, in fact, air-raid-like
-sirens. Sounding all around the city.
+when the same thing happened. Except, because the flat is quite well-insulated
+(and the windows were closed due to it being February), the same screech was a
+lot more quiet... My first thought was "Huh, that sounds almost like air-raid
+sirens. But I must be wrong; why would something like that be going off?" Only
+for me to open the window and discover that, yes, those were, in fact,
+air-raid-like sirens. Sounding all around the city.
 
 If you've seen enough movies, or played enough video games, the sound is
 unmistakeable and hearing it in the real world, in what you know is not some
@@ -55,8 +55,8 @@ had somehow suddenly broken out. When that didn't seem to be the case (and I
 started getting the adrenaline under control) I noticed that literally nobody
 else down on the street below seemed concerned. Either they'd made their peace
 with the impending doom a long time ago, or there was something I was missing.
-Assuming it was most likely the latter, I tried looking at local the local news,
-but no luck there either. Finally, I did an online search for "Switzerland air
+Assuming it was most likely the latter, I tried looking at the local news, but
+no luck there either. Finally, I did an online search for "Switzerland air
 sirens" (in retrospect, I probably should've done that a lot sooner in the
 process) and found a perfectly reasonable explanation on an online forum. I
 laughed a bit at the wave of relief that washed over me, and continued going

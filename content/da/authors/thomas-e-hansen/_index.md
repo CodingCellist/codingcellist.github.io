@@ -57,7 +57,7 @@ social:
   link: "mailto:thomas-e-hansen@teh6.eu"
 - icon: user-lock
   icon_pack: fas
-  link: ../files/pubkey.asc
+  link: ../uploads/pubkey.asc
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
 # - icon: cv
@@ -75,7 +75,7 @@ email: ""
 ---
 
 I øjeblikket er jeg i gang med en ph.d. i datalogi, angående
-[noget i retning af at kombinere Typeteory og Formelle Metoder](../files/phd-proposal.pdf)
+[noget i retning af at kombinere Typeteory og Formelle Metoder](../uploads/phd-proposal.pdf)
 (men emnet kan ændre sig, efterhånden som projektet skrider frem), under
 vejledning af [Dr. Edwin Brady](https://www.type-driven.org.uk/edwinb/). Jeg kan
 godt lide at kode, samarbejde på projekter, og hjælpe andre med at skrive eller

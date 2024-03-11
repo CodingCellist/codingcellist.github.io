@@ -3,30 +3,17 @@
 # Hugo Documentation: https://gohugo.io/getting-started/configuration/#all-configuration-settings
 # This file is formatted using YAML syntax - learn more at https://learnxinyminutes.com/docs/yaml/
 
+
+############################
+## TITLE AND ROOT
+############################
+
 # website title/name
 title: Thomas Ekström Hansen
 
 # root of the website, should contain a trailing slash
-baseurl: 'https://teh6.host.cs.st-andrews.ac.uk'
+baseurl: 'https://codingcellist.github.io/'
 
-############################
-### PAGE OPTIONS
-#############################
-
-cascade:
-  # Blog post options
-  - _target:
-    path: /post/**
-    pager: true
-    editable: false
-    reading_time: false
-    commentable: false
-    show_related: true
-    show_breadcrumb: false    # `Home / Posts / <title>` at the top?
-    share: false
-    header:
-      navbar:
-        enable: true
 
 ############################
 ## LANGUAGE
@@ -35,6 +22,7 @@ cascade:
 # use EN by default and not DA
 defaultContentLanguage: en
 
+# does this site use Chinese, Japanese, and/or Korean?
 hasCJKLanguage: false
 
 # default content is in content/en
@@ -44,14 +32,26 @@ removePathAccents: true
 
 
 ############################
-## MODULES
+## COLLECTIONS
 ############################
 
-module:
-  imports:
-    - path: github.com/wowchemy/wowchemy-hugo-themes/modules/wowchemy-plugin-netlify-cms
-    - path: github.com/wowchemy/wowchemy-hugo-themes/modules/wowchemy-plugin-netlify
-    - path: github.com/wowchemy/wowchemy-hugo-themes/modules/wowchemy/v5
+# https://docs.hugoblox.com/reference/page-features/#how-to-configure-a-page-collection
+cascade:
+  # Configure blog posts
+  - _target:
+      path: /post/**
+    pager: true
+    editable: false
+    reading_time: false
+    commentable: false
+    show_related: true
+    # whether to show a path-like thing at the top
+    show_breadcrumb: false
+    share: false
+    # whether to show the menu-/nav-bar at the top of each blog page
+    header:
+      navbar:
+        enable: true
 
 
 ############################
@@ -59,7 +59,7 @@ module:
 ############################
 
 # get latest update info from git?
-enableGitInfo: false
+enableGitInfo: true
 
 # summary length in words
 summaryLength: 30
@@ -108,19 +108,10 @@ related:
       weight: 100
     - name: categories
       weight: 70
-
-sitemap:
-  _merge: deep
-
-
-############################
-## SECURITY
-############################
-
 security:
   _merge: deep
-  funcs:
-    getenv:
-      - ^HUGO_
-      - ^WC_
+sitemap:
+  _merge: deep
+minify:
+  _merge: deep
 

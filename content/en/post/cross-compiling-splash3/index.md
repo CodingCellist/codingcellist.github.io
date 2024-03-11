@@ -203,7 +203,7 @@ To use the new `libtiff` with `volrend`, we need to make a couple of changes:
     - Remove the `$(MAKE) -C libtiff clean` line from the `clean` target's
       recipe.
     - (If you feel unsure about making the changes above yourself,
-        [here is a patch](/files/splash3-volrend-makefile-patch.diff) you can apply
+        [here is a patch](/uploads/splash3-volrend-makefile-patch.diff) you can apply
         by copying it to the `codes` directory and running
         ```bash
         $ patch -p0 < splash3-volrend-makefile-patch.diff

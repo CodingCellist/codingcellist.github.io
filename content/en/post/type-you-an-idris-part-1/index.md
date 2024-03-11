@@ -66,7 +66,7 @@ $ git clone git@github.com:edwinb/splv20 splv20-tinyidris
 ```
 
 Next, if you're running a reasonably recent version of Idris2
-(⩾ v0.5.0), you'll need to apply [this patch](/files/splv20-v0.5.1.patch)
+(⩾ v0.5.0), you'll need to apply [this patch](/uploads/splv20-v0.5.1.patch)
 using `git apply` from the root of the directory where you checked out the
 repository. The reason for is that there were a number of changes in v0.5.0
 which meant the following needed fixed in TinyIdris before it would even build:
