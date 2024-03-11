@@ -7,7 +7,7 @@ summary: ""
 authors: [thomas-e-hansen]
 tags: [admin, meta, misc, hosting, rant]
 categories: [succulent]
-date: 2024-03-08
+date: 2024-03-11
 lastmod:
 featured: false
 draft: false
