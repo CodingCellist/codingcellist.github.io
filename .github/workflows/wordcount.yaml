@@ -59,7 +59,7 @@ jobs:
       #   * zip -- for extracting texcount
       - name: Setup perl, curl, and zip
         run: |
-          sudo apt update
+          sudo apt update && sudo apt upgrade
           type perl 2&>1 /dev/null && sudo apt install -y perl
           type curl 2&>1 /dev/null && sudo apt install -y curl
           type zip 2&>1 /dev/null && sudo apt install -y zip
