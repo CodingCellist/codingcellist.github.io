@@ -176,3 +176,18 @@ _anything_ other than writing my thesis, the details of that are up (in rough
 form) in this other blog post:
 [auto-plotting-thesis-word-count](/en/post/auto-plotting-thesis-word-count/)
 
+I even managed to get some writing done! From the talk I gave about 2 weeks ago,
+but now in more written form. I am still just jotting things down informally and
+in bullet-points; "easier to edit and expand something actually written" and all
+that. As part of that, I vaguely remembered hearing LaTeX had neat glossary
+support, and looked into that. It _is_ pretty nice, not gonna lie, and not even
+that troublesome to set up (as LaTeX things go). But my enjoyment from it --
+being able to use a little macro whenever I wanted to refer to a glossary term
+and/or its definition -- did again remind me that LaTeX was written by
+programmers for programmers to some extent; good luck concvincing a regular user
+this is better than chords in MS Word or however that program does it.
+
+Oh and according to the script, there are about 400-500 words more in my thesis
+now (no clue if that includes glossary items), so that's pretty neat! And I'll
+be even happier to see the line go up tonight  ^^
+
