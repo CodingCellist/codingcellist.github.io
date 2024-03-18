@@ -1,0 +1,91 @@
+name: Nightly thesis word count
+
+on:
+  schedule:
+    # quote due to '*'; cron-input-style string: 55' 23h DD MM day(s)
+    - cron: '55 23 * * 1-5'
+  # for testing, this lets us run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # id
+  nightly-word-count:
+    # name
+    name: Nightly word count
+    # which GH-hosted runner to use, in this case we don't really mind as long
+    # as its linux and `ubuntu-latest` is what GH provides. Also fairly simple
+    # to modify later
+    runs-on: ubuntu-latest
+    steps:
+      # Need some dependencies
+      # https://github.com/marketplace/actions/checkout
+
+      # Website is needed
+      - name: Checkout website
+        uses: actions/checkout@v4
+        with:
+          path: personal-website
+
+      # also need the PhD repo
+      - name: Checkout phd-thesis
+        uses: actions/checkout@v4
+        with:
+          repository: 'CodingCellist/phd-thesis'
+          path: phd-thesis
+          ref: 'main'
+          token: ${{ secrets.PHD_TOKEN }}
+
+      # https://github.com/marketplace/actions/setup-python
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pipenv'
+
+      # update `pip` and install plotly+pandas
+      - name: Update pip, install deps
+        run: |
+          pip install --upgrade pip
+          pip install plotly pandas
+
+      # install various dependencies if they are not already there:
+      #   * perl -- for texcount to work
+      #   * curl -- for downloading texcount
+      #   * zip -- for extracting texcount
+      - name: Setup perl, curl, and zip
+        run: |
+          sudo apt update
+          type perl 2&>1 /dev/null && sudo apt install -y perl
+          type curl 2&>1 /dev/null && sudo apt install -y curl
+          type zip 2&>1 /dev/null && sudo apt install -y zip
+
+      # download, extract, and configure the texcount perl script
+      - name: Setup texcount
+        run: |
+          curl -L -o texcount.zip https://app.uio.no/ifi/texcount/download.php?file=texcount_3_2_0_41.zip
+          unzip texcount.zip
+          rm -rf Doc
+          mv -v texcount{.pl,}
+          chmod +x texcount
+          # add current location to the path for texcount to be available
+          echo "$PWD" >> $GITHUB_PATH
+      - name: Count the words
+        run: |
+          cd phd-thesis
+          chmod +x xwcount.sh
+          # count the words, removing the stderr output and keeping only
+          # numbers, add the date it was measured, and append the resulting data
+          # entry to the data file
+          ./xwcount.sh 2> /dev/null | grep -P '^\d+$' | tr -d '\n' | cat - <(echo -n ",") <(date -I) >> ../personal-website/static/uploads/thesis-plot/wcount.csv
+          cd ..
+
+      - name: Read data, make plot
+        run: |
+          python personal-website/static/uploads/thesis-plot/plot.py > personal-website/content/en/post/writing-up-a-phd/wcount-plot.json
+
+      - name: Add plot and push
+        run: |
+          cd personal-website
+          git commit -a -m "[ auto ] Nightly thesis plot"
+          git push
+

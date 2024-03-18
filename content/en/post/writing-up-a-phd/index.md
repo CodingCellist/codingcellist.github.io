@@ -6,9 +6,9 @@ subtitle: "A log of the train wreck to come"
 summary: ""
 authors: [thomas-e-hansen]
 tags: [misc, phd, academia]
-categories: [seed]
+categories: [shoot]
 date: 2024-01-16
-lastmod: 2024-03-08
+lastmod: 2024-03-18
 featured: false
 draft: false
 
@@ -27,6 +27,8 @@ image:
 #   Otherwise, set `projects = []`.
 projects: []
 ---
+
+{{< chart data="wcount-plot" >}}
 
 I am coming up on the end of my allotted time for my PhD and need to write up.
 There is little content of this follow-along-journal-kind out there (as far as I
