@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-DATA_PATH = "static/uploads/thesis-count/wcount.csv"
+DATA_PATH = "static/uploads/thesis-plot/wcount.csv"
 
 # read the data and work out the daily word diff
 
