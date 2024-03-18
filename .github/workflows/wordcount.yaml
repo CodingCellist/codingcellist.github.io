@@ -76,13 +76,13 @@ jobs:
           echo "$PWD" >> $GITHUB_PATH
       - name: Count the words
         run: |
-          cd phd-thesis
+          cd phd-thesis/latex-src
           chmod +x xwcount.sh
           # count the words, removing the stderr output and keeping only
           # numbers, add the date it was measured, and append the resulting data
           # entry to the data file
-          ./xwcount.sh 2> /dev/null | grep -P '^\d+$' | tr -d '\n' | cat - <(echo -n ",") <(date -I) >> ../personal-website/static/uploads/thesis-plot/wcount.csv
-          cd ..
+          ./xwcount.sh 2> /dev/null | grep -P '^\d+$' | tr -d '\n' | cat - <(echo -n ",") <(date -I) >> ../../personal-website/static/uploads/thesis-plot/wcount.csv
+          cd ../..
 
       - name: Read data, make plot
         run: |
