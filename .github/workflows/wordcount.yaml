@@ -21,6 +21,7 @@ jobs:
       # https://github.com/marketplace/actions/checkout
 
       # Website is needed
+      # and needs a PAT to trigger the `publish` push workflow
       - name: Checkout website
         uses: actions/checkout@v4
         with:
@@ -53,17 +54,6 @@ jobs:
           pip install -r requirements.txt
           # just to be safe
           cd ../../../../
-
-      # install various dependencies if they are not already there:
-      #   * perl -- for texcount to work
-      #   * curl -- for downloading texcount
-      #   * zip -- for extracting texcount
-      - name: Setup perl, curl, and zip
-        run: |
-          sudo apt update
-          sudo apt install -y perl
-          sudo apt install -y curl
-          sudo apt install -y zip
 
       # download, extract, and configure the texcount perl script
       - name: Setup texcount
