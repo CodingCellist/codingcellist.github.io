@@ -93,6 +93,8 @@ jobs:
       - name: Add plot and push
         run: |
           cd personal-website
-          git commit -a -m "[ auto ] Nightly thesis plot"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -a -m "[ generated ] Nightly thesis plot"
           git push
 
