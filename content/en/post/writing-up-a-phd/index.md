@@ -160,3 +160,19 @@ speak it.
 Oh and I want to get some info-vis-like progress meter going for my word count.
 So that's what I'm procrastinating with right now  ^^
 
+
+## 2024-03-18
+
+I've spent the past however many days (10 according to this changelog, aaaah!)
+working on a little automatic word-count plot for the top of this page. That way
+I can point people at that whenever they ask me how things are going  : P
+
+Not the best in terms of actually making progress, but very good in terms of fun
+(and learning new tools? no no: growing my skillset; yes, that sounds much
+better)
+
+It took a bit of work to get going, and because I'd rather do pretty much
+_anything_ other than writing my thesis, the details of that are up (in rough
+form) in this other blog post:
+[auto-plotting-thesis-word-count](/en/post/auto-plotting-thesis-word-count/)
+
