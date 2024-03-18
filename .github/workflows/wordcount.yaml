@@ -25,6 +25,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: personal-website
+          token: ${{ secrets.WEBSITE_TOKEN }}
 
       # also need the PhD repo
       - name: Checkout phd-thesis
