@@ -39,14 +39,19 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-          cache: 'pipenv'
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: |
+            personal-website/static/uploads/thesis-plot/requirements.txt
 
       # update `pip` and install plotly+pandas
       - name: Update pip, install deps
         run: |
+          cd personal-website/static/uploads/thesis-plot/
           pip install --upgrade pip
-          pip install plotly pandas
+          pip install -r requirements.txt
+          # just to be safe
+          cd ../../../../
 
       # install various dependencies if they are not already there:
       #   * perl -- for texcount to work
@@ -81,7 +86,9 @@ jobs:
 
       - name: Read data, make plot
         run: |
-          python personal-website/static/uploads/thesis-plot/plot.py > personal-website/content/en/post/writing-up-a-phd/wcount-plot.json
+          cd personal-website
+          python static/uploads/thesis-plot/plot.py > content/en/post/writing-up-a-phd/wcount-plot.json
+          cd ..
 
       - name: Add plot and push
         run: |
