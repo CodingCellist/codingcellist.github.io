@@ -184,10 +184,43 @@ support, and looked into that. It _is_ pretty nice, not gonna lie, and not even
 that troublesome to set up (as LaTeX things go). But my enjoyment from it --
 being able to use a little macro whenever I wanted to refer to a glossary term
 and/or its definition -- did again remind me that LaTeX was written by
-programmers for programmers to some extent; good luck concvincing a regular user
+programmers for programmers to some extent; good luck convincing a regular user
 this is better than chords in MS Word or however that program does it.
 
 Oh and according to the script, there are about 400-500 words more in my thesis
 now (no clue if that includes glossary items), so that's pretty neat! And I'll
 be even happier to see the line go up tonight  ^^
+
+
+## 2024-04-03
+
+I got an email last week saying that my "continuation period" was now starting
+and that, as such, I would no longer be receiving any funding. My first reaction
+was "What??" -- I thought I had another month before that happened -- but
+unfortunately the admin office was able to confirm that we were indeed 6 months
+off September (which is when the University actually, properly come breathing
+down my neck) and my funding was 3.5 years, so it all added up. My supervisor is
+currently writing a grant application but doesn't have an active grant, and it
+is the end of teaching. So now I'm burning savings, yaaay...
+
+Oh well, as my supervisor so nicely put it: "Well, better get writing then" (to
+be clear: this was done in good humour, and I did/do find the comment funny).
+
+Even with that said, finding motivation to write can be hard. Or rather, it is
+very easy to spend the morning writing emails and helping people out on the
+various discords I'm in, going for lunch, and then spending the afternoon going
+"I really should be writing" whilst simultaneously not getting any actual
+writing done. The graph is doing its job though: looming over me and publicly
+shaming the (lack of) work I've been doing.
+
+Anyhow, I did manage to eventually get some writing done today -- doubly
+frustrating is that once I get going, it just all comes flowing -- thanks to a
+notebook from 2 years ago which not only has implementation details and
+explanations (thank you, past me) but _also_ has a summary/birds-eye-view at the
+end of the section detailing how it all ties together (THANK YOU, past me!).
+
+Oh and apparently I'm giving a talk tomorrow. But it is meant to be a technical
+one, going over implementation details, so I might just walk through the code
+live as the talk; won't be the first time somebody does that at a PL
+(Programming Languages) Group session ^^;;
 
