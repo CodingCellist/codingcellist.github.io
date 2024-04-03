@@ -219,7 +219,15 @@ notebook from 2 years ago which not only has implementation details and
 explanations (thank you, past me) but _also_ has a summary/birds-eye-view at the
 end of the section detailing how it all ties together (THANK YOU, past me!).
 
-Oh and apparently I'm giving a talk tomorrow. But it is meant to be a technical
+This, in combination with finding some early-2000s pop and pop-punk music to put
+on in the background, resulted in me sort of just happily vibing along and
+writing. Which surprised me somewhat, as I can normally not write anything while
+listening to stuff with lyrics: either the lyrics end up sneaking into the
+current sentence, or I end up just listening to the music. However, for mostly
+just transferring stuff I've already written from one medium to another, it
+seems to work (or at least it did today).
+
+Also apparently I'm giving a talk tomorrow. But it is meant to be a technical
 one, going over implementation details, so I might just walk through the code
 live as the talk; won't be the first time somebody does that at a PL
 (Programming Languages) Group session ^^;;
