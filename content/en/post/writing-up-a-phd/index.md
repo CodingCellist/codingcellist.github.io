@@ -6,7 +6,7 @@ subtitle: "A log of the train wreck to come"
 summary: ""
 authors: [thomas-e-hansen]
 tags: [misc, phd, academia]
-categories: [shoot]
+categories: [sapling]
 date: 2024-01-16
 lastmod: 2024-03-18
 featured: false

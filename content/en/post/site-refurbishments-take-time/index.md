@@ -6,9 +6,9 @@ subtitle: ""
 summary: ""
 authors: [thomas-e-hansen]
 tags: [misc, gardening, meta]
-categories: [shoot]
+categories: [sapling]
 date: 2024-01-12
-lastmod:
+lastmod: 2024-04-18
 featured: false
 draft: false
 
@@ -65,7 +65,7 @@ addition to the 2 I just referenced):
 
 Inspired by all these things, here's the first little change: categories and
 graphical labels, aka. emojis, for these (you may have noticed that this post is
-in the category "shoot")
+in the category "sapling")
 
 * :beans: **seed** --- Seeds are things which I intend to write, but haven't
     gotten beyond the prototyping/bullet-point/ideation stage. I'll try my best
@@ -77,12 +77,13 @@ in the category "shoot")
     full-blown blog post/essay (more on those shortly), but in its early stages.
     I expect these to be more expanded, paragraph-like bullet-points, but
     without the flow and structuring that a complete post has.
-* :herb: **shoot** --- Shoots are works which might be done, but need another
-    look through (or don't). Maybe there are some details which need
+* :herb: **sapling** --- Saplings are works which might be done, but need
+    another look through (or don't). Maybe there are some details which need
     clarification, or some sections need moving around, or similar. Or maybe I
-    just decide that they're actually fine, and nothing needs adjusting. I'm not
-    quite happy with the name "shoot", so that may change if I find a better
-    term.
+    just decide that they're actually fine, and nothing needs adjusting. ~~I'm
+    not quite happy with the name "shoot", so that may change if I find a better
+    term.~~ _Update 2024-04-18:_ I'm a lot happier with the word "sapling"!
+    That's staying!
 * :evergreen_tree: **evergreen** --- These are the finished and polished
     posts, essays, tutorials, what have you. Although the name "evergreen"
     suggests that they never need adjusting, that's will vary depending on the
