@@ -6,7 +6,7 @@ subtitle: ""
 summary: ""
 authors: [thomas-e-hansen]
 tags: [calendars, encryption, privacy, foss]
-categories: [sapling]
+categories: [evergreen]
 date: 2024-04-20
 lastmod:
 featured: false

@@ -8,7 +8,7 @@ summary: "It all started yesterday morning, where I booted up my laptop and
           anything: I had a cursor and a black screen."
 authors: [thomas-e-hansen]
 tags: [linux,drivers,debugging,gpu]
-categories: [sprout]
+categories: [sapling]
 date: 2024-05-09
 lastmod:
 featured: false
