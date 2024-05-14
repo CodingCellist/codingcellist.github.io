@@ -64,8 +64,6 @@ just use them, so let's start by hiding these defaults in order to implement our
 own:
 
 ```idris
-module DecEqIntro
-
 %hide (==)
 %hide (===)
 %hide Void
@@ -375,9 +373,11 @@ public export
 data Void : Type where
 ```
 
-This is a perfectly valid datatype declaration, we can "forward-declare" data
-definitions just like we can for functions. Except if we never define any
-constructors (neither here nor later) then we can never create something of type
+This is a perfectly valid datatype declaration. When defining a new datatype we
+must provide all its constructors, and that is exactly what we've done: there
+aren't any. A datatype with no constructors would typically not be very useful
+-- having no constructors means we can never create an instance of the type --
+but here it is precisely what we need: we can never create something of type
 `Void` but we can still talk about it.
 
 Since we prove things by having instances of datatypes whose constructors can
@@ -920,12 +920,14 @@ the concept and inner workings of decidable equality. Thanks for reading along!
 
 ## Acknowledgements
 
-- Zoe Stafford (z-snails/z_snail) and Guillaume Allais (gallais) for help with
+* Zoe Stafford (z-snails/z_snail) and Guillaume Allais (gallais) for help with
     understanding `rewrite` and `void`.
-- Tom Harley (magnostherobot) for reading this once I'd published it, and
+* Maggie Harley (magnostherobot) for reading this once I'd published it, and
     spotting that I'd confused "injective" for "congruent".
-- the hacker known as "Alex" (mangopdf), for making me realise I was
+* the hacker known as "Alex" (mangopdf), for making me realise I was
     [writing a textbook when I didn't need to](https://mango.pdf.zone/i-give-you-feedback-on-your-blog-post-draft-but-you-dont-send-it-to-me)
+* emdash, Madman Bob, and Denis Buzdalov on discord for catching and correcting
+    my mistake about `Void` being fully defined, not forward-declared.
 
 
 ## Would you like to know more?
@@ -1216,4 +1218,13 @@ likely get it wrong, both your datatypes and the properties involving them, but
 that's just part of the _"Type, define, refine"_ mantra of Idris.
 
 gl hf!
+
+
+## Changelog
+
+* **2024-05-14** -- Corrected the statement about `Void` being forward-declared.
+    It is _not_ forward-declared, it is completely declared without any
+    constructors; we cannot accidentally introduce a constructor for `Void`
+    later to make it an "inhabitable" data type. (Also fixed the module name not
+    matching the file name by simply removing it ^^.)
 
