@@ -275,7 +275,7 @@ Date:   Thu Jun 6 14:09:13 2024 +0100
 
     [ ch06 ] Rename to what it actually will be about
 
-commit a9be52442b2f953f4c24e0a451f0046f78dd6b2f (origin/main, cs/main)
+commit a9be52442b2f953f4c24e0a451f0046f78dd6b2f
 Author: Thomas E. Hansen <...>
 Date:   Wed Apr 3 19:04:19 2024 +0100
 
