@@ -56,8 +56,8 @@ $ ls -l /dev/ttyACM0
 crw-rw---- 1 root uucp 166, 0 Jun  5 22:03 /dev/ttyACM0
 ```
 
-Aha! That probably explains things: I am not in the `uucp` group, that might be
-a problem. And indeed, with a
+Aha! That probably explains things: I am not in the `uucp` group, which might be
+a problem. One
 
 ```
 $ sudo usermod -aG uucp thomas
@@ -109,9 +109,9 @@ things:
     Powered by WebAssembly". That one is easily fixable via `pacman -S
     wasmer`, thankfully.
 * Unfortunately `pipenv` does not and will never support version ranges
-    ([#1050](https://github.com/pypa/pipenv/issues/1050)), and `wasmer` wheels
-    currently only build for up to `python3.10` (Arch ships `3.12.3` at the time
-    of writing).  
+    ([pipenv#1050](https://github.com/pypa/pipenv/issues/1050)), and `wasmer`
+    wheels currently only build for up to `python3.10` (Arch ships `3.12.3` at
+    the time of writing).  
     *sigh*  
     Turns out however, that `pyenv` is a thing which a allows you to easily
     manage multiple python installations. Well, somewhat easily: after running
@@ -119,7 +119,7 @@ things:
     $ pyenv install 3.10 && pyenv local 3.10
     ```
     you then use the configured version by wrapping the command in `pyenv exec`.
-    Not exactly seamless, but better than nothing I guess, but does lead to this
+    Not exactly seamless, but better than nothing I guess. It does lead to this
     mildly rediculous invocation:
     ```
     $ pyenv exec pipenv run python run.py
