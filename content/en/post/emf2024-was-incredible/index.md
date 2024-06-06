@@ -36,9 +36,9 @@ is a bi-annual event in the UK where a bunch of tech enthusiasts, tinkerers,
 creative folk from all over meet up in a field and hang out for 3-4 days. I
 first found out about it from friends around the end of 2018 / start of 2019,
 when it had just been and thought "Wow that sounds amazing! I'll definitely come
-along to the next one! See you all at EMF _2020_". Yeah that didn't happen. And
-then I was away in 2022. But after 5-6 years, I finally got to go! And it. was.
-_incredible!!_
+along to the next one! See you all at EMF **2020**". Yeah that didn't happen.
+And then I was away in 2022. But after 5-6 years, I finally got to go! And it.
+was. _incredible!!_
 
 Never have I seen so many cool people, outfits, decorated tents, various exotic
 vehicles, all gathered in one place and having the best of times as one big
@@ -47,7 +47,7 @@ community.
 ![Photo of several tents stretching out into the distance](emf24/site.jpg)
 
 And, you know, it is a maker camp, so of course the infrastructure was on point:
-40GiB fiber link to the site, providing some of the best WiFi I have ever had
+40GiB fibre link to the site, providing some of the best WiFi I have ever had
 (as well as Ethernet, if you had a long enough cable); a DECT phone network for
 contacting organisers and fellow attendees who brought and registered their DECT
 phones; a Plain Old copper Telephone network for corded phones and fax machines;
@@ -69,7 +69,7 @@ spotlights and lasers in the sky,
 
 ![Photo of spotlights above a pointed tent](emf24/night-spotlights.jpg)
 
-<!-- TODO: people in photo ![Photo of green laser beams across the night sky](emf24/ -->
+![Photo of a black sky with multiple green laser beams spreading out from two central sources at the bottom](emf24/ns-lasers.jpg)
 
 fog and light installations across one of the lakes,
 
@@ -99,11 +99,13 @@ sleeping bag." And I _was_ fine. I just had to sleep in socks, trousers, and two
 t-shirts one night. According to various weather apps, it never got below 8-10
 degrees, but that is almost definitely a lie. It felt more like 4-5 degrees. The
 final day was roasting though, not a cloud in the sky, and that was a very nice
-conclusion (even though you slightly boiled in the stage tents).
+conclusion (even though everyone slightly boiled in the stage tents).
 
 Speaking of sleeping, there is a significantly non-zero overlap between the
 hacker scene and the (German) techno scene. Which led to some incredible raves,
-but also meant you could _feel_ the bass across the camp TODO
+but also meant you could _feel_ the bass across the camp.
+
+<!-- TODO map + description of where noise -->
 
 Oh and the badge! I almost forgot to talk about the badge! Again, EMF is a hacker
 camp, so the attending badge is not just a badge, it's a PCB with a
@@ -215,8 +217,8 @@ McDonalds-like greasy stuff. With free potable water being available at numerous
 taps around the site, food was really all you needed and I was happy to buy the
 occasional hot lunch or dinner. (I also volunteered, which got you a ticket for
 the volunteer kitchen, serving hot breakfast, lunch, and dinner all days of the
-festival.) Overall, I spent TODO on food, including the occasional crêpe or ice
-cream.
+festival.) Overall, I spent £91.40 on food in 4 days, including the occasional
+crêpe and ice cream.
 
 ### Sanitation
 
