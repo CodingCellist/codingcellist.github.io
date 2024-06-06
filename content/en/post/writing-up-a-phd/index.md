@@ -232,3 +232,34 @@ one, going over implementation details, so I might just walk through the code
 live as the talk; won't be the first time somebody does that at a PL
 (Programming Languages) Group session ^^;;
 
+
+## 2024-06-06
+
+Where have I been the past 2 months? I've been
+[writing a TyDe'24 paper](/en/post/tyde-24-paper)! Which was very exciting but
+also extremely tiring. But I am quite happy with it, and according to a quick
+`texcount`, it should net me ~16k extra words on the graph (when I eventually
+add it in), which is _definitely_ worth it  : )
+
+Today I restart trying to write up parts of my thesis which I did roughly 2
+years ago. Once again: thank goodness for notebooks. Even with them though,
+it'll still be work to retrace my steps. Oh well, I'm sure it'll come faster and
+faster the more I work through it.
+
+I also had a look over the _tiny_ thesis outline and drafting I'd done so far in
+my main thesis repo. I guess the good news are that I am beginning to see how
+the chapters need merging, changing, what needs to go where, etc. But the bad
+news are that my first thought to all the old stuff that was there was "Christ!
+It all needs rewriting!" To be fair, it is bullet-point stuff I wrote for a
+PhD-review over a year ago, so I would be somewhat surprised if I didn't have a
+better grasp on things now. Well, time to get to it I guess...
+
+Oh and I'm trying out a new pomodoro-style thing called "Plantie" -- you grow
+virtual trees or fruit or something during the time slots. Very cute. I've
+always been highly sceptical of the pomodoro technique -- something about
+maintaining "flow" and all that -- but a friend said it really helped for
+larger, marathon-like tasks. Which writing up a huge chunk of work from two
+years ago happens to be. So I'm giving it a shot. I can see the wisdom in taking
+frequent breaks for those kinds of tasks, and hey, worst case I just uninstall
+the app and still have some amount of work done. Seems worth a try.
+
