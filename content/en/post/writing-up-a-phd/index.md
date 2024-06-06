@@ -263,3 +263,44 @@ years ago happens to be. So I'm giving it a shot. I can see the wisdom in taking
 frequent breaks for those kinds of tasks, and hey, worst case I just uninstall
 the app and still have some amount of work done. Seems worth a try.
 
+... Briefly popping back to say: `git` commits can be a time saver! I was
+wondering how much work I had actually ported from my notebooks. And all I had
+to do, thanks to how I structure commit messages, was ask `git`:
+
+```
+$ git log --grep='ch06'
+commit a0104646e9effd495303584a02e134c8e323a43f
+Author: Thomas E. Hansen <...>
+Date:   Thu Jun 6 14:09:13 2024 +0100
+
+    [ ch06 ] Rename to what it actually will be about
+
+commit a9be52442b2f953f4c24e0a451f0046f78dd6b2f (origin/main, cs/main)
+Author: Thomas E. Hansen <...>
+Date:   Wed Apr 3 19:04:19 2024 +0100
+
+    [ ch06 ] Start writing up dsa-gen:edges
+
+    There is _a lot_ to detail in terms of edges; turns out (as I
+    increasingly recall) that stuff was really complicated actually! Nice!
+
+commit a0e7af7072e451cb18f8c8f6da485080a4d1608a
+Author: Thomas E. Hansen <...>
+Date:   Wed Apr 3 18:04:29 2024 +0100
+
+    [ ch06 ] Port dsa-gen overview from blue notebook
+
+commit a0846ba7a782c1701269f62819a95a1b7d4f0273
+Author: Thomas E. Hansen <...>
+Date:   Mon Apr 1 17:14:42 2024 +0100
+
+    [ ch06 ] Reconstruct mental map of blue nb
+
+    Not a huge wordcount increase (might even be a decrease), but this was
+    massively helpful in terms of remembering how things went and figuring
+    out where they were written down.
+```
+
+Now I know where to resume my work, avoiding wasting time copying stuff from my
+notebooks that was already there!
+
