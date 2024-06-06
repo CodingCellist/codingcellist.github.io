@@ -94,8 +94,8 @@ happier. I even got this exciting diff of messages on `dmesg`:
 ```
 
 Look at that! We now have the product correctly declared as "TilDAGON", the
-manufacturer as "Electromagnetic Field", and the serial number as ~~nonsense~~
-123456! Neat!
+manufacturer as "Electromagnetic Field", and the serial number as
+~~nonsense~~ 123456. Neat!
 
 
 ## Setting up for simulation
@@ -105,11 +105,27 @@ Rather than running a buggy app directly on the hardware, the
 comes with a handy simulator. Once again however, I need to slightly change
 things:
 
-* `pipenv` does not and will never support version ranges
-    ([#1050](https://github.com/pypa/pipenv/issues/1050)), but a quick
-    replacement of `3.10` with `3.12` in `Pipfile` and `Pipfile.lock` solved
-    that (it's probably fiiine).
-* Also turns out I'm missing some libraries: `wasmer` -- "Universal
-    Binaries Powered by WebAssembly". That one is easily fixable via `pacman -S
-    wasmer` (TODO: and a reboot?), thankfully.
+* It turns out I'm missing some libraries: `wasmer` -- "Universal Binaries
+    Powered by WebAssembly". That one is easily fixable via `pacman -S
+    wasmer`, thankfully.
+* Unfortunately `pipenv` does not and will never support version ranges
+    ([#1050](https://github.com/pypa/pipenv/issues/1050)), and `wasmer` wheels
+    currently only build for up to `python3.10` (Arch ships `3.12.3` at the time
+    of writing).  
+    *sigh*  
+    Turns out however, that `pyenv` is a thing which a allows you to easily
+    manage multiple python installations. Well, somewhat easily: after running
+    ```
+    $ pyenv install 3.10 && pyenv local 3.10
+    ```
+    you then use the configured version by wrapping the command in `pyenv exec`.
+    Not exactly seamless, but better than nothing I guess, but does lead to this
+    mildly rediculous invocation:
+    ```
+    $ pyenv exec pipenv run python run.py
+    ```
+    "Yo dawg, I heard you like running things, so I put running things in your
+    things that run things."
+
+At last, the simulator successfully runs.
 
