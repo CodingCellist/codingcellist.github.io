@@ -120,7 +120,7 @@ things:
     ```
     you then use the configured version by wrapping the command in `pyenv exec`.
     Not exactly seamless, but better than nothing I guess. It does lead to this
-    mildly rediculous invocation:
+    mildly ridiculous invocation:
     ```
     $ pyenv exec pipenv run python run.py
     ```
