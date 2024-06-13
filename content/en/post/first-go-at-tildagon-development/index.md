@@ -129,3 +129,27 @@ things:
 
 At last, the simulator successfully runs.
 
+
+## Getting ready for development
+
+### Licenses
+
+From a cursory browse on GitHub searching for "tildagon app", it seems the
+[base software repo](https://github.com/emfcamp/badge-2024-software)
+has no license, and people release their apps under a wide variety of licenses. I
+I found several projects without a license (aka.
+[all rights reserved](https://choosealicense.com/no-permission/)
+(this is not legal advice, I am not a lawyer, etc. etc.)), the Unlicense,
+GPL-3.0-or-later, MPL-2.0, etc. Am I being overly cautious here? Almost
+definitely. But it just feels best to be clear about these things.
+
+I'm going to go with
+[BSD-3-Clause](https://choosealicense.com/licenses/bsd-3-clause/),
+because it is one I'm familiar with, it's reasonably loose and so people can
+learn from it (which I love the idea of!), I like that commercial use requires
+explicit permission, and in this case I don't mind improvements not necessarily
+making it back. I'm of course hoping they will, but I'm not going to require it.
+
+With the boring bureaucracy out of the way, let's move on to setting up a
+development environment.
+
