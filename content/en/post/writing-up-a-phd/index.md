@@ -304,3 +304,67 @@ Date:   Mon Apr 1 17:14:42 2024 +0100
 Now I know where to resume my work, avoiding wasting time copying stuff from my
 notebooks that was already there!
 
+
+## 2024-06-13
+
+"When the going gets tough [...]" -- Aye right. More like "When it rains it
+pours."
+
+Thanks to a _"minor"_ incompetence by Registry at my uni, it turns out the
+letter telling me I had a right to 12 months continuation was a template and was
+sent in error. Continuation can only take me up to month 48, the end of the 4th
+year, of my PhD, and beyond that we're going into "You should apply for a formal
+extension"-territory. Our department's Director of Postgraduate Research (DoPGR)
+had to reach out to Registry personally to get the correct information, and they
+never sent me the correction, the DoPGR had to tell me later when he realised
+Registry hadn't told me directly.
+
+Institutional communication is hard, but of all news, I really wish they hadn't
+screwed up this one.
+
+If you've been following this for updates, you might recall that my funding
+ended and my continuation started
+[in April](#2024-04-03).
+What this means, is that I knew I had 6 months from April, then trusted the
+information I was sent from the University saying I had 12 months -- calming me
+a bit -- and have now been told that the Uni was wrong and I still only have 6
+months left. From April, mind you, so at this stage it's closer to 3 months. Oh
+and my flat is up in the middle of August because the Uni doesn't believe I'll
+be a student long enough for them to extend it beyond that. Brilliant. Just
+bloody brilliant...
+
+"A log of the train wreck to come" is the subtitle of this post/series. Well
+here's the first major derailment.
+
+As you might imagine, all this means I'm incredibly stressed. Which means I find
+it hard to focus on writing, which in turn makes me more stressed.  
+:notes: The wheels on the bus go round and round :notes:  
+On the other hand, writing all of this down has reduced my stress slightly --
+now it lives on the page and not in my brain -- and, if you're reading this and
+are similarly incredibly stressed, I hope it at least reassures you that it
+unfortunately seems to be on par for the PhD course. It's not just you.
+
+To try to end this update on a positive note: My supervisor absolutely believes
+I can do the write-up in that time -- "It is impossible for you to fail at this
+point. Worst case, you get Major Corrections and then that's just another year
+to finish things. And most people get Minor Corrections." -- which is genuinely
+immensely appreciated. He has also reassured me that he can reach out to
+Accommodation and talk some sense into them. (Turns out not having a place to
+live is bad for Student Welfare and for writing up, who knew?) I continue to be
+incredibly grateful and lucky to have such an excellent supervisor. Another
+positive thing is that I got accepted for my university's "Thesis Boot Camp":
+three 10-hour days of writing, surrounded by peers equally desperate to write,
+with the aim of getting at least 10k words down over the span of the event.
+It'll definitely be intense, but also probably good at this stage (if nothing
+else, just to commiserate).
+
+I suppose "When it rains it pours" can be true at the same time as "When the
+going gets tough, the tough get going". I am really not enjoying it though. The
+pomodoro-style timer does seem to be somewhat helpful -- I'm trying to remind
+myself that it's a marathon, not a sprint -- as does writing the occasional rant
+(:wave: oh hi), and I am incredibly lucky and grateful to have the support I
+have.
+
+Well, time to get back to it I guess. Until the next update, and thank you for
+reading along so far. Good luck!
+
