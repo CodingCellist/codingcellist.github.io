@@ -153,3 +153,17 @@ making it back. I'm of course hoping they will, but I'm not going to require it.
 With the boring bureaucracy out of the way, let's move on to setting up a
 development environment.
 
+### Brief notes from tonight (2024-06-17)
+
+* Can we set up an environment? With several libs spread across places
+  - Thread the dependencies and libraries somehow?
+  - Might be simpler not to and just use the docs (what I've been doing so far).
+* Seems the app _must_ be in a file called `app.py`. Naming it anything else
+    causes it to not be detected in the simulator, despite a corresponding
+    `__init__.py` pointing to the right place.
+* LEDs seem to be indexed from 1, based on the examples out there. Corresponds
+    to the labelling on the PCB.
+* Using the `ctx.arc` function causes a `TypeError`! That's exciting!
+* And I've clearly done something wrong: my timer logic causes the entire
+    simulator to hang...  ^^;;
+
