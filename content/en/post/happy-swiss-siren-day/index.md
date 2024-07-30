@@ -80,7 +80,5 @@ soon...
 
 (Oh, and since you're probably curious as to what it sounds like, here you go!)
 
-<video height="1080" width="1920" controls>
-  <source src="sirens.mp4" type="video/mp4">
-</video>
+{{< video src="sirens.mp4" controls="yes" >}}
 
