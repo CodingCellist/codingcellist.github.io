@@ -163,7 +163,91 @@ development environment.
     `__init__.py` pointing to the right place.
 * LEDs seem to be indexed from 1, based on the examples out there. Corresponds
     to the labelling on the PCB.
-* Using the `ctx.arc` function causes a `TypeError`! That's exciting!
+* ~~Using the `ctx.arc` function causes a `TypeError`! That's exciting!~~
+  - Update 2024-07-22: I suspect this was to do with some erroneous
+      initialisation logic or referring to fields which I had commented out, and
+      not the fault of the graphics API.
 * And I've clearly done something wrong: my timer logic causes the entire
     simulator to hang...  ^^;;
+
+
+## Things learned the hard way (2024-07-12)
+
+* This is micropython, occasionally I reach for things which simply aren't there
+  - tuple(a + b for a,b in zip(self.tup1, self.tup2))
+* When there is a syntax error, undefined value, incompatible value/type,
+    or unsupported syntax (ternary if, for example), simulator doesn't crash, it
+    freezes entirely. Has to be force-quit either by Ctrl+C from the terminal,
+    or sometimes the terminal locks up as well and the window manager has to
+    kill it!
+
+
+## Developing the app
+
+As can be seen from the notes above, there was a good amount of trial and error
+to get things going. However, now we (hopefully) know what to look for when
+certain crashes happen, and we can get on with making the actual app!
+
+### Idea
+
+My idea for an app was very practical and current-situation-minded: I need to
+write up my PhD and -- in keeping with traditions -- will do pretty much
+anything else on the side. Including developing a Pomodoro timer for the
+Tildagon! Perhaps a bit boring, but it ought to be simple enough to be a good
+first project on this new platform which I've never developed for before: I know
+_precisely_ how it is meant to work, there are few moving parts, and yet there
+is enough creative room for exploring different parts of the Tildagon's
+capabilities:
+
+* There will be a simple internal state to manage: on break or not, and two time
+    durations;
+* Displaying the remaining time should be simple enough (famous last words);
+* Figuring out some way to do time -- either via the `time` API or a rough
+    guesstimate from the frequency of the `update` function -- ought to be
+    doable as well;
+* The LEDs around the edge could be lit up in a colour depending on whether the
+    user is on a break or in a focus/work session;
+* The LEDs could "count down" one second at a time, flashing in a circle around
+    the board (or probably better to have it be subtle highlighting so as to not
+    be too distracting);
+* The LEDs could also turn off once every twelfth of the countdown, making for a
+    clear visual indicator (I really like this idea);
+* And for bonus points: a menu system for configuring the times and behaviour to
+    the user's liking, which would involve using the button states.
+
+Plenty of interesting little things to go around!
+
+### Foundations
+
+Going off the
+[hardware overview](https://tildagon.badge.emfcamp.org/tildagon-apps/reference/badge-hardware/)
+and the
+[graphics documentation](https://tildagon.badge.emfcamp.org/tildagon-apps/reference/ctx/),
+as well as the
+[Hello World app walkthrough](https://tildagon.badge.emfcamp.org/tildagon-apps/development/)
+I think we'll need at least the following:
+
+```python
+import app
+
+from app_components import clear_background
+from events.input import Buttons, BUTTON_TYPES
+from tildagonos import tildagonos
+from system.eventbus import eventbus
+from system.patterndisplay.events import *
+import time
+
+
+# Main app
+class Pomodoro(app.App):
+    def __init__(self):
+        self.button_states = Buttons(self)
+
+        # disable the default spinning pattern
+        eventbus.emit(PatternDisable())
+```
+
+### Lights!
+
+
 

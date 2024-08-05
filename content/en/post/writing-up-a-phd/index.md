@@ -8,7 +8,7 @@ authors: [thomas-e-hansen]
 tags: [misc, phd, academia]
 categories: [sapling]
 date: 2024-01-16
-lastmod: 2024-03-18
+lastmod: 2024-08-05
 featured: false
 draft: false
 
@@ -367,4 +367,76 @@ have.
 
 Well, time to get back to it I guess. Until the next update, and thank you for
 reading along so far. Good luck!
+
+
+## 2024-08-05
+
+It's been a while. I'm still alive. 
+
+The thesis bootcamp was a success: I managed to write over 5000 words in 3 days,
+which got me 2 Lego bricks (we had to set three writing goals, and every goal
+you made gave you a nicer lego brick; green, then blue, then gold/yellow). I
+didn't make it to my final one -- 10,000 words -- but I am still very happy with
+the amount I did get written. It might honestly just have been the different
+location, maybe the lab has become "friendly" after so long... But yes, it was
+good. I met some nice people, there was lots of commiseration, _unlimited free
+snacks_, and lunch was provided. A really great take-away that I got from it was
+to take a 45 minute break around 15:00. Sounds insane, but that's when most
+people are crashing anyhow, and it makes you much more productive for the -- now
+considerably shorter -- rest of the day (as showcased by everyone there doing
+it, and everyone there being more productive than they normally were). The
+person running the bootcamp was also fantastic to talk to, with lots of support
+and positivity when it was needed. Although we did have a chat at the end where
+they told me that they got hit by a car about a week after submitting their
+thesis, and "[they] would still take the car over the write-up." Always
+encouraging to hear ^^;;
+
+The housing situation has simultaneously turned out ever so slightly better and
+also not great at all. The University continues to believe that my latest
+"authority Top Trumps" -- a signed letter from my GP, a _medical professional_
+-- is not good enough to confirm that my mental health would be significantly
+better if I didn't have to worry about moving right before the end of my PhD. So
+I am now searching for a flat. At least they prolonged it until the end of
+August instead of the middle of it, and I should hopefully have written up by
+then anyway, so there's that. Regardless of that though, it turns out that
+looking for a flat near the end of your PhD is not exactly straightforward
+because explaining to people that I am not a student, nor am I technically
+employed, but nor am I unemployed, and yes I will be able to make both rent and
+my cost of living, but no I can't give an exact figure of how much I make, but
+I'm not a "gig worker", is somewhat unique. And nothing scares away letting
+agents like a unique situation. Finally managed to get a couple of viewings
+though, so that's something. In St Andrews? HA! Forget about that, it is
+prohibitively expensive: \>£1200 per month for a one/two bedroom place. And
+funnily enough I don't have 40k saved up to put down on a deposit for a mortgage
+to buy a small flat either. St Andrews is a great place to live if you happen to
+already own Property (TM) or know a current student who can directly pass their
+lease on to you. Otherwise it is borderline impossible to find something, and
+you'll pay dearly for it.
+
+Oof, that got heavier than I intended, sorry about that. In much, much better
+news, my
+[TyDe'24 paper](/en/post/tyde-24-paper)
+got accepted first try, and with -- and I quote my supervisor -- "unusually
+positive reviews"!!  : D  
+On top of giving a bunch of useful advice and feedback -- most of which made it
+into the final version of the paper, and the rest will be gold for thesis
+sections -- it also means that I get to go present this work at TyDe'24, part of
+[ICFP](https://icfp24.sigplan.org/)
+in Milan in Italy. And I am lucky enough that the University not only has the
+means to pay for the registration fee (which added up to ~€1200 for the student
+fee, once workshops were included  O.O), but they also pay for travel and
+accommodation! I guess that's the flip side of the insanely expensive uni town
+where mostly rich undergrads can afford to come. ICFP is 6 days long, from the
+2nd to the 7th of September. 6 days in Milan (at a conference, but still) is not
+a bad way to end the writing up time if I do say so myself.
+
+"To the LaTeX mines!" -- my supervisor at our last meeting.  
+He's off on holiday for 3 weeks, so next time I see him I really ought to have
+my thesis ready for its first proof-reading. There is light at the end of the
+tunnel, and with a bit of luck (and a lot of writing over the next couple of
+weeks), the train headlights will switch tracks and reveal the sunlight instead.
+The anxiety and stress is _so_ very much still there, but in one way or another,
+I will make it out.
+
+See you on the other side. o7 cmdr.
 
