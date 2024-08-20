@@ -440,3 +440,12 @@ I will make it out.
 
 See you on the other side. o7 cmdr.
 
+
+## 2024-08-20
+
+Well the word count script clearly isn't working: I wrote a lot more than ~100
+words per day in the last couple of weeks, and I absolutely didn't write over
+eighteen **_thousand_** words just yesterday. Maybe `minted` is messing with
+something... Anyway, that is _infinitely_ low on the list of current priorities
+such as: "AAAAAAA! I need to have a draft ready in ideally 3 days!!"
+
