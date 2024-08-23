@@ -449,3 +449,18 @@ eighteen **_thousand_** words just yesterday. Maybe `minted` is messing with
 something... Anyway, that is _infinitely_ low on the list of current priorities
 such as: "AAAAAAA! I need to have a draft ready in ideally 3 days!!"
 
+
+## 2024-08-23
+
+It's funny how it is noticeable what writing I produced without issue -- maybe
+because I felt I'd come up with a great example -- versus the writing that I
+have produced in this semi-depressive state of slogging through getting the last
+of my background chapter done. I just discovered a large section of stuff that
+should go in the background chapter, but which I'd written months ago as part of
+a different chapter, and the writing just seems _brighter_ somehow. It flows
+better, has better examples and explanations, is _significantly_ less dry than
+stuff I wrote this week (on basically the same topic, by the way). I can
+somewhat rationalise to myself that it makes sense that my writing changes based
+on my mood and whether I'm sick of the topic yet, but it is still very
+interesting to suddenly see it right there in one's face...
+
