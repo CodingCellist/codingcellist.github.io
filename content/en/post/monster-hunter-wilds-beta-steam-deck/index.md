@@ -50,19 +50,18 @@ download go  ^^
 Unfortunately, yesterday was Thursday, meaning today is Friday, not the weekend,
 and so I had to wait until after work to try it out.
 
-My Steam Deck is my main gaming machine these days (if it can be called that), I
-haven't had time nor budget to build a desktop PC, so I was somewhat worried
-about whether the beta would even run:
+My Steam Deck is my main gaming machine these days, I haven't had time nor
+budget to build a desktop PC, so I was somewhat worried about whether the beta
+would even run:
 
-1. It's the Steam Deck and MH Wilds recommends turning on AI Frame Generation,
-   _even for 1080p 60fps!_ The Steam Deck is very nice and convenient, but a
-   graphics powerhouse it is not...
+1. MH Wilds recommends turning on AI Frame Generation, _even for 1080p 60fps!_
+   The Steam Deck is very nice and convenient, but a graphics powerhouse it is
+   not...
 2. The Steam Deck runs Linux. Although Valve has done borderline miraculous
    things with respect to compatibility layers and interop between Windows games
    and their little Linux box, we are talking about the beta version of a PS5
    game ported to PC assumed to be running Windows. I was asking a lot of
-   several potentially brittle moving parts here, and fully expected to be
-   disappointed.
+   several brittle moving parts here, and fully expected to be disappointed.
 
 I am so happy I was wrong! The game _just worked_ (!!) out of the box. Download
 the ~29GB; click "Play"; game UI loads (I'd already made it further than I
@@ -72,8 +71,8 @@ this be actually working??); and camera, lights, action! Well. Almost. Turns out
 even though I had said "no" to enabling frame generation, the graphics settings
 still had it turned on, and the Steam Deck doesn't support frame generation as
 far as I know. But the menus were running, just not with a game preview as the
-background, so I could easily navigate to the right setting and change it to
-"Off" myself.
+background, so I could navigate to the right setting and change it to "Off"
+myself.
 
 Ladies and gentlemen, we got graphical backgrounds on the menus!
 
@@ -82,8 +81,8 @@ playing the introductory campaign. Does it run? Yes! Amazingly? No, it's the
 Steam Deck. But it _does_ run! I got ~16-20 fps stable in the environment,
 occasionally maybe dipping down to 10 during fights, but no "slide show"
 stutters which prevented me from reacting, it always ran smoothly (for a
-suitable definition of that word). I also did not expect any flickering of the
-whole image, something other Linux users had reported, so overall I consider
+suitable definition of that word). I also did not experience any flickering of
+the whole image, something other Linux users had reported, so overall I consider
 this a massive success! Sure, the visuals are all set to either "off", "low", or
 "lowest" (yep, there's one worse setting for some of them ^^;;) but hey, it
 actually runs!
