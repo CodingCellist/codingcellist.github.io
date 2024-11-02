@@ -5,16 +5,16 @@
 
 # Default language
 en:
-  languageCode: en-gb
   # Uncomment for multi-lingual sites, and move English content into `en` sub-folder.
   contentDir: content/en
   params:
+    languageCode: en-gb
     description: "Thomas Ekström Hansen's personal website"
 
 da:
-  language-code: da
   contentDir: content/da
   params:
+    language-code: da
     description: "Thomas Ekström Hansens personlige hjemmeside"
   menu:
     main:

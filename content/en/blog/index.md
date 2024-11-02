@@ -1,7 +1,7 @@
 ---
 title: "Blog"
 summary: "Random thoughts and comments."
-date: "2020-08-23T15:47+02:00"
+date: "2020-08-23"
 type: "widget_page"
 ---
 
